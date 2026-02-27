@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cards de funciones</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Segoe UI, Tahoma, sans-serif;
+            background: #eef4f8;
+            color: #1b2635
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 22px 14px
+        }
+
+        .hero {
+            background: linear-gradient(130deg, #0d5e86, #1f95ab);
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px
+        }
+
+        .card {
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid #d3e1ec;
+            border-radius: 10px;
+            padding: 12px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 10px
+        }
+
+        .item {
+            background: #f4f8fc;
+            border: 1px solid #d3e1ec;
+            border-radius: 10px;
+            padding: 10px
+        }
+
+        details {
+            margin-top: 6px
+        }
+
+        pre {
+            background: #111922;
+            color: #e6f2ff;
+            padding: 8px;
+            border-radius: 8px;
+            white-space: pre-wrap
+        }
+
+        input {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #c5d7e7;
+            border-radius: 8px
+        }
+
+        button {
+            background: #be4d00;
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            padding: 9px 12px;
+            cursor: pointer
+        }
+
+        .out {
+            margin-top: 8px;
+            background: #101922;
+            color: #e6f2ff;
+            border-radius: 8px;
+            padding: 10px;
+            white-space: pre-wrap;
+            min-height: 88px
+        }
+
+        a {
+            color: #0d5e86
+        }
+    </style>
+</head>
+
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <h1>Documentacion desplegable de funciones</h1>
+            <p>Cards para visualizar rapido que hace cada funcion y cuando conviene usarla.</p>
+        </section>
+        <section class="card">
+            <div class="grid">
+                <article class="item">
+                    <h3>map</h3>
+                    <p>Transforma elemento a elemento.</p>
+                    <details>
+                        <summary>Ejemplo</summary>
+                        <pre>Flux.just(1,2,3).map(n -> n * 2)</pre>
+                    </details>
+                </article>
+                <article class="item">
+                    <h3>flatMap</h3>
+                    <p>Encadena operaciones asincronas.</p>
+                    <details>
+                        <summary>Ejemplo</summary>
+                        <pre>profile(id).flatMap(p -> score(p.id()))</pre>
+                    </details>
+                </article>
+                <article class="item">
+                    <h3>concatMap</h3>
+                    <p>Mantiene orden en procesamiento secuencial.</p>
+                    <details>
+                        <summary>Ejemplo</summary>
+                        <pre>Flux.just(a,b,c).concatMap(this::call)</pre>
+                    </details>
+                </article>
+                <article class="item">
+                    <h3>zip</h3>
+                    <p>Combina fuentes en paralelo y espera a todas.</p>
+                    <details>
+                        <summary>Ejemplo</summary>
+                        <pre>Mono.zip(a,b,c).map(t -> t.getT1())</pre>
+                    </details>
+                </article>
+                <article class="item">
+                    <h3>timeout</h3>
+                    <p>Corta espera maxima para proteger latencia.</p>
+                    <details>
+                        <summary>Ejemplo</summary>
+                        <pre>service().timeout(Duration.ofMillis(250))</pre>
+                    </details>
+                </article>
+                <article class="item">
+                    <h3>sum en funcional</h3>
+                    <p>Para sumar en streams usa mapToInt(...).sum().</p>
+                    <details>
+                        <summary>Ejemplo</summary>
+                        <pre>int total = nums.stream().mapToInt(n -> n).sum();</pre>
+                    </details>
+                </article>
+            </div>
+        </section>
+        <section class="card">
+            <h2>Pregunta rapida</h2>
+            <input id="pregunta" placeholder="Ej: no sabia que sum ya suma el arreglo, como funciona?" />
+            <button onclick="responderLocal()">Responder con docs</button>
+            <button onclick="preguntarIa()">Preguntar IA local</button>
+            <div id="out" class="out">Respuesta aqui...</div>
+            <p><a href="/entrevista">Volver a entrevista</a></p>
+        </section>
+    </main>
+    <script>
+        function responderLocal() {
+            const q = (document.getElementById("pregunta").value || "").toLowerCase();
+            const out = document.getElementById("out");
+            if (q.includes("sum")) {
+                out.textContent = "En Java Stream<Integer> no tiene sum directo. Lo comun es mapToInt(...).sum(). Ejemplo: nums.stream().mapToInt(n -> n).sum().";
+                return;
+            }
+            if (q.includes("flatmap") && q.includes("concatmap")) {
+                out.textContent = "flatMap prioriza paralelismo; concatMap prioriza orden. En entrevista debes justificar el trade-off.";
+                return;
+            }
+            if (q.includes("zip")) {
+                out.textContent = "zip combina varias fuentes y emite cuando todas completan. Es util cuando dependencias son independientes.";
+                return;
+            }
+            out.textContent = "No encontre coincidencia local. Usa 'Preguntar IA local'.";
+        }
+        window.responderLocal = responderLocal;
+
+        async function preguntarIa() {
+            const q = document.getElementById("pregunta").value || "";
+            const out = document.getElementById("out");
+            out.textContent = "Consultando IA local...";
+            try {
+                const res = await fetch("/ollama/qa", {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                    body: q
+                });
+                out.textContent = await res.text();
+            } catch (err) {
+                out.textContent = "Error consultando IA: " + err;
+            }
+        }
+        window.preguntarIa = preguntarIa;
+    </script>
+</body>
+
+</html>

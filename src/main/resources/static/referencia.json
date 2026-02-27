@@ -1,0 +1,39 @@
+{
+  "temas": [
+    {
+      "id": "variables",
+      "titulo": "Variables en Java",
+      "resumen": "Una variable es un espacio de memoria con un nombre asociado para almacenar datos que pueden cambiar durante la ejecución.",
+      "ejemplo": "int edad = 25;\nString nombre = \"Juan\";",
+      "link": "https://www.abrirllave.com/java/variables.php"
+    },
+    {
+      "id": "comentarios",
+      "titulo": "Comentarios",
+      "resumen": "Los comentarios son notas para el desarrollador que el compilador ignora.",
+      "ejemplo": "// Comentario de una línea\n/* Comentario de\n   varias líneas */",
+      "link": "https://www.abrirllave.com/java/comentarios.php"
+    },
+    {
+      "id": "constantes",
+      "titulo": "Constantes",
+      "resumen": "Se usa la palabra reservada 'final' para definir valores que no pueden ser modificados una vez asignados.",
+      "ejemplo": "final double PI = 3.14159;",
+      "link": "https://www.abrirllave.com/java/constantes.php"
+    },
+    {
+      "id": "instrucciones-control",
+      "titulo": "Instrucciones de Control",
+      "resumen": "Permiten alterar el flujo de ejecución del programa mediante condiciones o bucles.",
+      "ejemplo": "if (edad >= 18) {\n    System.out.println(\"Mayor de edad\");\n}",
+      "link": "https://www.abrirllave.com/java/instrucciones-de-control.php"
+    },
+    {
+      "id": "arrays",
+      "titulo": "Arrays (Arreglos)",
+      "resumen": "Estructuras que permiten almacenar múltiples valores del mismo tipo en una sola variable.",
+      "ejemplo": "int[] numeros = {1, 2, 3, 4, 5};\nSystem.out.println(numeros[0]);",
+      "link": "https://www.abrirllave.com/java/arrays.php"
+    }
+  ]
+}

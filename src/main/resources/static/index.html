@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia Interactiva POO + HTTP</title>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="logo-icon">JP</div>
+      <div class="nav-item active" title="Inicio"
+        onclick="document.querySelector('.main-content').scrollTo({top: 0, behavior: 'smooth'})">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </div>
+      <div class="nav-item" title="Rutas"
+        onclick="document.querySelector('#target-rutas').scrollIntoView({behavior: 'smooth'})">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>
+      </div>
+      <div class="nav-item" title="Retos Repositorio"
+        onclick="document.querySelector('#target-repo').scrollIntoView({behavior: 'smooth'})">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+          </path>
+        </svg>
+      </div>
+      <div class="nav-item" title="Playground" onclick="activarPlaygroundLibre()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
+        </svg>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="nav-item" id="btnConfig" title="Configuracion">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </div>
+        <!--<div class="nav-item" title="Cerrar sesion">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </div>-->
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="user-info">
+          <h2>Hola, Desarrollador</h2>
+          <p>Continua tu ruta de aprendizaje Java hoy.</p>
+        </div>
+        <!-- <div class="header-actions">
+          <div class="search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="Buscar ejercicios...">
+          </div>
+          <div class="icon-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </div>
+          <div class="icon-btn" style="background: var(--brand); color: #fff; border: none;">D</div>
+        </div> -->
+      </header>
+
+      <div class="featured-row">
+        <div class="hero-dashboard">
+          <h1 style="color: var(--brand); margin: 0;">Guia interactiva: POO</h1>
+          <p>Potencia tus habilidades de desarrollo Java con ejercicios reales y playground local.</p>
+          <div style="margin-top: 20px;">
+            <button class="action"
+              onclick="document.querySelector('#target-rutas').scrollIntoView({behavior: 'smooth'})">Empezar
+              ahora</button>
+          </div>
+        </div>
+
+        <div class="card-dashboard" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="status-pill" style="color: var(--brand); background: rgba(13,106,99,0.1);">Progreso
+              diario</span>
+            <h3 style="margin: 15px 0 5px;">Tu meta hoy</h3>
+            <p style="font-size: 0.9rem; color: #666;">Completa 2 retos del nivel base.</p>
+          </div>
+          <div style="height: 8px; background: #eee; border-radius: 4px;">
+            <div style="width: 40%; height: 100%; background: var(--brand); border-radius: 4px;"></div>
+          </div>
+        </div>
+
+        <div class="card-dashboard" style="background: var(--brand); color: #fff;">
+          <h3>Tip Java</h3>
+          <p style="font-size: 0.85rem; opacity: 0.9;">Usa <code style="color: #fff;">Optional</code> para evitar
+            NullPointerExceptions en flujos funcionales.</p>
+          <a href="#" style="color: #fff; font-size: 0.8rem; font-weight: 700;">Ver mas</a>
+        </div>
+      </div>
+
+      <div class="section-grid">
+        <section id="target-rutas" class="dashboard-card">
+          <div class="card-title">
+            <span>Ruta por clases</span>
+            <span class="status-pill">Documentacion</span>
+          </div>
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="tab-scope">Scope</button>
+            <button class="tab-btn" data-tab="tab-poo-base">Bases</button>
+            <button class="tab-btn" data-tab="tab-poo-dia">Tienda</button>
+            <button class="tab-btn" data-tab="tab-abs">Abstraccion</button>
+            <button class="tab-btn" data-tab="tab-fundamentos">Fundamentos</button>
+          </div>
+
+          <div id="tab-scope" class="tab-panel active">
+            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+              <h4>ScopeInstanciasPractica.java</h4>
+              <p>El scope define la visibilidad de las variables.</p>
+              <div class="code-wrap">
+                <pre class="code"><code>System.out.println(ScopeInstanciasPractica.getTotalInstancias());</code></pre>
+              </div>
+              <button class="expand-btn" data-target="full-scope"
+                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
+                completo</button>
+              <pre id="full-scope" style="display:none;">
+public class ScopeInstanciasPractica {
+    private static int totalInstancias = 0;
+    public ScopeInstanciasPractica() { totalInstancias++; }
+    public static int getTotalInstancias() { return totalInstancias; }
+}
+              </pre>
+            </article>
+          </div>
+
+          <div id="tab-poo-base" class="tab-panel">
+            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+              <h4>Persona.java (Bases)</h4>
+              <p>Clases y objetos: la base de Java. Aprende a definir atributos privados y constructores.</p>
+              <div class="code-wrap">
+                <pre class="code"><code>Persona p = new Persona("Ana");
+System.out.println(p.saludar());</code></pre>
+              </div>
+              <button class="expand-btn" data-target="full-persona"
+                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
+                completo</button>
+              <pre id="full-persona" style="display:none;">
+public class Persona {
+    private String nombre;
+    public Persona(String nombre) {
+        this.nombre = nombre;
+    }
+    public String saludar() {
+        return "Hola, soy " + nombre;
+    }
+}
+              </pre>
+            </article>
+          </div>
+
+          <div id="tab-poo-dia" class="tab-panel">
+            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+              <h4>Relaciones de Clases</h4>
+              <p>Agregacion: cuando un objeto contiene a otro. El carrito "tiene" productos.</p>
+              <div class="code-wrap">
+                <pre class="code"><code>Tienda t = new Tienda();
+t.agregarProducto(new Producto("Cafe", 2.5));</code></pre>
+              </div>
+              <button class="expand-btn" data-target="full-tienda"
+                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
+                completo</button>
+              <pre id="full-tienda" style="display:none;">
+public class Tienda {
+    private List&lt;Producto&gt; productos = new ArrayList&lt;&gt;();
+    public void agregarProducto(Producto p) {
+        productos.add(p);
+    }
+}
+              </pre>
+            </article>
+          </div>
+
+          <div id="tab-abs" class="tab-panel">
+            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+              <h4>Abstraccion</h4>
+              <p>Uso de clases abstractas para contratos base. Define el "qué" sin el "cómo".</p>
+              <div class="code-wrap">
+                <pre class="code"><code>abstract class Animal {
+    abstract void hablar();
+}</code></pre>
+              </div>
+              <button class="expand-btn" data-target="full-abs"
+                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
+                completo</button>
+              <pre id="full-abs" style="display:none;">
+abstract class Animal {
+    private String nombre;
+    abstract void hablar();
+    public void dormir() {
+        System.out.println("Zzz...");
+    }
+}
+
+class Perro extends Animal {
+    void hablar() { System.out.println("Guau!"); }
+}
+              </pre>
+            </article>
+          </div>
+
+          <div id="tab-fundamentos" class="tab-panel">
+            <div class="card-title">
+              <span>Fundamentos Java (Wiki)</span>
+              <div class="search-bar reference-search">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" id="refSearch" placeholder="Filtrar conceptos..." oninput="filtrarReferencia()">
+              </div>
+            </div>
+            <p style="margin-bottom: 20px; font-size: 0.9rem;">Conceptos básicos de <a
+                href="https://www.abrirllave.com/java/" target="_blank"
+                style="color: var(--brand2); font-weight: 600;">Abrirllave.com</a>.</p>
+            <div id="referenciaGrid" class="level-grid">
+              <!-- Referencia cards will be injected here -->
+            </div>
+          </div>
+
+          <div style="margin-top: auto; padding-top: 20px; display: flex; gap: 10px;">
+            <a class="action-link" style="font-size: 0.8rem;" href="/entrevista">Plan Entrevista</a>
+          </div>
+        </section>
+
+        <section id="target-repo" class="dashboard-card">
+          <div class="card-title">
+            <span id="repo-section-title">Gestión de Repositorios (GitHub)</span>
+            <span class="status-pill" style="color: var(--brand2); background: rgba(181,85,47,0.1);">Repositorio</span>
+          </div>
+          <p>Gestiona y descarga colecciones de ejercicios externos para tu ruta personalizada.</p>
+          <div class="repo-loader">
+            <input type="text" id="repoUrl" placeholder="URL de GitHub..." class="repo-input">
+            <button class="action" onclick="cargarDesdeRepo()" style="padding: 10px 20px;">Cargar</button>
+            <button class="action" id="btnSaveRepo" onclick="guardarRepositorioActual()"
+              style="padding: 10px 20px; background: var(--brand2); color: white; display: none;">Guardar</button>
+            <button class="action" onclick="document.getElementById('helpModal').classList.add('active')"
+              style="background:transparent; border:1px solid var(--brand2); color:var(--brand2); padding:10px;">?</button>
+          </div>
+
+          <div id="saved-repos-container" style="margin-top: 15px; display: none;">
+            <p style="font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; color: #666;">Repositorios Guardados:</p>
+            <div id="saved-repos-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+          </div>
+
+          <div id="backendStatus" style="font-size: 0.8rem; color: #666; margin-top: 5px;"></div>
+
+          <div id="repo-slider"
+            style="display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; scrollbar-width: none; border-bottom: 1px solid rgba(0,0,0,0.05);">
+            <button class="repo-tab active" onclick="switchRepo('standard')"
+              style="padding: 8px 15px; border-radius: 20px; border: 1px solid var(--brand); background: var(--brand); color: white; cursor: pointer; white-space: nowrap; font-size: 0.85rem;">Standard</button>
+          </div>
+
+          <div class="level-scroll">
+            <div id="retos-container" class="level-grid">
+              <!-- Los retos se cargaran dinamicamente aqui -->
+            </div>
+          </div>
+        </section>
+
+        <section id="target-playground" class="dashboard-card playground-section">
+          <div class="card-title">
+            <span id="playground-title">Playground Java</span>
+            <div style="display:flex; gap:10px;">
+              <button id="btnExpandEditor" class="action"
+                style="background: rgba(0,0,0,0.05); color: var(--ink); font-size: 0.8rem; padding: 8px 15px;"
+                onclick="toggleEditorFullscreen()">Ampliar</button>
+              <button class="action" style="background: #1e2227; font-size: 0.8rem; padding: 8px 15px;"
+                onclick="ejecutarJava()">Ejecutar</button>
+            </div>
+          </div>
+
+          <div id="editorShell" class="editor-shell">
+            <div class="editor-top">
+              <span>Main.java</span>
+              <div style="display: flex; gap: 15px;">
+                <span id="editorHint" style="opacity: 0.7; font-size: 0.8rem;">Escribe codigo Java aqui</span>
+                <button id="btnExpandEditorTop" onclick="toggleEditorFullscreen()"
+                  style="border:none;background:none;color:inherit;cursor:pointer;font-size:0.75rem;">Full
+                  Screen</button>
+              </div>
+            </div>
+            <div class="editor-body">
+              <pre id="lineNumbers" class="line-numbers">1</pre>
+              <textarea id="javaEditor" class="editor" spellcheck="false">public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hola desde plataforma de aprendizaje Dashboard");
+    }
+}</textarea>
+              <div id="snippetPanel" class="snippet-panel"></div>
+            </div>
+          </div>
+          <pre id="runOutput" class="run-output">Salida aparecerá aqui...</pre>
+        </section>
+      </div>
+
+      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
+        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
+      </footer>
+    </main>
+  </div>
+
+  <div id="codeModal" class="modal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <strong>Vista ampliada de codigo</strong>
+        <button id="closeModal" class="close-btn">Cerrar</button>
+      </div>
+      <pre class="code"><code id="modalCode"></code></pre>
+    </div>
+  </div>
+
+  <div id="helpModal" class="modal">
+    <div class="modal-box" style="max-width: 600px;">
+      <div class="modal-top">
+        <strong>Configuracion del Repositorio</strong>
+        <button class="close-btn"
+          onclick="document.getElementById('helpModal').classList.remove('active')">Cerrar</button>
+      </div>
+      <div style="padding: 25px; overflow-y: auto; max-height: 70vh;">
+        <p>Para cargar tus propios ejercicios, tu repositorio de GitHub debe contener un archivo <code>retos.json</code>
+          en la raiz con esta estructura:</p>
+        <div class="code-wrap">
+          <pre class="code"><code>{
+  "retos": [
+    {
+      "id": "nivel1",
+      "titulo": "Nombre del Reto",
+      "descripcion": "Instrucciones...",
+      "template": "public class Main { ... }",
+      "output_esperado": ["Texto esperado"]
+    }
+  ]
+}</code></pre>
+        </div>
+        <ul style="font-size: 0.9rem; line-height: 1.6;">
+          <li><strong>id</strong>: Debe coincidir con el nivel (nivel1, nivel2, etc).</li>
+          <li><strong>template</strong>: Es el codigo inicial que aparecera en el editor.</li>
+          <li><strong>output_esperado</strong>: Lista de fragmentos que la salida del programa debe contener para
+            validar.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="themeModal" class="modal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h3 style="margin:0;">Seleccionar Tema</h3>
+        <button id="closeThemeModal" class="close-btn">X</button>
+      </div>
+      <div class="theme-grid">
+        <div class="theme-card active" data-theme="emerald">
+          <div class="theme-preview">
+            <div style="background: #f0f2f5;"></div>
+            <div style="background: #0d6a63;"></div>
+            <div style="background: #ffffff;"></div>
+          </div>
+          <span>Esmeralda</span>
+        </div>
+        <div class="theme-card" data-theme="dark">
+          <div class="theme-preview">
+            <div style="background: #0d1117;"></div>
+            <div style="background: #238636;"></div>
+            <div style="background: #161b22;"></div>
+          </div>
+          <span>Noche Profunda</span>
+        </div>
+        <div class="theme-card" data-theme="midnight">
+          <div class="theme-preview">
+            <div style="background: #0a192f;"></div>
+            <div style="background: #64ffda;"></div>
+            <div style="background: #112240;"></div>
+          </div>
+          <span>Azul Medianoche</span>
+        </div>
+        <div class="theme-card" data-theme="earth">
+          <div class="theme-preview">
+            <div style="background: #fdf6e3;"></div>
+            <div style="background: #859900;"></div>
+            <div style="background: #eee8d5;"></div>
+          </div>
+          <span>Tierra (Java Earth)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+</body>
+
+</html>

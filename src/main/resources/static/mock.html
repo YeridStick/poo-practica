@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mock tecnico reactivo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Segoe UI, Tahoma, sans-serif;
+            background: #eef4f8;
+            color: #1b2635
+        }
+
+        .wrap {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 22px 14px
+        }
+
+        .hero {
+            background: linear-gradient(130deg, #0d5e86, #1f95ab);
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px
+        }
+
+        .card {
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid #d3e1ec;
+            border-radius: 10px;
+            padding: 12px
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        button {
+            background: #be4d00;
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            padding: 9px 12px;
+            cursor: pointer
+        }
+
+        .ghost {
+            background: #f4f8fc;
+            color: #173048;
+            border: 1px solid #c5d7e7
+        }
+
+        .out {
+            margin-top: 8px;
+            background: #101922;
+            color: #e6f2ff;
+            border-radius: 8px;
+            padding: 10px;
+            white-space: pre-wrap;
+            min-height: 80px
+        }
+
+        .mini {
+            background: #f6fbff;
+            border-left: 4px solid #0d5e86;
+            padding: 8px
+        }
+
+        a {
+            color: #0d5e86
+        }
+    </style>
+</head>
+
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <h1>Mock tecnico (preguntas y repreguntas en tiempo real)</h1>
+            <p>Practica para entrevista: responde en voz alta y luego presiona repregunta para profundizar.</p>
+        </section>
+        <section class="card">
+            <div class="toolbar">
+                <button id="btnStartMock">Iniciar mock (15 min)</button>
+                <button id="btnNextMock" class="ghost">Siguiente pregunta</button>
+                <button id="btnFollowMock" class="ghost">Repregunta</button>
+            </div>
+            <p class="mini"><strong>Timer:</strong> <span id="timer">No iniciado</span></p>
+            <div id="preguntaOut" class="out">Pulsa iniciar para comenzar.</div>
+            <div id="repreguntaOut" class="out">Las repreguntas apareceran aqui.</div>
+            <textarea id="respuestaInput" placeholder="Escribe aqui tu respuesta tecnica..."
+                style="margin-top:8px;width:100%;min-height:120px;border:1px solid #c5d7e7;border-radius:8px;padding:10px;font-family:Consolas,Monaco,monospace"></textarea>
+            <div class="toolbar">
+                <button id="btnSaveAnswer" class="ghost">Guardar respuesta</button>
+                <button id="btnClearAnswer" class="ghost">Limpiar</button>
+            </div>
+            <div id="respuestaStatus" class="out">Sin respuesta guardada.</div>
+        </section>
+        <section class="card">
+            <h2>Guia de respuesta esperada</h2>
+            <ol>
+                <li>Contexto del problema.</li>
+                <li>Decision tecnica (operador, patron, arquitectura).</li>
+                <li>Trade-off (latencia, costo, complejidad).</li>
+                <li>Como mediras si fue buena decision.</li>
+            </ol>
+            <p><a href="/entrevista">Volver a entrevista</a></p>
+        </section>
+    </main>
+    <script>
+        const bank = [
+            {
+                q: "Disena un endpoint WebFlux para evaluar riesgo de fraude en menos de 300ms.",
+                r: [
+                    "Que timeout pondrias por dependencia y por que?",
+                    "Como evitas que una dependencia lenta tumbe toda la respuesta?",
+                    "Que metricas exactas observarias en produccion?"
+                ]
+            },
+            {
+                q: "Explica flatMap vs concatMap en un caso real de eventos de pago.",
+                r: [
+                    "Cuando priorizas orden sobre throughput?",
+                    "Que pasa si subes demasiado la concurrencia?",
+                    "Como justificas esa decision en code review?"
+                ]
+            },
+            {
+                q: "Como integrarias Kafka en un flujo reactivo con idempotencia?",
+                r: [
+                    "Como manejas retrys y dead-letter queue?",
+                    "Donde guardas deduplicacion y con que TTL?",
+                    "Que haria fallar ese diseno?"
+                ]
+            },
+            {
+                q: "Desde frontend React, como manejas loading/error/success sin race conditions?",
+                r: [
+                    "Como cancelas requests al cambiar de vista?",
+                    "Que contrato de errores expones al usuario final?",
+                    "Como validas que no hay estado inconsistente?"
+                ]
+            }
+        ];
+        let active = null;
+        let left = 0;
+        let timer = null;
+
+        function refreshTimer() {
+            if (left <= 0) {
+                document.getElementById("timer").textContent = "Finalizado";
+                return;
+            }
+            const mm = String(Math.floor(left / 60)).padStart(2, "0");
+            const ss = String(left % 60).padStart(2, "0");
+            document.getElementById("timer").textContent = mm + ":" + ss;
+        }
+
+        function iniciarMock() {
+            left = 15 * 60;
+            if (timer) clearInterval(timer);
+            refreshTimer();
+            siguientePregunta();
+            timer = setInterval(() => {
+                left--;
+                refreshTimer();
+                if (left <= 0) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+            }, 1000);
+        }
+        function siguientePregunta() {
+            active = bank[Math.floor(Math.random() * bank.length)];
+            document.getElementById("preguntaOut").textContent = "Pregunta: " + active.q;
+            document.getElementById("repreguntaOut").textContent = "Repregunta pendiente...";
+        }
+
+        function lanzarRepregunta() {
+            if (!active) {
+                document.getElementById("repreguntaOut").textContent = "Elige primero una pregunta.";
+                return;
+            }
+            const rep = active.r[Math.floor(Math.random() * active.r.length)];
+            document.getElementById("repreguntaOut").textContent = "Repregunta: " + rep;
+        }
+
+        function guardarRespuesta() {
+            const txt = document.getElementById("respuestaInput").value.trim();
+            if (!txt) {
+                document.getElementById("respuestaStatus").textContent = "No hay texto para guardar.";
+                return;
+            }
+            const key = "mock_respuesta_" + Date.now();
+            localStorage.setItem(key, txt);
+            document.getElementById("respuestaStatus").textContent = "Respuesta guardada localmente (" + txt.length + " chars).";
+        }
+
+        function limpiarRespuesta() {
+            document.getElementById("respuestaInput").value = "";
+            document.getElementById("respuestaStatus").textContent = "Respuesta limpia.";
+        }
+
+        document.getElementById("btnStartMock").addEventListener("click", iniciarMock);
+        document.getElementById("btnNextMock").addEventListener("click", siguientePregunta);
+        document.getElementById("btnFollowMock").addEventListener("click", lanzarRepregunta);
+        document.getElementById("btnSaveAnswer").addEventListener("click", guardarRespuesta);
+        document.getElementById("btnClearAnswer").addEventListener("click", limpiarRespuesta);
+    </script>
+</body>
+
+</html>

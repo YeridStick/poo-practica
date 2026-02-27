@@ -1,0 +1,318 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.poo.practica:poo-practica >--------------------
+[INFO] Building poo-practica 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ poo-practica ---
+[INFO] Copying 8 resources from src\main\resources to build\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ poo-practica ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 17 source files with javac [debug target 17] to build\classes
+[INFO] -------------------------------------------------------------
+[WARNING] COMPILATION WARNING : 
+[INFO] -------------------------------------------------------------
+[WARNING] system modules path not set in conjunction with -source 17
+[INFO] 1 warning
+[INFO] -------------------------------------------------------------
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[2,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[2,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[3,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[3,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[5,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[4,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[5,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[6,43] package org.junit.jupiter.api.MethodOrderer does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[8,2] cannot find symbol
+  symbol: class TestMethodOrder
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[9,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[14,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[19,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[24,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[9,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[14,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[19,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[11,6] cannot find symbol
+  symbol:   class Test
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[16,6] cannot find symbol
+  symbol:   class Test
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[21,6] cannot find symbol
+  symbol:   class Test
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[27,6] cannot find symbol
+  symbol:   class Test
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[8,18] cannot find symbol
+  symbol: class OrderAnnotation
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[25,6] cannot find symbol
+  symbol:   class Test
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[26,6] cannot find symbol
+  symbol:   class Order
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[33,6] cannot find symbol
+  symbol:   class Test
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[34,6] cannot find symbol
+  symbol:   class Order
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[42,6] cannot find symbol
+  symbol:   class Test
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[43,6] cannot find symbol
+  symbol:   class Order
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[9,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[14,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[19,6] cannot find symbol
+  symbol:   class Test
+  location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[11,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[16,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[21,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[26,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[11,9] cannot find symbol
+  symbol:   method assertEquals(double,double,double)
+  location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[16,9] cannot find symbol
+  symbol:   method assertEquals(double,double,double)
+  location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[21,9] cannot find symbol
+  symbol:   method assertEquals(double,double,double)
+  location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[13,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[18,9] cannot find symbol
+  symbol:   method assertEquals(double,double,double)
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[23,9] cannot find symbol
+  symbol:   method assertTrue(boolean)
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[24,9] cannot find symbol
+  symbol:   method assertFalse(boolean)
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[29,9] cannot find symbol
+  symbol:   method assertEquals(double,double,double)
+  location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[36,9] cannot find symbol
+  symbol:   method assumeTrue(boolean,java.lang.String)
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[45,9] cannot find symbol
+  symbol:   method assumeTrue(boolean,java.lang.String)
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[46,9] cannot find symbol
+  symbol:   method assumeTrue(boolean,java.lang.String)
+  location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[11,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[16,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[21,9] cannot find symbol
+  symbol:   method assertEquals(java.lang.String,java.lang.String)
+  location: class Ejercicio01ScopeTest
+[INFO] 62 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.409 s
+[INFO] Finished at: 2026-02-24T13:24:03-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project poo-practica: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[2,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[2,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[3,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[3,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[5,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[4,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[5,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[6,43] package org.junit.jupiter.api.MethodOrderer does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[8,2] cannot find symbol
+[ERROR]   symbol: class TestMethodOrder
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[1,36] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[1,1] static import only from classes and interfaces
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[9,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[14,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[19,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[24,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[9,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[14,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[19,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[11,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[16,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[21,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[27,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[8,18] cannot find symbol
+[ERROR]   symbol: class OrderAnnotation
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[25,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[26,6] cannot find symbol
+[ERROR]   symbol:   class Order
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[33,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[34,6] cannot find symbol
+[ERROR]   symbol:   class Order
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[42,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[43,6] cannot find symbol
+[ERROR]   symbol:   class Order
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[9,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[14,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[19,6] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[11,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[16,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[21,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio03FactoryTest.java:[26,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio03FactoryTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[11,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(double,double,double)
+[ERROR]   location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[16,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(double,double,double)
+[ERROR]   location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio02StrategyTest.java:[21,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(double,double,double)
+[ERROR]   location: class Ejercicio02StrategyTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[13,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[18,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(double,double,double)
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[23,9] cannot find symbol
+[ERROR]   symbol:   method assertTrue(boolean)
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[24,9] cannot find symbol
+[ERROR]   symbol:   method assertFalse(boolean)
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/PooBasesEjerciciosTest.java:[29,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(double,double,double)
+[ERROR]   location: class PooBasesEjerciciosTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[36,9] cannot find symbol
+[ERROR]   symbol:   method assumeTrue(boolean,java.lang.String)
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[45,9] cannot find symbol
+[ERROR]   symbol:   method assumeTrue(boolean,java.lang.String)
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/RutaAprendizajeTest.java:[46,9] cannot find symbol
+[ERROR]   symbol:   method assumeTrue(boolean,java.lang.String)
+[ERROR]   location: class RutaAprendizajeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[11,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[16,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio01ScopeTest
+[ERROR] /C:/Users/yerid/Documents/Proyectos/practica java/poo-practica/src/test/java/Ejercicio01ScopeTest.java:[21,9] cannot find symbol
+[ERROR]   symbol:   method assertEquals(java.lang.String,java.lang.String)
+[ERROR]   location: class Ejercicio01ScopeTest
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

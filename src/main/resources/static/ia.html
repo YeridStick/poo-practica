@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IA local - Ollama</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Segoe UI, Tahoma, sans-serif;
+            background: #eef4f8;
+            color: #1b2635
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 22px 14px
+        }
+
+        .hero {
+            background: linear-gradient(130deg, #0d5e86, #1f95ab);
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px
+        }
+
+        .card {
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid #d3e1ec;
+            border-radius: 10px;
+            padding: 12px
+        }
+
+        button {
+            background: #be4d00;
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            padding: 9px 12px;
+            cursor: pointer
+        }
+
+        .ghost {
+            background: #f4f8fc;
+            color: #173048;
+            border: 1px solid #c5d7e7
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .out {
+            margin-top: 8px;
+            background: #101922;
+            color: #e6f2ff;
+            border-radius: 8px;
+            padding: 10px;
+            white-space: pre-wrap;
+            min-height: 88px
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #c5d7e7;
+            border-radius: 8px;
+            padding: 9px
+        }
+
+        textarea {
+            min-height: 160px;
+            font-family: Consolas, Monaco, monospace
+        }
+
+        pre {
+            background: #111922;
+            color: #e6f2ff;
+            padding: 10px;
+            border-radius: 8px;
+            white-space: pre-wrap
+        }
+
+        a {
+            color: #0d5e86
+        }
+    </style>
+</head>
+
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <h1>IA local para practicar (Ollama)</h1>
+            <p>Genera ejercicios aleatorios y revisa si tu solucion cumple la consigna.</p>
+        </section>
+        <section class="card">
+            <h2>Estado modelo local</h2>
+            <pre>ollama list
+NAME             ID              SIZE      MODIFIED
+llama3:latest    365c0bd3c000    4.7 GB    2 months ago</pre>
+            <div class="toolbar">
+                <button onclick="actualizarList()">Actualizar ollama list</button>
+                <button class="ghost" onclick="generarEj()">Generar ejercicio aleatorio</button>
+                <button class="ghost" onclick="revisar()">Revisar solucion</button>
+            </div>
+            <p>Foco opcional:</p>
+            <input id="foco" placeholder="ej: webflux timeout fallback, kafka idempotencia, react estado asincrono" />
+            <div id="listOut" class="out">Sin consultar.</div>
+            <div id="ejOut" class="out">Ejercicio IA aparecera aqui.</div>
+        </section>
+        <section class="card">
+            <h2>Tu solucion</h2>
+            <textarea id="solucion" placeholder="Pega aqui tu solucion o codigo"></textarea>
+            <div id="reviewOut" class="out">Revision de IA aparecera aqui.</div>
+            <p><a href="/entrevista">Volver a entrevista</a></p>
+        </section>
+    </main>
+    <script>
+        async function actualizarList() {
+            const box = document.getElementById("listOut");
+            box.textContent = "Consultando ollama list...";
+            try {
+                const res = await fetch("/ollama/list");
+                box.textContent = await res.text();
+            } catch (err) {
+                box.textContent = "Error: " + err;
+            }
+        }
+        window.actualizarList = actualizarList;
+
+        async function generarEj() {
+            const foco = document.getElementById("foco").value || "";
+            const box = document.getElementById("ejOut");
+            box.textContent = "Generando ejercicio aleatorio...";
+            try {
+                const res = await fetch("/ollama/generar", {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                    body: foco
+                });
+                box.textContent = await res.text();
+            } catch (err) {
+                box.textContent = "Error: " + err;
+            }
+        }
+        window.generarEj = generarEj;
+
+        async function revisar() {
+            const consigna = document.getElementById("ejOut").textContent || "";
+            const solucion = document.getElementById("solucion").value || "";
+            const box = document.getElementById("reviewOut");
+            if (!consigna.trim()) {
+                box.textContent = "Primero genera una consigna.";
+                return;
+            }
+            if (!solucion.trim()) {
+                box.textContent = "No hay solucion para revisar.";
+                return;
+            }
+            box.textContent = "Revisando...";
+            try {
+                const payload = consigna + "\n---SOLUTION---\n" + solucion;
+                const res = await fetch("/ollama/revisar", {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                    body: payload
+                });
+                box.textContent = await res.text();
+            } catch (err) {
+                box.textContent = "Error: " + err;
+            }
+        }
+        window.revisar = revisar;
+    </script>
+</body>
+
+</html>

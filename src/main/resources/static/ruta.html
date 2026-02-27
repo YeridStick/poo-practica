@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruta de Entrevista: Java Avanzado + POO</title>
+    <style>
+        :root {
+            --bg: #f3f7fa;
+            --panel: #ffffff;
+            --ink: #1d2430;
+            --brand: #005f73;
+            --brand2: #ca6702;
+            --line: #d6e2ea;
+            --soft: #eff6fb;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 8% 8%, #e8f8ff 0, transparent 30%),
+                linear-gradient(180deg, #f0f6fa 0%, #eef4f7 50%, #e6eef3 100%);
+        }
+
+        .wrap {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 24px 16px 40px
+        }
+
+        .hero {
+            background: linear-gradient(130deg, #005f73, #0a9396);
+            color: #fff;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, .16);
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-top: 0
+        }
+
+        p,
+        li {
+            line-height: 1.5
+        }
+
+        .card {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            box-shadow: 0 5px 14px rgba(0, 0, 0, .06);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px
+        }
+
+        .item {
+            background: var(--soft);
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 10px
+        }
+
+        code.inline {
+            font-family: Consolas, Monaco, monospace;
+            background: #eef2f5;
+            padding: 1px 5px;
+            border-radius: 5px
+        }
+
+        pre {
+            margin: 8px 0 0;
+            background: #111923;
+            color: #eef7ff;
+            padding: 12px;
+            border-radius: 10px;
+            overflow: auto
+        }
+
+        details {
+            margin-top: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px;
+            background: #fff
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        .action {
+            display: inline-block;
+            margin-top: 8px;
+            background: var(--brand2);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            padding: 9px 12px
+        }
+
+        .tag {
+            display: inline-block;
+            background: #d7edf5;
+            color: #003b48;
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-size: .84rem
+        }
+    </style>
+</head>
+
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <h1>Ruta de entrevista: Java Avanzado + POO + Arquitectura</h1>
+            <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.
+            </p>
+            <span class="tag">Objetivo: dominar la herencia, polimorfismo y principios SOLID</span>
+        </section>
+
+        <section class="card">
+            <h2>Modo practica interactiva</h2>
+            <p>Usa estas secciones para practicar POO, patrones de diseño, IA para revisión de código y documentación
+                técnica.</p>
+            <div class="grid">
+                <article class="item">
+                    <h3>Mock en tiempo real</h3>
+                    <p>Preguntas y repreguntas dinamicas con timer de entrevista.</p>
+                    <a class="action" href="/entrevista/mock">Abrir mock tecnico</a>
+                </article>
+                <article class="item">
+                    <h3>Laboratorio POO Avanzado</h3>
+                    <p>Practica con herencia, interfaces y polimorfismo complejo.</p>
+                    <a class="action" href="/entrevista/webflux2">Abrir laboratorio POO</a>
+                </article>
+                <article class="item">
+                    <h3>IA local con Ollama</h3>
+                    <p>Genera ejercicios aleatorios y revisa cumplimiento de tu solucion.</p>
+                    <a class="action" href="/entrevista/ia">Abrir seccion IA</a>
+                </article>
+                <article class="item">
+                    <h3>Cards de Conceptos</h3>
+                    <p>Documentacion desplegable para patrones y estructuras de datos.</p>
+                    <a class="action" href="/entrevista/docs">Abrir cards de conceptos</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Mapa de temas que debes dominar</h2>
+            <div class="grid">
+                <article class="item">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Java Core: Colecciones, Generics y Lambdas.</li>
+                        <li>POO: Herencia, Abstracción y Encapsulamiento.</li>
+                        <li>Patrones de Diseño: Creacionales, Estructurales y de Comportamiento.</li>
+                        <li>Arquitectura: SOLID, Clean Code y Hexagonal.</li>
+                    </ul>
+                </article>
+                <article class="item">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>React con estado asincrono y UI responsiva.</li>
+                        <li>Integracion segura con APIs backend.</li>
+                        <li>Colaboracion UX/UI orientada a producto.</li>
+                    </ul>
+                </article>
+                <article class="item">
+                    <h3>Ingenieria</h3>
+                    <ul>
+                        <li>Tests unitarios, integracion y funcionales.</li>
+                        <li>Gradle/Maven + pipeline CI/CD.</li>
+                        <li>Code review con foco en riesgos y regresiones.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Principios reactivos: repaso profundo</h2>
+            <ol>
+                <li><strong>Encapsulamiento:</strong> proteger el estado interno de los objetos.</li>
+                <li><strong>Abstracción:</strong> representar las características esenciales sin detalles de
+                    implementación.</li>
+                <li><strong>Herencia:</strong> reutilización de código y jerarquías de clases.</li>
+                <li><strong>Polimorfismo:</strong> múltiples formas de ejecutar un comportamiento.</li>
+                <li><strong>Interfaces:</strong> contratos que definen qué hace el sistema, no cómo.</li>
+            </ol>
+            <p><strong>Pregunta clave:</strong> Explica la diferencia entre composición y herencia. ¿Cuándo preferirías
+                una sobre la otra?</p>
+        </section>
+
+        <section class="card">
+            <h2>Preguntas tecnicas para practicar</h2>
+            <details>
+                <summary>1) ¿Cuál es la diferencia entre una interfaz y una clase abstracta?</summary>
+                <p>Respuesta esperada: Las interfaces definen contratos (qué hacer), mientras que las clases abstractas
+                    pueden definir estado y comportamiento base (cómo hacerlo parcialmente).</p>
+            </details>
+            <details>
+                <summary>2) ¿Qué es el polimorfismo y cómo se aplica en Java?</summary>
+                <p>Respuesta esperada: Es la capacidad de un objeto de tomar varias formas. En Java se aplica mediante
+                    la sobrescritura de métodos (overriding) y el uso de referencias de interfaces/clases base.</p>
+            </details>
+            <details>
+                <summary>3) ¿Qué son los principios SOLID?</summary>
+                <p>Respuesta esperada: Single responsibility, Open-closed, Liskov substitution, Interface segregation y
+                    Dependency inversion. Son guías para crear software mantenible.</p>
+            </details>
+            <details>
+                <summary>4) Disena una API de fraude de alta carga</summary>
+                <p>Incluye versionado, idempotencia, limites, timeouts, retries, circuit breaker, cache y tracing.</p>
+            </details>
+            <details>
+                <summary>5) Frontend: como manejas estados loading/error/success en React para flujos de riesgo?
+                </summary>
+                <p>Respuesta esperada: estado explicito, cancelacion de requests, reintentos y feedback claro al
+                    analista.</p>
+            </details>
+        </section>
+
+        <section class="card">
+            <h2>Ejercicios Java POO (practica guiada)</h2>
+            <article class="item">
+                <h3>Ejercicio 1: Encapsulamiento y Modelado</h3>
+                <p>Crea un sistema de <code class="inline">CuentaBancaria</code> con validaciones de saldo y
+                    transacciones atómicas.</p>
+            </article>
+            <article class="item">
+                <h3>Ejercicio 2: Herencia y Polimorfismo</h3>
+                <p>Implementa un sistema de <code class="inline">FormasGeometricas</code> donde cada forma calcule su
+                    área y perímetro de forma única.</p>
+            </article>
+            <article class="item">
+                <h3>Ejercicio 3: Patrón Strategy</h3>
+                <p>Define diferentes algoritmos de cálculo de impuestos que se puedan intercambiar en tiempo de
+                    ejecución.</p>
+            </article>
+            <article class="item">
+                <h3>Ejercicio 4: Manejo de Colecciones y Streams</h3>
+                <p>Procesa una lista de empleados para agruparlos por departamento y calcular el salario promedio.</p>
+            </article>
+            <article class="item">
+                <h3>Ejercicio 5: testing serio</h3>
+                <p>Usa <code class="inline">StepVerifier</code> para servicios y <code
+                        class="inline">WebTestClient</code> para endpoints.</p>
+            </article>
+            <pre><code>// Ejemplo de Polimorfismo y Factory
+public void procesarNotificacion(String tipo, String mensaje) {
+    Notificador n = NotificadorFactory.crear(tipo);
+    n.enviar(mensaje);
+}
+
+// Ejemplo de Streams
+public double calcularVentasTotales(List<Pedido> pedidos) {
+    return pedidos.stream()
+                  .filter(p -> p.estado() == Estado.COMPLETADO)
+                  .mapToDouble(Pedido::total)
+                  .sum();
+}</code></pre>
+        </section>
+
+        <section class="card">
+            <h2>Simulacion de entrevista (60 min)</h2>
+            <ol>
+                <li>10 min: explica arquitectura de un servicio reactivo de fraude.</li>
+                <li>20 min: resuelve un endpoint WebFlux con manejo de errores.</li>
+                <li>15 min: diseña integracion Kafka + contrato API.</li>
+                <li>10 min: estrategia de testing y CI/CD.</li>
+                <li>5 min: trade-offs y decisiones tecnicas.</li>
+            </ol>
+            <p>Tip: responde con estructura fija: contexto, decision, trade-off, medicion.</p>
+        </section>
+
+        <section class="card">
+            <h2>Siguiente paso recomendado</h2>
+            <p>Empieza por el Ejercicio 2 y luego explica en voz alta por que usaste cada operador de Reactor.</p>
+            <a class="action" href="/">Volver a la guia principal</a>
+        </section>
+    </main>
+</body>
+
+</html>
