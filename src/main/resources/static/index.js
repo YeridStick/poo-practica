@@ -56,6 +56,9 @@ const snippetDefs = {
   psvm: { label: 'alias main', body: 'public static void main(String[] args) {\n    \n}', caretOffset: 'public static void main(String[] args) {\n    '.length }
 };
 
+// Context Menu Elements
+const editorContextMenu = document.getElementById('editorContextMenu');
+
 function setEditorHint(text) {
   editorHint.innerHTML = text;
 }
@@ -1361,3 +1364,110 @@ applyTheme(savedTheme);
 window.addEventListener('click', (e) => {
   if (e.target === themeModal) toggleThemeModal();
 });
+
+// --- SMART CONTEXT MENU LOGIC ---
+
+editorEl.addEventListener('contextmenu', (e) => {
+  // Solo activar si estamos dentro del área del editor
+  if (e.target !== editorEl) return;
+
+  e.preventDefault();
+
+  const mouseX = e.clientX;
+  const mouseY = e.clientY;
+
+  // Posicionar menú
+  editorContextMenu.style.left = `${mouseX}px`;
+  editorContextMenu.style.top = `${mouseY}px`;
+  editorContextMenu.classList.add('active');
+
+  // Cerrar al hacer click fuera
+  const closeMenu = () => {
+    editorContextMenu.classList.remove('active');
+    document.removeEventListener('click', closeMenu);
+  };
+  setTimeout(() => document.addEventListener('click', closeMenu), 10);
+});
+
+function parseClassFields() {
+  const code = editorEl.value;
+  // Regex para detectar campos: (private|protected) [Tipo] [nombre];
+  const fieldRegex = /(?:private|protected)\s+([A-Za-z0-9_<>?]+)\s+([A-Za-z0-9_]+)\s*;/g;
+  let matches;
+  const fields = [];
+
+  while ((matches = fieldRegex.exec(code)) !== null) {
+    fields.push({ type: matches[1], name: matches[2] });
+  }
+  return fields;
+}
+
+function insertGettersSetters() {
+  const fields = parseClassFields();
+  if (fields.length === 0) {
+    alert("No se encontraron campos privados/protegidos para generar métodos. Asegúrate de declarar tus campos así: private String miVariable;");
+    return;
+  }
+
+  let generatedCode = "\n";
+  fields.forEach(f => {
+    const capitalized = f.name.charAt(0).toUpperCase() + f.name.slice(1);
+    // Getter
+    generatedCode += `    public ${f.type} get${capitalized}() {\n        return this.${f.name};\n    }\n\n`;
+    // Setter
+    generatedCode += `    public void set${capitalized}(${f.type} ${f.name}) {\n        this.${f.name} = ${f.name};\n    }\n\n`;
+  });
+
+  injectCodeAtCursor(generatedCode);
+}
+
+function insertConstructor() {
+  const fields = parseClassFields();
+  // Intentar encontrar el nombre de la clase
+  const classMatch = editorEl.value.match(/public\s+class\s+([A-Za-z0-9_]+)/);
+  const className = classMatch ? classMatch[1] : "MiClase";
+
+  let params = fields.map(f => `${f.type} ${f.name}`).join(", ");
+  let body = fields.map(f => `        this.${f.name} = ${f.name};`).join("\n");
+
+  let generatedCode = `\n    public ${className}(${params}) {\n${body}\n    }\n`;
+
+  injectCodeAtCursor(generatedCode);
+}
+
+function insertBoilerplate(type) {
+  let code = "";
+  const className = "ClaseDemo";
+
+  switch (type) {
+    case 'controller':
+      code = `import org.springframework.stereotype.Controller;\nimport org.springframework.web.bind.annotation.*;\n\n@Controller\n@RequestMapping("/${className.toLowerCase()}")\npublic class ${className}Controller {\n\n    @GetMapping\n    public String index() {\n        return "index";\n    }\n}`;
+      break;
+    case 'rest-controller':
+      code = `import org.springframework.web.bind.annotation.*;\nimport org.springframework.http.ResponseEntity;\n\n@RestController\n@RequestMapping("/api/${className.toLowerCase()}")\npublic class ${className}Controller {\n\n    @GetMapping\n    public ResponseEntity<?> getAll() {\n        return ResponseEntity.ok().build();\n    }\n}`;
+      break;
+    case 'entity':
+      code = `import javax.persistence.*;\n\n@Entity\n@Table(name = "${className.toLowerCase()}s")\npublic class ${className} {\n\n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n\n}`;
+      break;
+  }
+
+  editorEl.value = code;
+  updateLineNumbers();
+  renderHighlight();
+}
+
+function injectCodeAtCursor(newCode) {
+  const start = editorEl.selectionStart;
+  const end = editorEl.selectionEnd;
+  const text = editorEl.value;
+
+  editorEl.value = text.substring(0, start) + newCode + text.substring(end);
+
+  updateLineNumbers();
+  renderHighlight();
+}
+
+// Globalizar funciones para onclick en HTML
+window.insertGettersSetters = insertGettersSetters;
+window.insertConstructor = insertConstructor;
+window.insertBoilerplate = insertBoilerplate;

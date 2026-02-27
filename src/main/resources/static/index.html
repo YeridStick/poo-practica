@@ -418,6 +418,19 @@ class Perro extends Animal {
     </div>
   </div>
 
+  <div id="editorContextMenu" class="ctx-menu">
+    <div class="ctx-section">Generar Métodos</div>
+    <div class="ctx-item" onclick="insertGettersSetters()">Getters y Setters</div>
+    <div class="ctx-item" onclick="insertConstructor()">Constructor</div>
+    <div class="ctx-section">Estructura Base</div>
+    <div class="ctx-item" onclick="insertBoilerplate('controller')">Spring Controller</div>
+    <div class="ctx-item" onclick="insertBoilerplate('rest-controller')">Rest Controller</div>
+    <div class="ctx-item" onclick="insertBoilerplate('entity')">JPA Entity</div>
+    <div class="ctx-section">Utilidades</div>
+    <div class="ctx-item" onclick="document.execCommand('copy')">Copiar</div>
+    <div class="ctx-item" onclick="document.execCommand('paste')">Pegar</div>
+  </div>
+
   <script src="/index.js"></script>
 </body>
 

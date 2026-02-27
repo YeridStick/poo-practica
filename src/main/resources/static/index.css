@@ -527,6 +527,51 @@ code.inline {
   cursor: pointer;
 }
 
+/* Smart Context Menu */
+.ctx-menu {
+  position: fixed;
+  display: none;
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(25px);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  min-width: 200px;
+  z-index: 2000000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 8px 0;
+  overflow: hidden;
+}
+
+.ctx-menu.active {
+  display: block;
+}
+
+.ctx-section {
+  padding: 8px 15px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+.ctx-item {
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.ctx-item:hover {
+  background: var(--brand);
+  padding-left: 25px;
+}
+
 /* Theme Selector Grid */
 .theme-grid {
   display: grid;
