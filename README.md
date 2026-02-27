@@ -48,6 +48,28 @@ java -cp build/poo-practica-1.0-SNAPSHOT.jar HttpEstudioServer 8080
 
 Abre tu navegador en: `http://localhost:8080` (o el puerto indicado en la consola).
 
+### Ejecutar con Docker / Podman
+
+Si prefieres usar contenedores, el proyecto incluye un `Dockerfile` multietapa optimizado:
+
+1. **Construir la imagen:**
+   ```bash
+   docker build -t java-poo-academy .
+   ```
+
+2. **Ejecutar el contenedor:**
+   ```bash
+   docker run -p 8080:8080 java-poo-academy
+   ```
+
+### Ejecutar con Docker Compose
+
+Para una gestión más sencilla (Docker o Podman), puedes usar:
+
+```bash
+docker-compose up --build
+```
+
 ---
 
 ## Estructura del Proyecto
