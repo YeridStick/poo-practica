@@ -503,20 +503,24 @@ code.inline {
 }
 
 .modal-box {
-  background: #fff;
+  background: var(--paper);
+  backdrop-filter: blur(30px);
   width: min(900px, 95%);
   max-height: 90vh;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  color: var(--ink);
 }
 
 .modal-top {
   padding: 15px 25px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .close-btn {
@@ -570,6 +574,114 @@ code.inline {
 .ctx-item:hover {
   background: var(--brand);
   padding-left: 25px;
+}
+
+/* Tab System */
+.tab-container {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  max-width: 60%;
+  scrollbar-width: none;
+}
+
+.tab-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  padding: 6px 15px;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tab.active {
+  background: var(--paper);
+  color: var(--brand);
+  font-weight: 600;
+  border: 1px solid var(--glass-border);
+  border-bottom: none;
+}
+
+.tab .close-tab {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.tab .close-tab:hover {
+  opacity: 1;
+  color: var(--brand2);
+}
+
+.add-tab-btn {
+  background: var(--brand);
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  transition: transform 0.2s;
+}
+
+.add-tab-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Suggestion Box */
+.suggestion-box {
+  position: fixed;
+  display: none;
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  min-width: 180px;
+  z-index: 3000000;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  padding: 5px 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.suggestion-box.active {
+  display: block;
+}
+
+.suggestion-item {
+  padding: 8px 15px;
+  font-size: 0.8rem;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background: var(--brand);
+}
+
+.suggestion-type {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  font-style: italic;
 }
 
 /* Theme Selector Grid */

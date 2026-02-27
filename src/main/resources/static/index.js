@@ -56,8 +56,68 @@ const snippetDefs = {
   psvm: { label: 'alias main', body: 'public static void main(String[] args) {\n    \n}', caretOffset: 'public static void main(String[] args) {\n    '.length }
 };
 
-// Context Menu Elements
-const editorContextMenu = document.getElementById('editorContextMenu');
+// Custom Modals Elements
+const inputModal = document.getElementById('inputModal');
+const customInput = document.getElementById('customInput');
+const inputModalConfirm = document.getElementById('inputModalConfirm');
+const alertModal = document.getElementById('alertModal');
+const alertModalMessage = document.getElementById('alertModalMessage');
+const alertModalConfirm = document.getElementById('alertModalConfirm');
+const alertModalCancel = document.getElementById('alertModalCancel');
+const alertModalTitle = document.getElementById('alertModalTitle');
+const inputModalTitle = document.getElementById('inputModalTitle');
+
+function showCustomPrompt(title, placeholder, onConfirm) {
+  inputModalTitle.textContent = title;
+  customInput.placeholder = placeholder;
+  customInput.value = '';
+  inputModal.classList.add('active');
+  customInput.focus();
+
+  const handleConfirm = () => {
+    const val = customInput.value;
+    if (val) {
+      onConfirm(val);
+      closeInputModal();
+    }
+  };
+
+  inputModalConfirm.onclick = handleConfirm;
+  customInput.onkeyup = (e) => { if (e.key === 'Enter') handleConfirm(); };
+}
+
+function closeInputModal() {
+  inputModal.classList.remove('active');
+}
+
+function showCustomAlert(title, message, onConfirm, showCancel = false) {
+  alertModalTitle.textContent = title;
+  alertModalMessage.textContent = message;
+  alertModalCancel.style.display = showCancel ? 'block' : 'none';
+  alertModal.classList.add('active');
+
+  alertModalConfirm.onclick = () => {
+    closeAlertModal();
+    if (onConfirm) onConfirm();
+  };
+}
+
+function closeAlertModal() {
+  alertModal.classList.remove('active');
+}
+
+window.closeInputModal = closeInputModal;
+window.closeAlertModal = closeAlertModal;
+
+// Multi-file State
+let files = {
+  "Main.java": `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hola desde plataforma de aprendizaje Dashboard");
+    }
+}`
+};
+let activeFile = "Main.java";
 
 function setEditorHint(text) {
   editorHint.innerHTML = text;
@@ -71,6 +131,64 @@ function updateExpandButtons(isFull) {
 
 let originalParent = null;
 let editorPlaceholder = null;
+
+function renderTabs() {
+  tabContainer.innerHTML = '';
+  Object.keys(files).forEach(fileName => {
+    const tab = document.createElement('div');
+    tab.className = `tab ${fileName === activeFile ? 'active' : ''}`;
+    tab.innerHTML = `
+      <span>${fileName}</span>
+      ${fileName !== 'Main.java' ? `<span class="close-tab" onclick="event.stopPropagation(); removeFile('${fileName}')">×</span>` : ''}
+    `;
+    tab.onclick = () => switchTab(fileName);
+    tabContainer.appendChild(tab);
+  });
+}
+
+function switchTab(fileName) {
+  // Guardar contenido actual
+  files[activeFile] = editorEl.value;
+
+  activeFile = fileName;
+  editorEl.value = files[fileName];
+
+  renderTabs();
+  updateLineNumbers();
+  renderHighlight();
+}
+
+function createNewFile() {
+  showCustomPrompt("Nuevo Archivo", "Nombre del archivo (ej: Persona.java)", (name) => {
+    if (!name.endsWith('.java')) {
+      showCustomAlert("Error", "El archivo debe terminar en .java");
+      return;
+    }
+    if (files[name]) {
+      showCustomAlert("Error", "El archivo ya existe");
+      return;
+    }
+
+    const className = name.replace('.java', '');
+    files[name] = `public class ${className} {\n    \n}`;
+    switchTab(name);
+  });
+}
+
+function removeFile(fileName) {
+  if (fileName === 'Main.java') return;
+  showCustomAlert("Confirmar", `¿Eliminar ${fileName}?`, () => {
+    delete files[fileName];
+    if (activeFile === fileName) {
+      switchTab('Main.java');
+    } else {
+      renderTabs();
+    }
+  }, true);
+}
+
+// Inicializar pestañas
+renderTabs();
 
 function toggleEditorFullscreen() {
   const isFull = editorShell.classList.toggle('fullscreen');
@@ -757,6 +875,11 @@ function renderRetos() {
       <div>
         <h4 style="margin: 0; color: var(--brand);">${cfg.titulo || 'Nivel ' + order}</h4>
         <p style="font-size: 0.85rem; margin: 10px 0;">${cfg.descripcion || cfg.expectedText || ''}</p>
+        <p style="font-size: 0.75rem; margin: 10px 0; opacity: 0.7;">
+          ${cfg.expected && cfg.expected.length
+        ? `Salida esperada: ${cfg.expected.map(t => `<code style="background:rgba(0,0,0,0.1);padding:1px 5px;border-radius:4px;">${t}</code>`).join(', ')}`
+        : ''}
+        </p>
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
         <span id="status-${currentRepo}-${order}" class="status-pill ${done ? 'ok' : 'pending'}">
@@ -1086,12 +1209,16 @@ async function cargarDesdeRepo() {
     const repoId = "repo_" + Date.now();
     const nuevosNiveles = {};
     data.ejercicios.forEach((ej, idx) => {
+      const expectedTokens = ej.output_esperado || ej.expected || null;
       nuevosNiveles[`nivel_${idx + 1}`] = {
         order: idx + 1,
         titulo: ej.titulo,
         descripcion: ej.descripcion,
         template: ej.template,
-        expected: ej.output_esperado || ej.expected || null
+        expected: expectedTokens,
+        expectedText: expectedTokens
+          ? `Salida esperada: la consola debe contener → ${expectedTokens.map(t => `"${t}"`).join(', ')}`
+          : ej.descripcion || ''
       };
     });
 
@@ -1365,6 +1492,12 @@ window.addEventListener('click', (e) => {
   if (e.target === themeModal) toggleThemeModal();
 });
 
+// Sincronizar archivos con el editor
+editorEl.addEventListener('input', () => {
+  files[activeFile] = editorEl.value;
+  updateLineNumbers();
+});
+
 // --- SMART CONTEXT MENU LOGIC ---
 
 editorEl.addEventListener('contextmenu', (e) => {
@@ -1405,7 +1538,7 @@ function parseClassFields() {
 function insertGettersSetters() {
   const fields = parseClassFields();
   if (fields.length === 0) {
-    alert("No se encontraron campos privados/protegidos para generar métodos. Asegúrate de declarar tus campos así: private String miVariable;");
+    showCustomAlert("Info", "No se encontraron campos privados/protegidos para generar métodos. Asegúrate de declarar tus campos así: private String miVariable;");
     return;
   }
 
@@ -1423,9 +1556,13 @@ function insertGettersSetters() {
 
 function insertConstructor() {
   const fields = parseClassFields();
-  // Intentar encontrar el nombre de la clase
-  const classMatch = editorEl.value.match(/public\s+class\s+([A-Za-z0-9_]+)/);
-  const className = classMatch ? classMatch[1] : "MiClase";
+  const code = editorEl.value;
+  const pos = editorEl.selectionStart;
+
+  // Buscar hacia atrás desde el cursor la palabra 'class' para el nombre
+  const beforeCursor = code.substring(0, pos);
+  const classMatches = [...beforeCursor.matchAll(/class\s+([A-Za-z0-9_]+)/g)];
+  const className = classMatches.length > 0 ? classMatches[classMatches.length - 1][1] : "MiClase";
 
   let params = fields.map(f => `${f.type} ${f.name}`).join(", ");
   let body = fields.map(f => `        this.${f.name} = ${f.name};`).join("\n");
@@ -1471,3 +1608,83 @@ function injectCodeAtCursor(newCode) {
 window.insertGettersSetters = insertGettersSetters;
 window.insertConstructor = insertConstructor;
 window.insertBoilerplate = insertBoilerplate;
+window.createNewFile = createNewFile;
+window.removeFile = removeFile;
+
+// --- DOT COMPLETION ENGINE ---
+
+editorEl.addEventListener('keyup', (e) => {
+  if (e.key === '.') {
+    handleDotCompletion(e);
+  } else if (e.key === 'Escape' || e.key === 'Enter') {
+    suggestionBox.classList.remove('active');
+  }
+});
+
+function handleDotCompletion(e) {
+  const pos = editorEl.selectionStart;
+  const text = editorEl.value;
+  const beforeDot = text.substring(0, pos - 1);
+
+  // Encontrar el nombre de la variable antes del punto (ej: persona. )
+  const varMatch = beforeDot.match(/([a-zA-Z0-9_]+)\s*$/);
+  if (!varMatch) return;
+
+  const varName = varMatch[1];
+
+  // Encontrar el tipo de la variable en el código (ej: Persona persona; o persona = new Persona())
+  const typeRegex = new RegExp(`(?:([A-Za-z0-9_<>?]+)\\s+${varName})|(?:${varName}\\s+=\\s+new\\s+([A-Za-z0-9_]+))`);
+  const typeMatch = text.match(typeRegex);
+  const typeName = typeMatch ? (typeMatch[1] || typeMatch[2]) : null;
+
+  if (!typeName) return;
+
+  // Buscar métodos en todos los archivos cargados
+  const suggestions = [];
+  Object.values(files).forEach(fileCode => {
+    // Buscar la clase correspondiente
+    const classRegex = new RegExp(`class\\s+${typeName}\\s*[^{]*\\{([\\s\\S]*?)\\}`, 'g');
+    let classMatch;
+    while ((classMatch = classRegex.exec(fileCode)) !== null) {
+      const classBody = classMatch[1];
+      // Buscar métodos públicos
+      const methodRegex = /public\s+([A-Za-z0-9_<>?]+)\s+([A-Za-z0-9_]+)\s*\(/g;
+      let m;
+      while ((m = methodRegex.exec(classBody)) !== null) {
+        suggestions.push({ name: m[2], type: m[1] });
+      }
+    }
+  });
+
+  if (suggestions.length > 0) {
+    showSuggestions(suggestions);
+  }
+}
+
+function showSuggestions(suggestions) {
+  suggestionBox.innerHTML = '';
+  suggestions.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'suggestion-item';
+    item.innerHTML = `<span>${s.name}()</span> <span class="suggestion-type">${s.type}</span>`;
+    item.onclick = () => {
+      injectCodeAtCursor(`${s.name}()`);
+      suggestionBox.classList.remove('active');
+      editorEl.focus();
+    };
+    suggestionBox.appendChild(item);
+  });
+
+  // Posicionamiento aproximado (basado en el cursor no es trivial en textarea, usamos flotante lateral)
+  const rect = editorEl.getBoundingClientRect();
+  suggestionBox.style.left = `${rect.left + (rect.width / 2)}px`;
+  suggestionBox.style.top = `${rect.top + 50}px`;
+  suggestionBox.classList.add('active');
+}
+
+// Cerrar sugerencias al hacer click fuera
+window.addEventListener('click', (e) => {
+  if (!suggestionBox.contains(e.target) && e.target !== editorEl) {
+    suggestionBox.classList.remove('active');
+  }
+});

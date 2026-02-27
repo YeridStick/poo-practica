@@ -304,8 +304,11 @@ class Perro extends Animal {
 
           <div id="editorShell" class="editor-shell">
             <div class="editor-top">
-              <span>Main.java</span>
-              <div style="display: flex; gap: 15px;">
+              <div id="tabContainer" class="tab-container">
+                <!-- Pestañas se inyectaran aqui -->
+              </div>
+              <button class="add-tab-btn" onclick="createNewFile()" title="Nuevo archivo">+</button>
+              <div style="display: flex; gap: 15px; margin-left: auto;">
                 <span id="editorHint" style="opacity: 0.7; font-size: 0.8rem;">Escribe codigo Java aqui</span>
                 <button id="btnExpandEditorTop" onclick="toggleEditorFullscreen()"
                   style="border:none;background:none;color:inherit;cursor:pointer;font-size:0.75rem;">Full
@@ -429,6 +432,45 @@ class Perro extends Animal {
     <div class="ctx-section">Utilidades</div>
     <div class="ctx-item" onclick="document.execCommand('copy')">Copiar</div>
     <div class="ctx-item" onclick="document.execCommand('paste')">Pegar</div>
+  </div>
+
+  <div id="suggestionBox" class="suggestion-box">
+    <!-- Sugerencias se inyectaran aqui -->
+  </div>
+
+  <!-- Custom Input Modal -->
+  <div id="inputModal" class="modal">
+    <div class="modal-box" style="max-width: 400px;">
+      <div class="modal-top">
+        <strong id="inputModalTitle">Nombre del archivo</strong>
+      </div>
+      <div style="padding: 20px;">
+        <input type="text" id="customInput" class="repo-input" style="width: 100%; margin-bottom: 20px;" placeholder="">
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button class="action" style="background: transparent; border: 1px solid var(--line); color: inherit;"
+            onclick="closeInputModal()">Cancelar</button>
+          <button class="action" id="inputModalConfirm">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert/Confirm Modal -->
+  <div id="alertModal" class="modal">
+    <div class="modal-box" style="max-width: 400px;">
+      <div class="modal-top">
+        <strong id="alertModalTitle">Mensaje</strong>
+      </div>
+      <div style="padding: 20px;">
+        <p id="alertModalMessage" style="margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;"></p>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button class="action" id="alertModalCancel"
+            style="background: transparent; border: 1px solid var(--line); color: inherit; display: none;"
+            onclick="closeAlertModal()">Cancelar</button>
+          <button class="action" id="alertModalConfirm">Aceptar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="/index.js"></script>
