@@ -1,10 +1,10 @@
-# ☕ Java POO Academy Dashboard
+# Java POO Academy Dashboard
 
 Una plataforma interactiva y moderna para el aprendizaje de Programación Orientada a Objetos (POO) en Java, diseñada para ofrecer una experiencia fluida tanto en escritorio como en dispositivos móviles.
 
 ---
 
-## 🎨 Características Principales
+## Características Principales
 
 - **Dashboard Inteligente**: Visualización clara de tu ruta de aprendizaje y retos disponibles.
 - **Playground Java en Vivo**: Escribe, compila y ejecuta código Java directamente en el navegador.
@@ -15,7 +15,7 @@ Una plataforma interactiva y moderna para el aprendizaje de Programación Orient
 
 ---
 
-## 🚀 Inicio Rápido
+## Inicio Rápido
 
 ### Requisitos Previos
 
@@ -50,7 +50,7 @@ Abre tu navegador en: `http://localhost:8080` (o el puerto indicado en la consol
 
 ---
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 - `src/main/java`: Lógica del servidor HTTP y procesadores de código Java.
 - `src/main/resources/static`: Frontend de la aplicación (HTML, CSS dinámico con temas, JS).
@@ -59,7 +59,7 @@ Abre tu navegador en: `http://localhost:8080` (o el puerto indicado en la consol
 
 ---
 
-## 🛠️ Desarrollo
+## Desarrollo
 
 Para aplicar cambios en el frontend (CSS/JS) o en el servidor:
 
