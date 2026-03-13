@@ -903,22 +903,22 @@
                                     <button class="btn btn-sm" onclick="ejecutarRxJava()">▶ Ejecutar</button>
                                 </div>
                             </div>
-                            <div class="editor-body"
-                                style="height: 480px; position: relative; display: block; background: #1e1e1e;">
+                            <div class="editor-body" style="height: 480px; position: relative; background: #1e1e1e;">
                                 <div id="monacoEditor" style="width: 100%;"></div>
                                 <!-- Viejo editor oculto para compatibilidad -->
-                                <textarea id="rxEditor" class="rx-editor" spellcheck="false" style="display:none;">import reactor.core.publisher.Flux;
-                                    import reactor.core.publisher.Mono;
+                                <textarea id="rxEditor" class="rx-editor" spellcheck="false" style="display:none;">
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-                                    public class Main {
-                                        public static void main(String[] args) {
-                                            // Tu primer Flux reactivo
-                                            Flux.just(1, 2, 3, 4, 5)
-                                                .filter(n -> n % 2 == 0)
-                                                .map(n -> "Par: " + n)
-                                                .subscribe(System.out::println);
-                                        }
-                                    }
+public class Main {
+    public static void main(String[] args) {
+        // Tu primer Flux reactivo
+        Flux.just(1, 2, 3, 4, 5)
+            .filter(n -> n % 2 == 0)
+            .map(n -> "Par: " + n)
+            .subscribe(System.out::println);
+    }
+}
                                 </textarea>
                             </div>
                         </div>
