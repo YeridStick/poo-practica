@@ -29,7 +29,6 @@ modal.addEventListener('click', (e) => {
   if (e.target === modal) modal.classList.remove('active');
 });
 
-const editorEl = document.getElementById('javaEditor');
 const editorShell = document.getElementById('editorShell');
 const editorHint = document.getElementById('editorHint');
 const btnExpandEditor = document.getElementById('btnExpandEditor');
@@ -40,6 +39,60 @@ const expectedLevelOutputEl = document.getElementById('expectedLevelOutput');
 const coachLevelOutputEl = document.getElementById('coachLevelOutput');
 const stepsLevelOutputEl = document.getElementById('stepsLevelOutput');
 const infoLevelOutputEl = document.getElementById('infoLevelOutput');
+
+// Monaco Editor Initialization
+let monacoEditor;
+const editorContainer = document.getElementById('monacoEditor');
+const oldTextarea = document.getElementById('javaEditor');
+
+require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+require(['vs/editor/editor.main'], function () {
+    monacoEditor = monaco.editor.create(editorContainer, {
+        value: oldTextarea.value || 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hola desde plataforma de aprendizaje Dashboard");\n    }\n}',
+        language: 'java',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        fontSize: 14,
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        padding: { top: 10, bottom: 10 },
+        roundedSelection: true
+    });
+
+    // Sincronizar con el estado de archivos
+    monacoEditor.onDidChangeModelContent(() => {
+        files[activeFile] = monacoEditor.getValue();
+        updateLineNumbers();
+    });
+
+    // Eventos de teclado y otros delegados a Monaco
+    monacoEditor.onKeyDown((e) => {
+        if (e.keyCode === monaco.KeyCode.Tab) {
+            if (tryAutoExpandFromToken()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+    });
+
+    monacoEditor.onMouseDown(() => renderSnippetSuggestions());
+    monacoEditor.onDidScrollChange(() => {
+        // syncLineScroll ya no es necesario
+    });
+});
+
+// Helper para obtener/establecer valor del editor (abstracción)
+function getEditorValue() {
+    return monacoEditor ? monacoEditor.getValue() : oldTextarea.value;
+}
+
+function setEditorValue(val) {
+    if (monacoEditor) {
+        monacoEditor.setValue(val);
+    } else {
+        oldTextarea.value = val;
+    }
+}
 
 // Theme Switcher Elements
 const themeModal = document.getElementById('themeModal');
@@ -125,8 +178,8 @@ function setEditorHint(text) {
 
 function updateExpandButtons(isFull) {
   const txt = isFull ? 'Reducir' : 'Ampliar';
-  btnExpandEditor.textContent = txt;
-  btnExpandEditorTop.textContent = isFull ? 'Salir' : 'Pantalla completa';
+  if (btnExpandEditor) btnExpandEditor.textContent = txt;
+  if (btnExpandEditorTop) btnExpandEditorTop.textContent = isFull ? 'Salir' : 'Pantalla completa';
 }
 
 let originalParent = null;
@@ -148,14 +201,13 @@ function renderTabs() {
 
 function switchTab(fileName) {
   // Guardar contenido actual
-  files[activeFile] = editorEl.value;
+  files[activeFile] = getEditorValue();
 
   activeFile = fileName;
-  editorEl.value = files[fileName];
+  setEditorValue(files[fileName]);
 
   renderTabs();
   updateLineNumbers();
-  renderHighlight();
 }
 
 function createNewFile() {
@@ -218,7 +270,10 @@ function toggleEditorFullscreen() {
   // Asegurar que el scroll se mantenga sincronizado tras el portal
   setTimeout(() => {
     syncLineScroll();
-    editorEl.focus();
+    if (monacoEditor) {
+        monacoEditor.layout();
+        monacoEditor.focus();
+    }
   }, 10);
 }
 window.toggleEditorFullscreen = toggleEditorFullscreen;
@@ -235,15 +290,22 @@ window.addEventListener('resize', () => {
 });
 
 function replaceInEditor(start, end, replacement, caretPos) {
-  const value = editorEl.value;
-  editorEl.value = value.slice(0, start) + replacement + value.slice(end);
-  editorEl.selectionStart = caretPos;
-  editorEl.selectionEnd = caretPos;
+  if (!monacoEditor) return;
+  const model = monacoEditor.getModel();
+  const startPos = model.getPositionAt(start);
+  const endPos = model.getPositionAt(end);
+  const range = new monaco.Range(startPos.lineNumber, startPos.column, endPos.lineNumber, endPos.column);
+  
+  monacoEditor.executeEdits("my-source", [
+    { range: range, text: replacement, forceMoveMarkers: true }
+  ]);
+  
+  const newPos = model.getPositionAt(caretPos);
+  monacoEditor.setPosition(newPos);
+  monacoEditor.focus();
 }
 
-function renderHighlight() {
-  // Resaltado de sintaxis desactivado para mantener el editor estable.
-}
+// Monaco maneja su propio scroll y resaltado
 
 function autoResizeEditor() {
   // Desactivamos el redimensionado automático para evitar que el editor crezca indefinidamente.
@@ -251,7 +313,7 @@ function autoResizeEditor() {
 }
 
 function updateLineNumbers() {
-  const lines = editorEl.value.split('\n').length;
+  const lines = getEditorValue().split('\n').length;
   let out = '';
   for (let i = 1; i <= lines; i++) {
     out += i + '\n';
@@ -261,26 +323,25 @@ function updateLineNumbers() {
 }
 
 function syncLineScroll() {
-  lineNumbersEl.scrollTop = editorEl.scrollTop;
+  // Monaco maneja su propio scroll
 }
 
-// Escuchar el scroll del editor para sincronizar los números de línea
-editorEl.addEventListener('scroll', syncLineScroll);
+// Eventos manejados por Monaco o delegados
+
 
 function getWordBounds() {
-  const start = editorEl.selectionStart;
-  const end = editorEl.selectionEnd;
-  if (start !== end) return null;
-  const value = editorEl.value;
-  let wordStart = start;
-  while (wordStart > 0 && /[A-Za-z_]/.test(value.charAt(wordStart - 1))) {
-    wordStart--;
-  }
-  let wordEnd = start;
-  while (wordEnd < value.length && /[A-Za-z_]/.test(value.charAt(wordEnd))) {
-    wordEnd++;
-  }
-  return { wordStart, wordEnd, token: value.slice(wordStart, start), fullToken: value.slice(wordStart, wordEnd) };
+  if (!monacoEditor) return null;
+  const position = monacoEditor.getPosition();
+  const model = monacoEditor.getModel();
+  const word = model.getWordAtPosition(position);
+  if (!word) return { wordStart: model.getOffsetAt(position), wordEnd: model.getOffsetAt(position), token: '', fullToken: '' };
+  
+  return {
+    wordStart: model.getOffsetAt({ lineNumber: position.lineNumber, column: word.startColumn }),
+    wordEnd: model.getOffsetAt({ lineNumber: position.lineNumber, column: word.endColumn }),
+    token: word.word.substring(0, position.column - word.startColumn),
+    fullToken: word.word
+  };
 }
 
 function expandSnippet(key) {
@@ -333,124 +394,28 @@ function renderSnippetSuggestions() {
   snippetPanel.querySelectorAll('.snippet-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       expandSnippet(btn.dataset.snippet);
-      editorEl.focus();
+      if (monacoEditor) monacoEditor.focus();
     });
   });
   setEditorHint('Sugerencias: pulsa chip o <span class="kbd">Tab</span>/<span class="kbd">Espacio</span> para expandir');
 }
 
 function indentSelection() {
-  const start = editorEl.selectionStart;
-  const end = editorEl.selectionEnd;
-  const value = editorEl.value;
-  const indent = '    ';
-
-  if (start === end) {
-    replaceInEditor(start, end, indent, start + indent.length);
-    return;
-  }
-
-  const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-  let lineEnd = value.indexOf('\n', end);
-  if (lineEnd === -1) lineEnd = value.length;
-  const block = value.slice(lineStart, lineEnd);
-  const lines = block.split('\n');
-  const indented = lines.map(l => indent + l).join('\n');
-  editorEl.value = value.slice(0, lineStart) + indented + value.slice(lineEnd);
-
-  editorEl.selectionStart = start + indent.length;
-  editorEl.selectionEnd = end + indent.length * lines.length;
+  if (!monacoEditor) return;
+  monacoEditor.trigger('keyboard', 'tab', {});
 }
 
 function outdentSelection() {
-  const start = editorEl.selectionStart;
-  const end = editorEl.selectionEnd;
-  const value = editorEl.value;
-  const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-  let lineEnd = value.indexOf('\n', end);
-  if (lineEnd === -1) lineEnd = value.length;
-  const block = value.slice(lineStart, lineEnd);
-  const lines = block.split('\n');
-
-  let removedTotal = 0;
-  const outdentedLines = lines.map(line => {
-    if (line.startsWith('    ')) {
-      removedTotal += 4;
-      return line.slice(4);
-    }
-    if (line.startsWith('\t')) {
-      removedTotal += 1;
-      return line.slice(1);
-    }
-    return line;
-  });
-
-  editorEl.value = value.slice(0, lineStart) + outdentedLines.join('\n') + value.slice(lineEnd);
-  editorEl.selectionStart = Math.max(lineStart, start - 4);
-  editorEl.selectionEnd = Math.max(editorEl.selectionStart, end - removedTotal);
+  if (!monacoEditor) return;
+  monacoEditor.trigger('keyboard', 'outdent', {});
 }
 
 function insertNewLineWithIndent() {
-  const cursor = editorEl.selectionStart;
-  const value = editorEl.value;
-  const lineStart = value.lastIndexOf('\n', cursor - 1) + 1;
-  const currentLine = value.slice(lineStart, cursor);
-  const indentMatch = currentLine.match(/^\s*/);
-  const baseIndent = indentMatch ? indentMatch[0] : '';
-  const extraIndent = currentLine.trimEnd().endsWith('{') ? '    ' : '';
-  const insertion = '\n' + baseIndent + extraIndent;
-  replaceInEditor(cursor, cursor, insertion, cursor + insertion.length);
+  if (!monacoEditor) return;
+  monacoEditor.trigger('keyboard', 'type', { text: "\n" });
 }
 
-editorEl.addEventListener('keydown', (e) => {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    if (tryAutoExpandFromToken()) return;
-    if (e.shiftKey) {
-      outdentSelection();
-    } else {
-      indentSelection();
-    }
-    updateLineNumbers();
-    renderHighlight();
-    renderSnippetSuggestions();
-    return;
-  }
-
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    if (tryAutoExpandFromToken()) {
-      insertNewLineWithIndent();
-    } else {
-      insertNewLineWithIndent();
-    }
-    updateLineNumbers();
-    renderHighlight();
-    renderSnippetSuggestions();
-    return;
-  }
-
-  if (e.key === ' ') {
-    if (tryAutoExpandFromToken()) {
-      e.preventDefault();
-      const cursor = editorEl.selectionStart;
-      replaceInEditor(cursor, cursor, ' ', cursor + 1);
-      updateLineNumbers();
-      renderHighlight();
-      renderSnippetSuggestions();
-    }
-  }
-});
-
-editorEl.addEventListener('scroll', syncLineScroll);
-editorEl.addEventListener('click', renderSnippetSuggestions);
-
-editorEl.addEventListener('input', () => {
-  updateLineNumbers();
-  renderHighlight();
-  syncLineScroll();
-  renderSnippetSuggestions();
-});
+// Eventos de teclado y otros delegados a Monaco (Movidos al require block)
 
 const niveles = {
   nivel1: {
@@ -926,7 +891,7 @@ function cargarEjercicioRepo(repoId, levelId) {
   const cfg = collections[repoId].niveles[levelId];
   if (!cfg) return;
   nivelActual = { repoId, levelId };
-  editorEl.value = cfg.template;
+  getEditorValue() = cfg.template;
   editorEl.focus();
   updateLineNumbers();
   renderHighlight();
@@ -980,7 +945,7 @@ function cargarEjercicioNivel(id) {
   const cfg = niveles[id];
   if (!cfg) return;
   nivelActual = id;
-  editorEl.value = cfg.template;
+  getEditorValue() = cfg.template;
   editorEl.focus();
   updateLineNumbers();
   renderHighlight();
@@ -1170,7 +1135,7 @@ public class Main {
 };
 
 function cargarPlantilla(tipo) {
-  editorEl.value = templates[tipo] || templates.hola;
+  getEditorValue() = templates[tipo] || templates.hola;
   editorEl.focus();
   updateLineNumbers();
   renderHighlight();
@@ -1180,15 +1145,51 @@ function cargarPlantilla(tipo) {
 }
 window.cargarPlantilla = cargarPlantilla;
 
+function withAutoImports(source) {
+  let code = source || '';
+  const hasImports = /import\s+java\./.test(code);
+
+  // Detectar uso de colecciones comunes
+  const needsUtil =
+    /\bList\b/.test(code) ||
+    /\bMap\b/.test(code) ||
+    /\bSet\b/.test(code) ||
+    /\bArrays\b/.test(code);
+
+  const lines = code.split('\n');
+  let insertIndex = 0;
+
+  // Saltar comentarios de cabecera y líneas en blanco
+  while (insertIndex < lines.length && /^\s*(\/\*|\/\/|$)/.test(lines[insertIndex])) {
+    insertIndex++;
+  }
+
+  const importsToAdd = [];
+  if (needsUtil && !/import\s+java\.util\./.test(code)) {
+    importsToAdd.push('import java.util.*;');
+  }
+
+  if (!importsToAdd.length) return code;
+
+  const before = lines.slice(0, insertIndex);
+  const after = lines.slice(insertIndex);
+  return [...before, ...importsToAdd, '', ...after].join('\n');
+}
+
 async function ejecutarJava() {
   const editor = document.getElementById('javaEditor');
   const out = document.getElementById('runOutput');
   out.textContent = "Ejecutando...";
   try {
+    const codeWithImports = withAutoImports(editor.value);
+    if (codeWithImports !== editor.value) {
+      editor.value = codeWithImports;
+      updateLineNumbers();
+    }
     const res = await fetch('/run-java', {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
-      body: editor.value
+      body: codeWithImports
     });
     const text = await res.text();
     out.textContent = text;
@@ -1199,7 +1200,7 @@ async function ejecutarJava() {
 window.ejecutarJava = ejecutarJava;
 
 function descargarEjercicio() {
-  const code = editorEl.value || '';
+  const code = getEditorValue() || '';
   if (!code.trim()) {
     setEditorHint('No hay codigo para descargar.');
     return;
@@ -1437,10 +1438,10 @@ function activarPlaygroundLibre() {
   setEditorHint("Modo <strong>Práctica Libre</strong> activado.");
 
   // Opcional: limpiar el editor con un template basico
-  editorEl.value = 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Practica POO libremente...");\n    }\n}';
+  setEditorValue('public class Main {\n    public static void main(String[] args) {\n        System.out.println("Practica POO libremente...");\n    }\n}');
   updateLineNumbers();
-  renderHighlight();
-  syncLineScroll();
+  // renderHighlight(); // Monaco ya lo hace
+  // syncLineScroll(); // Monaco ya lo hace
 
   document.querySelector('#target-playground').scrollIntoView({ behavior: 'smooth' });
 }
@@ -1553,10 +1554,13 @@ window.addEventListener('click', (e) => {
 });
 
 // Sincronizar archivos con el editor
+// El listener input original ya no es necesario o se maneja vía onDidChangeModelContent
+/*
 editorEl.addEventListener('input', () => {
-  files[activeFile] = editorEl.value;
+  files[activeFile] = getEditorValue();
   updateLineNumbers();
 });
+*/
 
 // --- SMART CONTEXT MENU LOGIC ---
 
@@ -1583,7 +1587,7 @@ editorEl.addEventListener('contextmenu', (e) => {
 });
 
 function parseClassFields() {
-  const code = editorEl.value;
+  const code = getEditorValue();
   // Regex para detectar campos: (private|protected) [Tipo] [nombre];
   const fieldRegex = /(?:private|protected)\s+([A-Za-z0-9_<>?]+)\s+([A-Za-z0-9_]+)\s*;/g;
   let matches;
@@ -1616,7 +1620,7 @@ function insertGettersSetters() {
 
 function insertConstructor() {
   const fields = parseClassFields();
-  const code = editorEl.value;
+  const code = getEditorValue();
   const pos = editorEl.selectionStart;
 
   // Buscar hacia atrás desde el cursor la palabra 'class' para el nombre
@@ -1648,20 +1652,21 @@ function insertBoilerplate(type) {
       break;
   }
 
-  editorEl.value = code;
+  getEditorValue() = code;
   updateLineNumbers();
   renderHighlight();
 }
 
 function injectCodeAtCursor(newCode) {
-  const start = editorEl.selectionStart;
-  const end = editorEl.selectionEnd;
-  const text = editorEl.value;
-
-  editorEl.value = text.substring(0, start) + newCode + text.substring(end);
-
+  if (!monacoEditor) return;
+  const selection = monacoEditor.getSelection();
+  const range = new monaco.Range(selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn);
+  
+  monacoEditor.executeEdits("my-source", [
+    { range: range, text: newCode, forceMoveMarkers: true }
+  ]);
+  monacoEditor.focus();
   updateLineNumbers();
-  renderHighlight();
 }
 
 // Globalizar funciones para onclick en HTML
@@ -1683,7 +1688,7 @@ editorEl.addEventListener('keyup', (e) => {
 
 function handleDotCompletion(e) {
   const pos = editorEl.selectionStart;
-  const text = editorEl.value;
+  const text = getEditorValue();
   const beforeDot = text.substring(0, pos - 1);
 
   // Encontrar el nombre de la variable antes del punto (ej: persona. )
@@ -1730,16 +1735,18 @@ function showSuggestions(suggestions) {
     item.onclick = () => {
       injectCodeAtCursor(`${s.name}()`);
       suggestionBox.classList.remove('active');
-      editorEl.focus();
     };
     suggestionBox.appendChild(item);
   });
 
-  // Posicionamiento aproximado (basado en el cursor no es trivial en textarea, usamos flotante lateral)
-  const rect = editorEl.getBoundingClientRect();
-  suggestionBox.style.left = `${rect.left + (rect.width / 2)}px`;
-  suggestionBox.style.top = `${rect.top + 50}px`;
-  suggestionBox.classList.add('active');
+  if (monacoEditor) {
+    const position = monacoEditor.getPosition();
+    const contentPos = monacoEditor.getScrolledVisiblePosition(position);
+    const rect = editorContainer.getBoundingClientRect();
+    suggestionBox.style.left = `${rect.left + contentPos.left}px`;
+    suggestionBox.style.top = `${rect.top + contentPos.top + 20}px`;
+    suggestionBox.classList.add('active');
+  }
 }
 
 // Cerrar sugerencias al hacer click fuera

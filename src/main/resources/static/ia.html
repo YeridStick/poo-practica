@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IA local - Ollama</title>
     <link rel="stylesheet" href="/index.css">
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 </head>
 
 <body>
@@ -112,8 +114,10 @@ llama3:latest    365c0bd3c000    4.7 GB    2 months ago</pre>
 
         <section class="dashboard-card" style="margin-top: 20px;">
             <h3 style="color: var(--brand); margin-top: 0;">Tu solución</h3>
+            <div id="monacoEditor" style="width: 100%; height: 300px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 10px;"></div>
+            <!-- Viejo editor oculto -->
             <textarea id="solucion" placeholder="Pega aquí tu solución o código" 
-                      style="border: 1px solid var(--line); padding: 12px; border-radius: 8px; width: 100%; min-height: 160px; font-family: Consolas, Monaco, monospace; font-size: 0.95rem;"></textarea>
+                      style="display:none;"></textarea>
             <h3 style="color: var(--brand); margin-top: 20px;">Revisión de IA</h3>
             <div id="reviewOut" style="background: #0f1721; color: #e6f2ff; border-radius: 8px; padding: 15px; white-space: pre-wrap; min-height: 88px; border: 1px solid var(--line);">Revisión de IA aparecerá aquí.</div>
         </section>
@@ -126,6 +130,28 @@ llama3:latest    365c0bd3c000    4.7 GB    2 months ago</pre>
   </div>
 
     <script>
+        const editorContainer = document.getElementById("monacoEditor");
+        const oldTextarea = document.getElementById("solucion");
+        let monacoEditor;
+
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            monacoEditor = monaco.editor.create(editorContainer, {
+                value: oldTextarea.value || "// Pega aquí tu solución o código",
+                language: 'java',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                roundedSelection: true
+            });
+        });
+
+        function getSolucionValue() {
+            return monacoEditor ? monacoEditor.getValue() : oldTextarea.value;
+        }
+
         async function actualizarList() {
             const box = document.getElementById("listOut");
             box.textContent = "Consultando ollama list...";
@@ -157,7 +183,7 @@ llama3:latest    365c0bd3c000    4.7 GB    2 months ago</pre>
 
         async function revisar() {
             const consigna = document.getElementById("ejOut").textContent || "";
-            const solucion = document.getElementById("solucion").value || "";
+            const solucion = getSolucionValue();
             const box = document.getElementById("reviewOut");
             if (!consigna.trim()) {
                 box.textContent = "Primero genera una consigna.";

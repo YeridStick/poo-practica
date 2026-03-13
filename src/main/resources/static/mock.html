@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mock técnico reactivo</title>
     <link rel="stylesheet" href="/index.css">
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 </head>
 
 <body>
@@ -107,8 +109,10 @@
 
         <section class="dashboard-card" style="margin-top: 20px;">
             <h3 style="color: var(--brand); margin-top: 0;">Tu respuesta</h3>
+            <div id="monacoEditor" style="width: 100%; height: 260px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 10px;"></div>
+            <!-- Viejo editor oculto -->
             <textarea id="respuestaInput" placeholder="Escribe aquí tu respuesta técnica..."
-                style="width: 100%; min-height: 120px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-family: Consolas, Monaco, monospace; font-size: 0.95rem;"></textarea>
+                style="display:none;"></textarea>
             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
                 <button id="btnSaveAnswer" class="action" style="background: var(--brand); color: white; padding: 10px 15px; border: none;">Guardar respuesta</button>
                 <button id="btnClearAnswer" class="action" style="background: var(--brand2); color: white; padding: 10px 15px; border: none;">Limpiar</button>
@@ -134,6 +138,28 @@
   </div>
 
     <script>
+        const editorContainer = document.getElementById("monacoEditor");
+        const oldTextarea = document.getElementById("respuestaInput");
+        let monacoEditor;
+
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            monacoEditor = monaco.editor.create(editorContainer, {
+                value: oldTextarea.value || "// Escribe aquí su respuesta técnica...",
+                language: 'java',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                roundedSelection: true
+            });
+        });
+
+        function getRespuestaValue() {
+            return monacoEditor ? monacoEditor.getValue() : oldTextarea.value;
+        }
+
         const bank = [
             {
                 q: "Diseña un endpoint WebFlux para evaluar riesgo de fraude en menos de 300ms.",
@@ -212,7 +238,7 @@
         }
 
         function guardarRespuesta() {
-            const txt = document.getElementById("respuestaInput").value.trim();
+            const txt = getRespuestaValue().trim();
             if (!txt) {
                 document.getElementById("respuestaStatus").textContent = "No hay texto para guardar.";
                 return;
@@ -223,7 +249,11 @@
         }
 
         function limpiarRespuesta() {
-            document.getElementById("respuestaInput").value = "";
+            if (monacoEditor) {
+                monacoEditor.setValue("");
+            } else {
+                oldTextarea.value = "";
+            }
             document.getElementById("respuestaStatus").textContent = "Respuesta limpia.";
         }
 

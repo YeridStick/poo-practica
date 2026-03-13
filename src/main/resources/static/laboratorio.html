@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laboratorio WebFlux - operadores y retos</title>
     <link rel="stylesheet" href="/index.css">
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <style>
         .wrap {
             max-width: 1120px;
@@ -45,7 +47,7 @@
         }
 
         .ghost {
-            background: rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
             color: var(--ink);
             border: 1px solid var(--line);
             font-weight: 500
@@ -198,314 +200,319 @@
 </head>
 
 <body>
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="logo-icon">JP</div>
-      <a href="/" class="nav-item" title="Inicio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </a>
-      <a href="/entrevista" class="nav-item" title="Ruta">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-      </a>
-      <a href="/entrevista/docs" class="nav-item" title="Documentación">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-        </svg>
-      </a>
-      <a href="/entrevista/ia" class="nav-item" title="IA">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="19" cy="12" r="1" />
-          <circle cx="5" cy="12" r="1" />
-        </svg>
-      </a>
-      <a href="/entrevista/mock" class="nav-item" title="Mock">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-          <path d="M12 6v6l4 2" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux2" class="nav-item active" title="Laboratorio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6" />
-          <polyline points="8 6 2 12 8 18" />
-        </svg>
-      </a>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo-icon">JP</div>
+            <a href="/" class="nav-item" title="Inicio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+            </a>
+            <a href="/entrevista" class="nav-item" title="Ruta">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+            </a>
+            <a href="/entrevista/docs" class="nav-item" title="Documentación">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+            </a>
+            <a href="/entrevista/ia" class="nav-item" title="IA">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="19" cy="12" r="1" />
+                    <circle cx="5" cy="12" r="1" />
+                </svg>
+            </a>
+            <a href="/entrevista/mock" class="nav-item" title="Mock">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                    <path d="M12 6v6l4 2" />
+                </svg>
+            </a>
+            <a href="/entrevista/webflux2" class="nav-item active" title="Laboratorio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
+                </svg>
+            </a>
+            <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                </svg>
+            </a>
 
-      <div class="sidebar-footer">
-        <div class="nav-item" id="btnConfig" title="Configuracion">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <header class="top-header">
-        <div class="user-info">
-          <h2>Laboratorio POO</h2>
-          <p>Práctica de Java avanzado, patrones de diseño y POO</p>
-        </div>
-      </header>
-
-      <main class="wrap">
-        <section class="card" style="border-left: 5px solid var(--brand2); background: rgba(181, 85, 47, 0.05);">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h3 style="color: var(--brand2); margin:0;">🚀 Guía de inicio rápido con Podman</h3>
-                <button class="toggle-btn">Minimizar</button>
+            <div class="sidebar-footer">
+                <div class="nav-item" id="btnConfig" title="Configuracion">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                </div>
             </div>
-            <div class="card-body">
-                <p>Para levantar este proyecto en tu entorno local usando Podman, ejecuta estos comandos:</p>
-                <div class="out" style="background: #1e1e1e; color: #dcdcdc; border: 1px solid #333;">
-                    <code># 1. Construir la imagen
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="user-info">
+                    <h2>Laboratorio POO</h2>
+                    <p>Práctica de Java avanzado, patrones de diseño y POO</p>
+                </div>
+            </header>
+
+            <main class="wrap">
+                <section class="card"
+                    style="border-left: 5px solid var(--brand2); background: rgba(181, 85, 47, 0.05);">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h3 style="color: var(--brand2); margin:0;">🚀 Guía de inicio rápido con Podman</h3>
+                        <button class="toggle-btn">Minimizar</button>
+                    </div>
+                    <div class="card-body">
+                        <p>Para levantar este proyecto en tu entorno local usando Podman, ejecuta estos comandos:</p>
+                        <div class="out" style="background: #1e1e1e; color: #dcdcdc; border: 1px solid #333;">
+                            <code># 1. Construir la imagen
 podman build -t poo-practica .
 
 # 2. Correr el contenedor
 podman run -p 8080:8080 poo-practica</code>
-                </div>
-                <p class="mini"><em>Tip: Asegúrate de estar en la carpeta raíz del proyecto.</em></p>
-            </div>
-        </section>
-
-        <section class="card">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h2 style="margin:0;">📁 Cargar ejercicios desde GitHub</h2>
-                <button class="toggle-btn">Expandir</button>
-            </div>
-            <div class="card-body collapsed">
-                <p>Ingresa la URL RAW de un archivo .java en GitHub para cargarlo directamente en el editor.</p>
-                <input id="githubUrlInput"
-                    placeholder="https://raw.githubusercontent.com/usuario/repo/main/Ejercicio.java"
-                    style="margin-bottom:8px;" />
-                <button id="btnFetchGithub" class="ghost">Descargar y cargar al editor</button>
-                <div id="githubStatus" class="mini" style="margin-top:8px; display:none;"></div>
-            </div>
-        </section>
-
-        <section class="card">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h2 style="margin:0;">Consola reactiva (ejecución real)</h2>
-                <button class="toggle-btn">Minimizar</button>
-            </div>
-            <div class="card-body">
-                <ol>
-                    <li>Usa <code>POST /run-java-reactivo</code> para compilar y ejecutar snippets con Reactor.</li>
-                    <li>Si algo falla, prepara dependencias con "Setup reactor".</li>
-                    <li>Practica primero WebFlux 2 y luego retos de operadores.</li>
-                </ol>
-                <div class="toolbar">
-                    <button id="btnTemplate" class="ghost">Cargar template WebFlux 2</button>
-                    <button id="btnPokemon" class="ghost">Cargar reto Pokemon (flatMap)</button>
-                    <button id="btnRun">Ejecutar reactivo</button>
-                    <button id="btnValidate" class="ghost">Validar WebFlux 2</button>
-                    <button id="btnSetup" class="ghost">Setup reactor</button>
-                    <button id="btnProbe" class="ghost">Probar runtime</button>
-                </div>
-                <div class="editor-shell">
-                    <div class="editor-head">
-                        <span>WebFlux Console Editor</span>
-                        <span>Atajos: <code>Ctrl + Enter</code> ejecutar, <code>Ctrl + L</code> limpiar salida</span>
-                    </div>
-                    <div class="editor-body">
-                        <pre id="lineNumbers" class="line-numbers">1</pre>
-                        <textarea id="editor" class="editor" spellcheck="false"></textarea>
-                    </div>
-                </div>
-                <div id="runtime" class="out">Estado runtime: sin verificar.</div>
-                <div id="coach" class="out">Tip: explica por que usaste cada operador.</div>
-                <div id="salida" class="out">Salida reactiva aqui...</div>
-            </div>
-        </section>
-
-        <section class="card">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h2 style="margin:0;">Ejercicios para codificar en consola</h2>
-                <button class="toggle-btn">Minimizar</button>
-            </div>
-            <div class="card-body">
-                <p>Elige un ejercicio y cárgalo al editor con un click. Están orientados a entrevista técnica WebFlux.
-                </p>
-                <div class="exercise-grid">
-                    <article class="exercise-item">
-                        <h3>Ejercicio 1: map</h3>
-                        <p>Transforma una lista de nombres a mayúsculas e imprime total.</p>
-                        <button class="ghost load-ex-btn" data-ej="ej1">Cargar ejercicio 1</button>
-                    </article>
-                    <article class="exercise-item">
-                        <h3>Ejercicio 2: flatMap</h3>
-                        <p>Simula detalle por usuario con llamadas async y recoge resultados.</p>
-                        <button class="ghost load-ex-btn" data-ej="ej2">Cargar ejercicio 2</button>
-                    </article>
-                    <article class="exercise-item">
-                        <h3>Ejercicio 3: concatMap</h3>
-                        <p>Procesa pasos secuenciales manteniendo orden estricto.</p>
-                        <button class="ghost load-ex-btn" data-ej="ej3">Cargar ejercicio 3</button>
-                    </article>
-                    <article class="exercise-item">
-                        <h3>Ejercicio 4: flatMapIterable</h3>
-                        <p>Desenvuelve wrapper con lista interna y emite cada item.</p>
-                        <button class="ghost load-ex-btn" data-ej="ej4">Cargar ejercicio 4</button>
-                    </article>
-                    <article class="exercise-item">
-                        <h3>Ejercicio 5: WebFlux 2 completo</h3>
-                        <p>Compón <code>Mono.zip</code> con timeout y fallback.</p>
-                        <button class="ghost load-ex-btn" data-ej="ej5">Cargar ejercicio 5</button>
-                    </article>
-                </div>
-                <div id="exerciseBox" class="out">Selecciona un ejercicio para cargarlo en el editor.</div>
-            </div>
-        </section>
-        <section class="card">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h2 style="margin:0;">Conceptos Fundamentales (dinamico)</h2>
-                <button class="toggle-btn">Minimizar</button>
-            </div>
-            <div class="card-body">
-                <div class="grid">
-                    <div>
-                        <label for="operatorSelect">Concepto</label>
-                        <select id="operatorSelect">
-                            <option value="herencia">Herencia</option>
-                            <option value="composicion">Composición</option>
-                            <option value="interfaces">Interfaces</option>
-                            <option value="abstractas">Clases Abstractas</option>
-                        </select>
-                        <div class="toolbar">
-                            <button id="btnExplainOp" class="ghost">¿Qué es? / ¿Cuándo usar?</button>
-                            <button id="btnLoadOpExample" class="ghost">Cargar ejemplo del concepto</button>
                         </div>
-                        <div id="operatorInfo" class="out">Selecciona un concepto y pulsa explicar.</div>
-                        <div id="operatorUse" class="out">Uso recomendado aparecera aqui.</div>
+                        <p class="mini"><em>Tip: Asegúrate de estar en la carpeta raíz del proyecto.</em></p>
                     </div>
-                    <div>
-                        <p class="mini"><strong>Pilares POO:</strong><br />
-                            <code>Herencia</code> = Reutilización "es un"<br />
-                            <code>Composición</code> = Flexibilidad "tiene un"<br />
-                            <code>Interfaces</code> = Contrato de comportamiento<br />
-                            <code>Abstracción</code> = Ocultar detalles complejos
+                </section>
+
+                <section class="card">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h2 style="margin:0;">📁 Cargar ejercicios desde GitHub</h2>
+                        <button class="toggle-btn">Expandir</button>
+                    </div>
+                    <div class="card-body collapsed">
+                        <p>Ingresa la URL RAW de un archivo .java en GitHub para cargarlo directamente en el editor.</p>
+                        <input id="githubUrlInput"
+                            placeholder="https://raw.githubusercontent.com/usuario/repo/main/Ejercicio.java"
+                            style="margin-bottom:8px;" />
+                        <button id="btnFetchGithub" class="ghost">Descargar y cargar al editor</button>
+                        <div id="githubStatus" class="mini" style="margin-top:8px; display:none;"></div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h2 style="margin:0;">Consola reactiva (ejecución real)</h2>
+                        <button class="toggle-btn">Minimizar</button>
+                    </div>
+                    <div class="card-body">
+                        <ol>
+                            <li>Usa <code>POST /run-java-reactivo</code> para compilar y ejecutar snippets con Reactor.
+                            </li>
+                            <li>Si algo falla, prepara dependencias con "Setup reactor".</li>
+                            <li>Practica primero WebFlux 2 y luego retos de operadores.</li>
+                        </ol>
+                        <div class="toolbar">
+                            <button id="btnTemplate" class="ghost">Cargar template WebFlux 2</button>
+                            <button id="btnPokemon" class="ghost">Cargar reto Pokemon (flatMap)</button>
+                            <button id="btnRun">Ejecutar reactivo</button>
+                            <button id="btnValidate" class="ghost">Validar WebFlux 2</button>
+                            <button id="btnSetup" class="ghost">Setup reactor</button>
+                            <button id="btnProbe" class="ghost">Probar runtime</button>
+                        </div>
+                        <div class="editor-shell">
+                            <div class="editor-head">
+                                <span>WebFlux Console Editor</span>
+                                <span>Atajos: <code>Ctrl + Enter</code> ejecutar, <code>Ctrl + L</code> limpiar
+                                    salida</span>
+                            </div>
+                            <div class="editor-body" style="height: 400px; position: relative;">
+                                <div id="monacoEditor" style="width: 100%; height: 100%;"></div>
+                                <!-- Viejo editor oculto para compatibilidad -->
+                                <textarea id="editor" class="editor" spellcheck="false" style="display:none;"></textarea>
+                            </div>
+                        </div>
+                        <div id="runtime" class="out">Estado runtime: sin verificar.</div>
+                        <div id="coach" class="out">Tip: explica por que usaste cada operador.</div>
+                        <div id="salida" class="out">Salida reactiva aqui...</div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h2 style="margin:0;">Ejercicios para codificar en consola</h2>
+                        <button class="toggle-btn">Minimizar</button>
+                    </div>
+                    <div class="card-body">
+                        <p>Elige un ejercicio y cárgalo al editor con un click. Están orientados a entrevista técnica
+                            WebFlux.
                         </p>
-                        <div id="operatorComp" class="out">Comparativa detallada.</div>
+                        <div class="exercise-grid">
+                            <article class="exercise-item">
+                                <h3>Ejercicio 1: map</h3>
+                                <p>Transforma una lista de nombres a mayúsculas e imprime total.</p>
+                                <button class="ghost load-ex-btn" data-ej="ej1">Cargar ejercicio 1</button>
+                            </article>
+                            <article class="exercise-item">
+                                <h3>Ejercicio 2: flatMap</h3>
+                                <p>Simula detalle por usuario con llamadas async y recoge resultados.</p>
+                                <button class="ghost load-ex-btn" data-ej="ej2">Cargar ejercicio 2</button>
+                            </article>
+                            <article class="exercise-item">
+                                <h3>Ejercicio 3: concatMap</h3>
+                                <p>Procesa pasos secuenciales manteniendo orden estricto.</p>
+                                <button class="ghost load-ex-btn" data-ej="ej3">Cargar ejercicio 3</button>
+                            </article>
+                            <article class="exercise-item">
+                                <h3>Ejercicio 4: flatMapIterable</h3>
+                                <p>Desenvuelve wrapper con lista interna y emite cada item.</p>
+                                <button class="ghost load-ex-btn" data-ej="ej4">Cargar ejercicio 4</button>
+                            </article>
+                            <article class="exercise-item">
+                                <h3>Ejercicio 5: WebFlux 2 completo</h3>
+                                <p>Compón <code>Mono.zip</code> con timeout y fallback.</p>
+                                <button class="ghost load-ex-btn" data-ej="ej5">Cargar ejercicio 5</button>
+                            </article>
+                        </div>
+                        <div id="exerciseBox" class="out">Selecciona un ejercicio para cargarlo en el editor.</div>
                     </div>
-                </div>
-            </div>
-        </section>
-        <section class="card">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h2 style="margin:0;">Reto dinamico por concepto</h2>
-                <button class="toggle-btn">Minimizar</button>
-            </div>
-            <div class="card-body">
-                <div class="toolbar">
-                    <button id="btnNewChallenge" class="ghost">Nuevo reto</button>
-                    <button id="btnLoadChallenge" class="ghost">Cargar reto en editor</button>
-                    <button id="btnHint" class="ghost">Pista</button>
-                    <button id="btnValidateChallenge" class="ghost">Validar reto</button>
-                </div>
-                <div id="challengeOut" class="out">Pulsa "Nuevo reto" para generar una practica.</div>
-                <div id="challengeHint" class="out">Pista del reto aparecera aqui.</div>
-            </div>
-        </section>
-        <section class="card">
-            <div class="card-header" onclick="toggleCard(this)">
-                <h2 style="margin:0;">Pregunta tecnica de operadores</h2>
-                <button class="toggle-btn">Minimizar</button>
-            </div>
-            <div class="card-body">
-                <input id="questionInput"
-                    placeholder="Ej: diferencia entre flatMapIterable y flatMap. Cuando usar concatMap?" />
-                <div class="toolbar">
-                    <button id="btnLocalAnswer" class="ghost">Responder local</button>
-                    <button id="btnIaAnswer" class="ghost">Preguntar IA local</button>
-                </div>
-                <div id="questionOut" class="out">Respuesta aqui...</div>
-            </div>
-            <p><a href="/entrevista">Volver a entrevista</a></p>
-        </section>
-    </main>
-    <script>
-        // Función para colapsar/ampliar secciones
-        function toggleCard(header) {
-            const body = header.parentElement.querySelector('.card-body');
-            const btn = header.querySelector('.toggle-btn');
-            if (body.classList.contains('collapsed')) {
-                body.classList.remove('collapsed');
-                btn.innerText = 'Minimizar';
-            } else {
-                body.classList.add('collapsed');
-                btn.innerText = 'Expandir';
-            }
-        }
-
-        // Lógica para GitHub
-        document.addEventListener('DOMContentLoaded', () => {
-            const btnFetch = document.getElementById('btnFetchGithub');
-            const urlInput = document.getElementById('githubUrlInput');
-            const statusDiv = document.getElementById('githubStatus');
-            const editor = document.getElementById('editor');
-
-            if (btnFetch) {
-                btnFetch.addEventListener('click', async () => {
-                    const url = urlInput.value.trim();
-                    if (!url) {
-                        alert('Por favor ingresa una URL de GitHub Raw');
-                        return;
+                </section>
+                <section class="card">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h2 style="margin:0;">Conceptos Fundamentales (dinamico)</h2>
+                        <button class="toggle-btn">Minimizar</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid">
+                            <div>
+                                <label for="operatorSelect">Concepto</label>
+                                <select id="operatorSelect">
+                                    <option value="herencia">Herencia</option>
+                                    <option value="composicion">Composición</option>
+                                    <option value="interfaces">Interfaces</option>
+                                    <option value="abstractas">Clases Abstractas</option>
+                                </select>
+                                <div class="toolbar">
+                                    <button id="btnExplainOp" class="ghost">¿Qué es? / ¿Cuándo usar?</button>
+                                    <button id="btnLoadOpExample" class="ghost">Cargar ejemplo del concepto</button>
+                                </div>
+                                <div id="operatorInfo" class="out">Selecciona un concepto y pulsa explicar.</div>
+                                <div id="operatorUse" class="out">Uso recomendado aparecera aqui.</div>
+                            </div>
+                            <div>
+                                <p class="mini"><strong>Pilares POO:</strong><br />
+                                    <code>Herencia</code> = Reutilización "es un"<br />
+                                    <code>Composición</code> = Flexibilidad "tiene un"<br />
+                                    <code>Interfaces</code> = Contrato de comportamiento<br />
+                                    <code>Abstracción</code> = Ocultar detalles complejos
+                                </p>
+                                <div id="operatorComp" class="out">Comparativa detallada.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="card">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h2 style="margin:0;">Reto dinamico por concepto</h2>
+                        <button class="toggle-btn">Minimizar</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <button id="btnNewChallenge" class="ghost">Nuevo reto</button>
+                            <button id="btnLoadChallenge" class="ghost">Cargar reto en editor</button>
+                            <button id="btnHint" class="ghost">Pista</button>
+                            <button id="btnValidateChallenge" class="ghost">Validar reto</button>
+                        </div>
+                        <div id="challengeOut" class="out">Pulsa "Nuevo reto" para generar una practica.</div>
+                        <div id="challengeHint" class="out">Pista del reto aparecera aqui.</div>
+                    </div>
+                </section>
+                <section class="card">
+                    <div class="card-header" onclick="toggleCard(this)">
+                        <h2 style="margin:0;">Pregunta tecnica de operadores</h2>
+                        <button class="toggle-btn">Minimizar</button>
+                    </div>
+                    <div class="card-body">
+                        <input id="questionInput"
+                            placeholder="Ej: diferencia entre flatMapIterable y flatMap. Cuando usar concatMap?" />
+                        <div class="toolbar">
+                            <button id="btnLocalAnswer" class="ghost">Responder local</button>
+                            <button id="btnIaAnswer" class="ghost">Preguntar IA local</button>
+                        </div>
+                        <div id="questionOut" class="out">Respuesta aqui...</div>
+                    </div>
+                    <p><a href="/entrevista">Volver a entrevista</a></p>
+                </section>
+            </main>
+            <script>
+                // Función para colapsar/ampliar secciones
+                function toggleCard(header) {
+                    const body = header.parentElement.querySelector('.card-body');
+                    const btn = header.querySelector('.toggle-btn');
+                    if (body.classList.contains('collapsed')) {
+                        body.classList.remove('collapsed');
+                        btn.innerText = 'Minimizar';
+                    } else {
+                        body.classList.add('collapsed');
+                        btn.innerText = 'Expandir';
                     }
+                }
 
-                    statusDiv.style.display = 'block';
-                    statusDiv.innerText = '⏳ Descargando archivo...';
-                    statusDiv.style.color = '#0d5e86';
+                // Lógica para GitHub
+                document.addEventListener('DOMContentLoaded', () => {
+                    const btnFetch = document.getElementById('btnFetchGithub');
+                    const urlInput = document.getElementById('githubUrlInput');
+                    const statusDiv = document.getElementById('githubStatus');
+                    const editor = document.getElementById('editor');
 
-                    try {
-                        const response = await fetch(url);
-                        if (!response.ok) throw new Error('No se pudo descargar el archivo. Verifica la URL.');
-                        const code = await response.text();
+                    if (btnFetch) {
+                        btnFetch.addEventListener('click', async () => {
+                            const url = urlInput.value.trim();
+                            if (!url) {
+                                alert('Por favor ingresa una URL de GitHub Raw');
+                                return;
+                            }
 
-                        editor.value = code;
-                        // Disparar evento input para actualizar números de línea si existen
-                        editor.dispatchEvent(new Event('input'));
+                            statusDiv.style.display = 'block';
+                            statusDiv.innerText = '⏳ Descargando archivo...';
+                            statusDiv.style.color = '#0d5e86';
 
-                        statusDiv.innerText = '✅ ¡Archivo cargado con éxito!';
-                        statusDiv.style.color = 'green';
-                        setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
-                    } catch (err) {
-                        statusDiv.innerText = '❌ Error: ' + err.message;
-                        statusDiv.style.color = 'red';
+                            try {
+                                const response = await fetch(url);
+                                if (!response.ok) throw new Error('No se pudo descargar el archivo. Verifica la URL.');
+                                const code = await response.text();
+
+                                editor.value = code;
+                                // Disparar evento input para actualizar números de línea si existen
+                                editor.dispatchEvent(new Event('input'));
+
+                                statusDiv.innerText = '✅ ¡Archivo cargado con éxito!';
+                                statusDiv.style.color = 'green';
+                                setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+                            } catch (err) {
+                                statusDiv.innerText = '❌ Error: ' + err.message;
+                                statusDiv.style.color = 'red';
+                            }
+                        });
                     }
                 });
-            }
-        });
 
 
-        const templatePooBasico = `public class Main {
+                const templatePooBasico = `public class Main {
     public static void main(String[] args) {
         System.out.println("Hola desde Java!");
     }
 }`;
 
-        const templatePatronStrategy = `interface EstrategiaEnvio {
+                const templatePatronStrategy = `interface EstrategiaEnvio {
     void enviar(String paquete);
 }
 
@@ -522,8 +529,8 @@ public class Main {
     }
 }`;
 
-        // Nota: templateWebflux2 se asume definido o inyectado.
-        const templateWebflux2 = `import reactor.core.publisher.Mono;
+                // Nota: templateWebflux2 se asume definido o inyectado.
+                const templateWebflux2 = `import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 import java.time.Duration;
 
@@ -543,11 +550,11 @@ public class Main {
     }
 }`;
 
-        const ejerciciosCodificacion = {
-            ej1: {
-                title: "Ejercicio 1 - map",
-                description: "Transforma nombres a mayúsculas e imprime TOTAL: 4.",
-                code: `import reactor.core.publisher.Flux;
+                const ejerciciosCodificacion = {
+                    ej1: {
+                        title: "Ejercicio 1 - map",
+                        description: "Transforma nombres a mayúsculas e imprime TOTAL: 4.",
+                        code: `import reactor.core.publisher.Flux;
 
 public class Main {
     public static void main(String[] args) {
@@ -557,11 +564,11 @@ public class Main {
         // 3) Imprime cada nombre y al final "TOTAL: 4"
     }
 }`
-            },
-            ej2: {
-                title: "Ejercicio 2 - flatMap",
-                description: "Llama detalle async por id y emite DONE-FLATMAP.",
-                code: `import reactor.core.publisher.Flux;
+                    },
+                    ej2: {
+                        title: "Ejercicio 2 - flatMap",
+                        description: "Llama detalle async por id y emite DONE-FLATMAP.",
+                        code: `import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.Duration;
 
@@ -577,11 +584,11 @@ public class Main {
         // 3) imprime resultados y "DONE-FLATMAP"
     }
 }`
-            },
-            ej3: {
-                title: "Ejercicio 3 - concatMap",
-                description: "Procesa 1..3 secuencialmente, respetando orden.",
-                code: `import reactor.core.publisher.Flux;
+                    },
+                    ej3: {
+                        title: "Ejercicio 3 - concatMap",
+                        description: "Procesa 1..3 secuencialmente, respetando orden.",
+                        code: `import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.Duration;
 
@@ -597,11 +604,11 @@ public class Main {
         // 3) imprime en orden y "DONE-CONCAT"
     }
 }`
-            },
-            ej4: {
-                title: "Ejercicio 4 - flatMapIterable",
-                description: "Convierte wrapper con lista a flujo de items.",
-                code: `import reactor.core.publisher.Mono;
+                    },
+                    ej4: {
+                        title: "Ejercicio 4 - flatMapIterable",
+                        description: "Convierte wrapper con lista a flujo de items.",
+                        code: `import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 import java.util.List;
 
@@ -620,312 +627,333 @@ public class Main {
         // 3) Imprime "ITEMS: 3"
     }
 }`
-            },
-            ej5: {
-                title: "Ejercicio 5 - WebFlux 2",
-                description: "Compone Mono.zip + timeout + fallback + DECISION.",
-                code: templateWebflux2
-            }
-        };
+                    },
+                    ej5: {
+                        title: "Ejercicio 5 - WebFlux 2",
+                        description: "Compone Mono.zip + timeout + fallback + DECISION.",
+                        code: templateWebflux2
+                    }
+                };
 
-        const operatorDocs = {
-            herencia: {
-                que: "Mecanismo por el cual una clase (hija) adquiere atributos y metodos de otra (padre).",
-                when: "Usalo para representar una relacion 'es un' (is-a). Ejemplo: Perro 'es un' Animal.",
-                compare: "Permite reutilizar codigo pero crea un acoplamiento fuerte.",
-                example: `class Animal { void comer() { System.out.println("Comiendo..."); } }\nclass Perro extends Animal { void ladrar() { System.out.println("Guau!"); } }\npublic class Main { public static void main(String[] args) { Perro p = new Perro(); p.comer(); p.ladrar(); } }`
-            },
-            composicion: {
-                que: "Tecnica donde una clase contiene una instancia de otra clase como uno de sus atributos.",
-                when: "Usalo para representar una relacion 'tiene un' (has-a). Ejemplo: Auto 'tiene un' Motor.",
-                compare: "Mas flexible que la herencia. Permite cambiar comportamiento en tiempo de ejecucion.",
-                example: `class Motor { void encender() { System.out.println("Motor ON"); } }\nclass Auto { private Motor m = new Motor(); void arrancar() { m.encender(); } }\npublic class Main { public static void main(String[] args) { new Auto().arrancar(); } }`
-            },
-            interfaces: {
-                que: "Contrato que define que debe hacer una clase, pero no como hacerlo.",
-                when: "Usalo para definir comportamientos comunes entre clases no relacionadas jerarquicamente.",
-                compare: "Permite polimorfismo total y desacoplamiento.",
-                example: `interface Volador { void volar(); }\nclass Avion implements Volador { public void volar() { System.out.println("Avion volando"); } }\npublic class Main { public static void main(String[] args) { Volador v = new Avion(); v.volar(); } }`
-            },
-            abstractas: {
-                que: "Clases que no se pueden instanciar y pueden tener metodos sin cuerpo (abstractos).",
-                when: "Usalo para definir una base comun que obligue a las clases hijas a implementar ciertos metodos.",
-                compare: "Punto medio entre clase normal e interfaz. Permite estado (atributos).",
-                example: `abstract class Figura { abstract double area(); }\nclass Circulo extends Figura { double r=5; double area() { return 3.14*r*r; } }\npublic class Main { public static void main(String[] args) { System.out.println(new Circulo().area()); } }`
-            }
-        };
+                const operatorDocs = {
+                    herencia: {
+                        que: "Mecanismo por el cual una clase (hija) adquiere atributos y metodos de otra (padre).",
+                        when: "Usalo para representar una relacion 'es un' (is-a). Ejemplo: Perro 'es un' Animal.",
+                        compare: "Permite reutilizar codigo pero crea un acoplamiento fuerte.",
+                        example: `class Animal { void comer() { System.out.println("Comiendo..."); } }\nclass Perro extends Animal { void ladrar() { System.out.println("Guau!"); } }\npublic class Main { public static void main(String[] args) { Perro p = new Perro(); p.comer(); p.ladrar(); } }`
+                    },
+                    composicion: {
+                        que: "Tecnica donde una clase contiene una instancia de otra clase como uno de sus atributos.",
+                        when: "Usalo para representar una relacion 'tiene un' (has-a). Ejemplo: Auto 'tiene un' Motor.",
+                        compare: "Mas flexible que la herencia. Permite cambiar comportamiento en tiempo de ejecucion.",
+                        example: `class Motor { void encender() { System.out.println("Motor ON"); } }\nclass Auto { private Motor m = new Motor(); void arrancar() { m.encender(); } }\npublic class Main { public static void main(String[] args) { new Auto().arrancar(); } }`
+                    },
+                    interfaces: {
+                        que: "Contrato que define que debe hacer una clase, pero no como hacerlo.",
+                        when: "Usalo para definir comportamientos comunes entre clases no relacionadas jerarquicamente.",
+                        compare: "Permite polimorfismo total y desacoplamiento.",
+                        example: `interface Volador { void volar(); }\nclass Avion implements Volador { public void volar() { System.out.println("Avion volando"); } }\npublic class Main { public static void main(String[] args) { Volador v = new Avion(); v.volar(); } }`
+                    },
+                    abstractas: {
+                        que: "Clases que no se pueden instanciar y pueden tener metodos sin cuerpo (abstractos).",
+                        when: "Usalo para definir una base comun que obligue a las clases hijas a implementar ciertos metodos.",
+                        compare: "Punto medio entre clase normal e interfaz. Permite estado (atributos).",
+                        example: `abstract class Figura { abstract double area(); }\nclass Circulo extends Figura { double r=5; double area() { return 3.14*r*r; } }\npublic class Main { public static void main(String[] args) { System.out.println(new Circulo().area()); } }`
+                    }
+                };
 
-        const retos = [
-            {
-                title: "Reto Herencia",
-                operator: "herencia",
-                goal: "Crea una jerarquia Animal -> Perro e imprime 'Ladrar'.",
-                hint: "Usa la palabra clave 'extends'.",
-                expectedOutput: "LADRAR",
-                starter: `class Animal { }\nclass Perro extends Animal { void ladrar() { System.out.println("LADRAR"); } }\npublic class Main { public static void main(String[] args){ new Perro().ladrar(); } }`
-            },
-            {
-                title: "Reto Interfaces",
-                operator: "interfaces",
-                goal: "Implementa una interfaz Notificador e imprime 'ENVIADO'.",
-                hint: "Usa 'implements' y define el metodo.",
-                expectedOutput: "ENVIADO",
-                starter: `interface Notificador { void enviar(); }\nclass Sms implements Notificador { public void enviar() { System.out.println("ENVIADO"); } }\npublic class Main { public static void main(String[] args){ new Sms().enviar(); } }`
-            }
-        ];
+                const retos = [
+                    {
+                        title: "Reto Herencia",
+                        operator: "herencia",
+                        goal: "Crea una jerarquia Animal -> Perro e imprime 'Ladrar'.",
+                        hint: "Usa la palabra clave 'extends'.",
+                        expectedOutput: "LADRAR",
+                        starter: `class Animal { }\nclass Perro extends Animal { void ladrar() { System.out.println("LADRAR"); } }\npublic class Main { public static void main(String[] args){ new Perro().ladrar(); } }`
+                    },
+                    {
+                        title: "Reto Interfaces",
+                        operator: "interfaces",
+                        goal: "Implementa una interfaz Notificador e imprime 'ENVIADO'.",
+                        hint: "Usa 'implements' y define el metodo.",
+                        expectedOutput: "ENVIADO",
+                        starter: `interface Notificador { void enviar(); }\nclass Sms implements Notificador { public void enviar() { System.out.println("ENVIADO"); } }\npublic class Main { public static void main(String[] args){ new Sms().enviar(); } }`
+                    }
+                ];
 
-        let retoActual = null;
-        const editorEl = document.getElementById("editor");
-        const lineNumbersEl = document.getElementById("lineNumbers");
-        const salidaEl = document.getElementById("salida");
+                let retoActual = null;
+                const editorContainer = document.getElementById("monacoEditor");
+                const oldTextarea = document.getElementById("editor");
+                let monacoEditor;
 
-        function updateLineNumbers() {
-            const lines = Math.max(1, editorEl.value.split("\n").length);
-            let nums = "";
-            for (let i = 1; i <= lines; i++) {
-                nums += i + "\n";
-            }
-            lineNumbersEl.textContent = nums;
-        }
-
-        function syncLineScroll() {
-            lineNumbersEl.scrollTop = editorEl.scrollTop;
-        }
-
-        function setEditorCode(code) {
-            editorEl.value = code;
-            updateLineNumbers();
-            syncLineScroll();
-            editorEl.focus();
-        }
-
-        function cargarTemplateBase() {
-            setEditorCode(templatePooBasico);
-            document.getElementById("coach").textContent = "Template POO cargado. Comienza a codificar.";
-        }
-
-        function cargarTemplatePokemon() {
-            setEditorCode(templatePatronStrategy);
-            document.getElementById("coach").textContent = "Template Strategy cargado. Observa como se desacopla el algoritmo.";
-        }
-
-        cargarTemplateBase();
-
-        async function ejecutarReactivo() {
-            const out = document.getElementById("salida");
-            out.textContent = "Ejecutando...";
-            try {
-                const res = await fetch("/run-java", {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain; charset=UTF-8" },
-                    body: editorEl.value
+                require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+                require(['vs/editor/editor.main'], function () {
+                    monacoEditor = monaco.editor.create(editorContainer, {
+                        value: templatePooBasico,
+                        language: 'java',
+                        theme: 'vs-dark',
+                        automaticLayout: true,
+                        fontSize: 14,
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
+                        roundedSelection: true
+                    });
                 });
-                out.textContent = await res.text();
-            } catch (err) {
-                out.textContent = "Error llamando backend Java: " + err;
-            }
-        }
 
-        async function probarRuntime() {
-            const probeCode = `import reactor.core.publisher.Mono;
+                function getEditorValue() {
+                    return monacoEditor ? monacoEditor.getValue() : oldTextarea.value;
+                }
+
+                function setEditorCode(code) {
+                    if (monacoEditor) {
+                        monacoEditor.setValue(code);
+                        monacoEditor.focus();
+                    } else {
+                        oldTextarea.value = code;
+                    }
+                    updateLineNumbers();
+                }
+
+                function updateLineNumbers() {
+                    // Monaco maneja esto internamente
+                }
+
+                function syncLineScroll() {
+                    // Monaco maneja esto internamente
+                }
+
+                function cargarTemplateBase() {
+                    setEditorCode(templatePooBasico);
+                    const coach = document.getElementById("coach");
+                    if (coach) coach.textContent = "Template POO cargado. Comienza a codificar.";
+                }
+
+                function cargarTemplatePokemon() {
+                    setEditorCode(templatePatronStrategy);
+                    const coach = document.getElementById("coach");
+                    if (coach) coach.textContent = "Template Strategy cargado. Observa como se desacopla el algoritmo.";
+                }
+
+                require(['vs/editor/editor.main'], function () {
+                    // Esperar un momento a que Monaco esté listo para la carga inicial
+                    setTimeout(cargarTemplateBase, 200);
+                });
+
+                async function ejecutarReactivo() {
+                    const out = document.getElementById("salida");
+                    out.textContent = "Ejecutando...";
+                    try {
+                        const res = await fetch("/run-java", {
+                            method: "POST",
+                            headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                            body: getEditorValue()
+                        });
+                        out.textContent = await res.text();
+                    } catch (err) {
+                        out.textContent = "Error llamando backend Java: " + err;
+                    }
+                }
+
+                async function probarRuntime() {
+                    const probeCode = `import reactor.core.publisher.Mono;
 public class Main {
   public static void main(String[] args){
     System.out.println(Mono.just("OK_REACTOR").block());
   }
 }`;
-            const box = document.getElementById("runtime");
-            box.textContent = "Probando runtime Reactor...";
-            try {
-                const res = await fetch("/run-java-reactivo", {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain; charset=UTF-8" },
-                    body: probeCode
+                    const box = document.getElementById("runtime");
+                    box.textContent = "Probando runtime Reactor...";
+                    try {
+                        const res = await fetch("/run-java-reactivo", {
+                            method: "POST",
+                            headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                            body: probeCode
+                        });
+                        const txt = await res.text();
+                        box.textContent = txt.includes("OK_REACTOR")
+                            ? "Runtime OK: Reactor activo."
+                            : "Runtime con problema:\n" + txt;
+                    } catch (err) {
+                        box.textContent = "Error probando runtime: " + err;
+                    }
+                }
+
+                async function setupReactivo() {
+                    const box = document.getElementById("runtime");
+                    box.textContent = "Preparando dependencias Reactor...";
+                    try {
+                        const res = await fetch("/setup-reactivo", { method: "POST" });
+                        box.textContent = await res.text();
+                    } catch (err) {
+                        box.textContent = "Error en setup reactivo: " + err;
+                    }
+                }
+
+                function validarEj2() {
+                    const out = (document.getElementById("salida").textContent || "").toUpperCase();
+                    const ok = out.includes("HOLA") || out.includes("ENVIANDO");
+                    if (ok) {
+                        document.getElementById("coach").textContent = "¡Excelente! El código se ejecutó correctamente.";
+                    } else {
+                        document.getElementById("coach").textContent = "Aun no pasa. Revisa los mensajes esperados en consola.";
+                    }
+                }
+
+                function explicarOperador() {
+                    const op = document.getElementById("operatorSelect").value;
+                    const cfg = operatorDocs[op];
+                    document.getElementById("operatorInfo").textContent =
+                        op + ": " + cfg.que;
+                    document.getElementById("operatorUse").textContent =
+                        "Cuando usarlo: " + cfg.when;
+                    document.getElementById("operatorComp").textContent =
+                        "Comparativa: " + cfg.compare;
+                }
+
+                function cargarEjemploOperador() {
+                    const op = document.getElementById("operatorSelect").value;
+                    const cfg = operatorDocs[op];
+                    setEditorCode(cfg.example);
+                    document.getElementById("coach").textContent = "Ejemplo de " + op + " cargado en consola.";
+                }
+
+                function generarReto() {
+                    retoActual = retos[Math.floor(Math.random() * retos.length)];
+                    document.getElementById("challengeOut").textContent =
+                        retoActual.title + "\nOperador objetivo: " + retoActual.operator + "\nObjetivo: " + retoActual.goal + "\nSalida esperada: " + retoActual.expectedOutput;
+                    document.getElementById("challengeHint").textContent = "Pista oculta. Pulsa 'Pista'.";
+                }
+
+                function cargarRetoEnEditor() {
+                    if (!retoActual) {
+                        document.getElementById("challengeOut").textContent = "Primero genera un reto.";
+                        return;
+                    }
+                    setEditorCode(retoActual.starter);
+                    document.getElementById("coach").textContent = "Reto cargado. Ejecuta y valida.";
+                }
+
+                function pistaReto() {
+                    if (!retoActual) {
+                        document.getElementById("challengeHint").textContent = "Primero genera un reto.";
+                        return;
+                    }
+                    document.getElementById("challengeHint").textContent = "Pista: " + retoActual.hint;
+                }
+
+                function validarReto() {
+                    if (!retoActual) {
+                        document.getElementById("challengeOut").textContent = "Genera un reto primero.";
+                        return;
+                    }
+                    const src = (getEditorValue() || "").toLowerCase();
+                    const out = (document.getElementById("salida").textContent || "").toUpperCase();
+                    const opUsed = src.includes(retoActual.operator.toLowerCase()) ||
+                        (retoActual.operator === "flatMapIterable" && src.includes("flatmapmany"));
+                    const outOk = out.includes(retoActual.expectedOutput.toUpperCase());
+                    if (opUsed && outOk) {
+                        document.getElementById("challengeOut").textContent =
+                            "Reto completado. Buen trabajo. Siguiente: explica trade-off del operador.";
+                    } else {
+                        document.getElementById("challengeOut").textContent =
+                            "Aún no pasa. Verifica operador objetivo y salida esperada.";
+                    }
+                }
+
+                function responderLocal() {
+                    const q = (document.getElementById("questionInput").value || "").toLowerCase();
+                    const out = document.getElementById("questionOut");
+                    if (!q.trim()) {
+                        out.textContent = "Escribe una pregunta técnica.";
+                        return;
+                    }
+                    if (q.includes("flatmapiterable")) {
+                        out.textContent = "flatMapIterable convierte un elemento con Iterable interno en flujo de items. Es común cuando una API devuelve wrapper con lista.";
+                        return;
+                    }
+                    if (q.includes("concatmap")) {
+                        out.textContent = "concatMap mantiene orden secuencial. Úsalo cuando el orden importa o para controlar presión sobre APIs externas.";
+                        return;
+                    }
+                    if (q.includes("flatmap")) {
+                        out.textContent = "flatMap aplana publishers y ejecuta de forma concurrente; prioriza throughput, no orden estricto.";
+                        return;
+                    }
+                    if (q.includes("map")) {
+                        out.textContent = "map transforma valor a valor síncrono. No hace llamadas asincrónicas ni aplana publishers.";
+                        return;
+                    }
+                    out.textContent = "No encontré respuesta local exacta. Usa IA local.";
+                }
+
+                async function preguntarIA() {
+                    const q = document.getElementById("questionInput").value || "";
+                    const out = document.getElementById("questionOut");
+                    out.textContent = "Consultando IA local...";
+                    try {
+                        const res = await fetch("/ollama/qa", {
+                            method: "POST",
+                            headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                            body: q
+                        });
+                        out.textContent = await res.text();
+                    } catch (err) {
+                        out.textContent = "Error consultando IA: " + err;
+                    }
+                }
+
+                function cargarEjercicio(id) {
+                    const ej = ejerciciosCodificacion[id];
+                    if (!ej) return;
+                    setEditorCode(ej.code);
+                    document.getElementById("exerciseBox").textContent =
+                        ej.title + "\n" + ej.description + "\nSugerencia: ejecuta y luego valida tu salida esperada.";
+                    document.getElementById("coach").textContent =
+                        "Ejercicio cargado: " + ej.title + ".";
+                }
+
+                document.getElementById("btnTemplate").onclick = cargarTemplateBase;
+                document.getElementById("btnPokemon").onclick = cargarTemplatePokemon;
+                document.getElementById("btnRun").onclick = ejecutarReactivo;
+                document.getElementById("btnValidate").onclick = validarEj2;
+                document.getElementById("btnSetup").onclick = setupReactivo;
+                document.getElementById("btnProbe").onclick = probarRuntime;
+                document.getElementById("btnExplainOp").onclick = explicarOperador;
+                document.getElementById("btnLoadOpExample").onclick = cargarEjemploOperador;
+                document.getElementById("btnNewChallenge").onclick = generarReto;
+                document.getElementById("btnLoadChallenge").onclick = cargarRetoEnEditor;
+                document.getElementById("btnHint").onclick = pistaReto;
+                document.getElementById("btnValidateChallenge").onclick = validarReto;
+                document.getElementById("btnLocalAnswer").onclick = responderLocal;
+                document.getElementById("btnIaAnswer").onclick = preguntarIA;
+                
+                document.querySelectorAll(".load-ex-btn").forEach(btn => {
+                    btn.onclick = () => cargarEjercicio(btn.dataset.ej);
                 });
-                const txt = await res.text();
-                box.textContent = txt.includes("OK_REACTOR")
-                    ? "Runtime OK: Reactor activo."
-                    : "Runtime con problema:\n" + txt;
-            } catch (err) {
-                box.textContent = "Error probando runtime: " + err;
-            }
-        }
 
-        async function setupReactivo() {
-            const box = document.getElementById("runtime");
-            box.textContent = "Preparando dependencias Reactor...";
-            try {
-                const res = await fetch("/setup-reactivo", { method: "POST" });
-                box.textContent = await res.text();
-            } catch (err) {
-                box.textContent = "Error en setup reactivo: " + err;
-            }
-        }
-
-        function validarEj2() {
-            const out = (document.getElementById("salida").textContent || "").toUpperCase();
-            const ok = out.includes("HOLA") || out.includes("ENVIANDO");
-            if (ok) {
-                document.getElementById("coach").textContent = "¡Excelente! El código se ejecutó correctamente.";
-            } else {
-                document.getElementById("coach").textContent = "Aun no pasa. Revisa los mensajes esperados en consola.";
-            }
-        }
-
-        function explicarOperador() {
-            const op = document.getElementById("operatorSelect").value;
-            const cfg = operatorDocs[op];
-            document.getElementById("operatorInfo").textContent =
-                op + ": " + cfg.que;
-            document.getElementById("operatorUse").textContent =
-                "Cuando usarlo: " + cfg.when;
-            document.getElementById("operatorComp").textContent =
-                "Comparativa: " + cfg.compare;
-        }
-
-        function cargarEjemploOperador() {
-            const op = document.getElementById("operatorSelect").value;
-            const cfg = operatorDocs[op];
-            setEditorCode(cfg.example);
-            document.getElementById("coach").textContent = "Ejemplo de " + op + " cargado en consola.";
-        }
-
-        function generarReto() {
-            retoActual = retos[Math.floor(Math.random() * retos.length)];
-            document.getElementById("challengeOut").textContent =
-                retoActual.title + "\nOperador objetivo: " + retoActual.operator + "\nObjetivo: " + retoActual.goal + "\nSalida esperada: " + retoActual.expectedOutput;
-            document.getElementById("challengeHint").textContent = "Pista oculta. Pulsa 'Pista'.";
-        }
-
-        function cargarRetoEnEditor() {
-            if (!retoActual) {
-                document.getElementById("challengeOut").textContent = "Primero genera un reto.";
-                return;
-            }
-            setEditorCode(retoActual.starter);
-            document.getElementById("coach").textContent = "Reto cargado. Ejecuta y valida.";
-        }
-
-        function pistaReto() {
-            if (!retoActual) {
-                document.getElementById("challengeHint").textContent = "Primero genera un reto.";
-                return;
-            }
-            document.getElementById("challengeHint").textContent = "Pista: " + retoActual.hint;
-        }
-
-        function validarReto() {
-            if (!retoActual) {
-                document.getElementById("challengeOut").textContent = "Genera un reto primero.";
-                return;
-            }
-            const src = (editorEl.value || "").toLowerCase();
-            const out = (document.getElementById("salida").textContent || "").toUpperCase();
-            const opUsed = src.includes(retoActual.operator.toLowerCase()) ||
-                (retoActual.operator === "flatMapIterable" && src.includes("flatmapmany"));
-            const outOk = out.includes(retoActual.expectedOutput.toUpperCase());
-            if (opUsed && outOk) {
-                document.getElementById("challengeOut").textContent =
-                    "Reto completado. Buen trabajo. Siguiente: explica trade-off del operador.";
-            } else {
-                document.getElementById("challengeOut").textContent =
-                    "Aún no pasa. Verifica operador objetivo y salida esperada.";
-            }
-        }
-
-        function responderLocal() {
-            const q = (document.getElementById("questionInput").value || "").toLowerCase();
-            const out = document.getElementById("questionOut");
-            if (!q.trim()) {
-                out.textContent = "Escribe una pregunta técnica.";
-                return;
-            }
-            if (q.includes("flatmapiterable")) {
-                out.textContent = "flatMapIterable convierte un elemento con Iterable interno en flujo de items. Es común cuando una API devuelve wrapper con lista.";
-                return;
-            }
-            if (q.includes("concatmap")) {
-                out.textContent = "concatMap mantiene orden secuencial. Úsalo cuando el orden importa o para controlar presión sobre APIs externas.";
-                return;
-            }
-            if (q.includes("flatmap")) {
-                out.textContent = "flatMap aplana publishers y ejecuta de forma concurrente; prioriza throughput, no orden estricto.";
-                return;
-            }
-            if (q.includes("map")) {
-                out.textContent = "map transforma valor a valor síncrono. No hace llamadas asincrónicas ni aplana publishers.";
-                return;
-            }
-            out.textContent = "No encontré respuesta local exacta. Usa IA local.";
-        }
-
-        async function preguntarIA() {
-            const q = document.getElementById("questionInput").value || "";
-            const out = document.getElementById("questionOut");
-            out.textContent = "Consultando IA local...";
-            try {
-                const res = await fetch("/ollama/qa", {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain; charset=UTF-8" },
-                    body: q
+                require(['vs/editor/editor.main'], function () {
+                    monacoEditor.onKeyDown((e) => {
+                        if (e.ctrlKey && e.keyCode === monaco.KeyCode.Enter) {
+                            e.preventDefault();
+                            ejecutarReactivo();
+                        }
+                        if (e.ctrlKey && (e.keyCode === monaco.KeyCode.KeyL)) {
+                            e.preventDefault();
+                            const salidaEl = document.getElementById("salida");
+                            if (salidaEl) salidaEl.textContent = "Salida limpiada.";
+                        }
+                    });
                 });
-                out.textContent = await res.text();
-            } catch (err) {
-                out.textContent = "Error consultando IA: " + err;
-            }
-        }
 
-        function cargarEjercicio(id) {
-            const ej = ejerciciosCodificacion[id];
-            if (!ej) return;
-            setEditorCode(ej.code);
-            document.getElementById("exerciseBox").textContent =
-                ej.title + "\n" + ej.description + "\nSugerencia: ejecuta y luego valida tu salida esperada.";
-            document.getElementById("coach").textContent =
-                "Ejercicio cargado: " + ej.title + ".";
-        }
+                explicarOperador();
+            </script>
 
-        document.getElementById("btnTemplate").addEventListener("click", cargarTemplateBase);
-        document.getElementById("btnPokemon").addEventListener("click", cargarTemplatePokemon);
-        document.getElementById("btnRun").addEventListener("click", ejecutarReactivo);
-        document.getElementById("btnValidate").addEventListener("click", validarEj2);
-        document.getElementById("btnSetup").addEventListener("click", setupReactivo);
-        document.getElementById("btnProbe").addEventListener("click", probarRuntime);
-        document.getElementById("btnExplainOp").addEventListener("click", explicarOperador);
-        document.getElementById("btnLoadOpExample").addEventListener("click", cargarEjemploOperador);
-        document.getElementById("btnNewChallenge").addEventListener("click", generarReto);
-        document.getElementById("btnLoadChallenge").addEventListener("click", cargarRetoEnEditor);
-        document.getElementById("btnHint").addEventListener("click", pistaReto);
-        document.getElementById("btnValidateChallenge").addEventListener("click", validarReto);
-        document.getElementById("btnLocalAnswer").addEventListener("click", responderLocal);
-        document.getElementById("btnIaAnswer").addEventListener("click", preguntarIA);
-        document.querySelectorAll(".load-ex-btn").forEach(btn => {
-            btn.addEventListener("click", () => cargarEjercicio(btn.dataset.ej));
-        });
-
-        editorEl.addEventListener("input", updateLineNumbers);
-        editorEl.addEventListener("scroll", syncLineScroll);
-        editorEl.addEventListener("keydown", (e) => {
-            if (e.ctrlKey && e.key === "Enter") {
-                e.preventDefault();
-                ejecutarReactivo();
-            }
-            if (e.ctrlKey && (e.key === "l" || e.key === "L")) {
-                e.preventDefault();
-                salidaEl.textContent = "Salida limpiada.";
-            }
-        });
-
-        updateLineNumbers();
-        syncLineScroll();
-        explicarOperador();
-    </script>
-
-      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
-        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
-      </footer>
-      </main>
-    </main>
-  </div>
+            <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
+                <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
+            </footer>
+        </main>
+        </main>
+    </div>
 </body>
 
 </html>

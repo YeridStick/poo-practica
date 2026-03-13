@@ -1,27 +1,25 @@
-# Etapa 1: Build con Maven
-FROM maven:3.8.5-eclipse-temurin-17 AS build
+## Etapa 1: Build con Maven (monolito)
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copiar el archivo pom.xml y descargar dependencias (para aprovechar caché)
+# Copiamos solo el pom primero para aprovechar mejor la caché de dependencias
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn -q dependency:go-offline
 
-# Copiar el código fuente y compilar
+# Copiamos el código fuente y construimos el proyecto + dependencias (incluye Reactor)
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn -q clean package -DskipTests \
+    dependency:copy-dependencies -DincludeArtifactIds=reactor-core,reactive-streams -DoutputDirectory=target/dependency
 
-# Etapa 2: Runtime con JDK completo (necesario para el playground/javac)
-FROM eclipse-temurin:17-jdk-focal
+## Etapa 2: Runtime (JDK completo, se usa javac dentro del playground)
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Copiar el JAR generado desde la etapa de build
-COPY --from=build /app/build/poo-practica-1.0-SNAPSHOT.jar app.jar
-
-# También podríamos copiar las dependencias si el servidor las necesita dinámicamente
-# Pero el JAR generado por Maven suele ser suficiente si se configura como fat-jar 
-# o si se copian las librerías a /app/lib
+# Copiamos clases compiladas y dependencias
+COPY --from=build /app/target/classes /app/target/classes
+COPY --from=build /app/target/dependency /app/target/dependency
 
 EXPOSE 8080
 
-# Ejecutar el servidor por defecto
-CMD ["java", "-cp", "app.jar", "HttpEstudioServer", "8080"]
+# Ejecutar el servidor HTTP del dashboard (monolito)
+CMD ["java", "-cp", "target/classes:target/dependency/*", "HttpEstudioServer", "8080"]

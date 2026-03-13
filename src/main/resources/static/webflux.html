@@ -6,23 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebFlux & Programación Reactiva</title>
     <link rel="stylesheet" href="/index.css">
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <style>
+        /* Ajuste de la paleta para que WebFlux use el mismo esquema claro del dashboard */
         :root {
-            --bg: #0b0e1a;
-            --surface: #111827;
-            --surface2: #1a2035;
-            --border: #1e2d4a;
-            --brand: #38bdf8;
-            --brand2: #f472b6;
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --surface2: #f6f7fb;
+            --border: rgba(0, 0, 0, 0.06);
+            --brand: #0d6a63;
+            --brand2: #b5552f;
             --brand3: #a78bfa;
-            --ink: #e2e8f0;
-            --ink-dim: #94a3b8;
+            --ink: #1e2227;
+            --ink-dim: #6b7280;
             --radius: 18px;
-            --glow: 0 0 24px rgba(56, 189, 248, 0.15);
+            --glow: 0 10px 40px rgba(0, 0, 0, 0.06);
         }
 
         * {
@@ -35,18 +38,7 @@
             height: 100%;
         }
 
-        /* Background mesh */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 10% 0%, rgba(56, 189, 248, 0.08) 0, transparent 50%),
-                radial-gradient(ellipse at 90% 100%, rgba(168, 139, 250, 0.08) 0, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
+        /* El fondo principal lo aporta el dashboard, aquí no añadimos mesh oscuro */
         .app {
             position: relative;
             z-index: 1;
@@ -116,16 +108,16 @@
         /* ---- MAIN GRID ---- */
         .main-grid {
             display: grid;
-            grid-template-columns: 340px 1fr;
-            gap: 20px;
-            align-items: start;
+            grid-template-columns: 380px minmax(0, 1.4fr);
+            gap: 28px;
+            align-items: flex-start;
         }
 
         /* ---- LEFT PANEL ---- */
         .left-panel {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
         .panel-card {
@@ -146,7 +138,7 @@
         }
 
         .panel-body {
-            padding: 14px 18px;
+            padding: 18px 20px;
         }
 
         /* Repo loader */
@@ -229,10 +221,10 @@
         .challenge-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 55vh;
+            gap: 14px;
+            max-height: 68vh;
             overflow-y: auto;
-            padding-right: 4px;
+            padding-right: 6px;
         }
 
         .challenge-list::-webkit-scrollbar {
@@ -251,14 +243,18 @@
         .challenge-card {
             background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 14px;
-            transition: border-color 0.2s;
+            border-radius: 18px;
+            padding: 18px 20px;
+            transition: border-color 0.2s, transform 0.15s ease;
             cursor: default;
+            min-height: 150px;            /* altura mínima para que todas se vean del mismo tamaño */
+            display: flex;
+            flex-direction: column;
         }
 
         .challenge-card:hover {
             border-color: var(--brand);
+            transform: translateY(-2px);
         }
 
         .challenge-card.done {
@@ -272,17 +268,17 @@
         }
 
         .ch-title {
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--brand);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .ch-desc {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--ink-dim);
-            line-height: 1.4;
-            margin-bottom: 8px;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
 
         .ch-expected {
@@ -308,6 +304,7 @@
             display: flex;
             gap: 6px;
             align-items: center;
+            margin-top: auto;             /* empuja acciones al fondo de la card */
         }
 
         .status-dot {
@@ -351,6 +348,9 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
+            flex: 1;
+            width: 100%;
+            max-width: 900px;   /* ancho objetivo en desktop, sin forzar scroll horizontal */
         }
 
         /* Concepts strip */
@@ -611,9 +611,31 @@
             cursor: pointer;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1200px) {
             .main-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .left-panel {
+                order: 2;
+            }
+            .right-panel {
+                order: 1;
+                width: 100%;
+                max-width: 100%;  /* ocupa todo el ancho disponible en pantallas medianas/pequeñas */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .app {
+                margin-top: 2.5rem; /* separa el contenido del topbar en vista móvil */
+            }
+            .panel-card,
+            .editor-shell,
+            .output-panel {
+                border-radius: 16px;
+            }
+            .challenge-list {
+                max-height: none;
             }
         }
     </style>
@@ -851,9 +873,10 @@
                             <button class="btn btn-sm" onclick="ejecutarRxJava()">▶ Ejecutar</button>
                         </div>
                     </div>
-                    <div class="editor-body">
-                        <pre class="line-numbers" id="rxLineNumbers">1</pre>
-                        <textarea id="rxEditor" class="rx-editor" spellcheck="false">import reactor.core.publisher.Flux;
+                    <div class="editor-body" style="height: 480px; position: relative;">
+                        <div id="monacoEditor" style="width: 100%; height: 100%;"></div>
+                        <!-- Viejo editor oculto para compatibilidad -->
+                        <textarea id="rxEditor" class="rx-editor" spellcheck="false" style="display:none;">import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class Main {
@@ -985,33 +1008,39 @@ public class Main {
         // ============================================================
         // EDITOR
         // ============================================================
-        const editorEl = document.getElementById('rxEditor');
-        const lineNumEl = document.getElementById('rxLineNumbers');
+        const rxEditorContainer = document.getElementById('monacoEditor');
+        const rxOldTextarea = document.getElementById('rxEditor');
+        let monacoEditor;
 
-        function updateLineNums() {
-            const lines = editorEl.value.split('\n').length;
-            let out = '';
-            for (let i = 1; i <= lines; i++) out += i + '\n';
-            lineNumEl.textContent = out;
-        }
-
-        editorEl.addEventListener('input', updateLineNums);
-        editorEl.addEventListener('scroll', () => { lineNumEl.scrollTop = editorEl.scrollTop; });
-        editorEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Tab') {
-                e.preventDefault();
-                const s = editorEl.selectionStart, end = editorEl.selectionEnd;
-                editorEl.value = editorEl.value.substring(0, s) + '    ' + editorEl.value.substring(end);
-                editorEl.selectionStart = editorEl.selectionEnd = s + 4;
-                updateLineNums();
-            }
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            monacoEditor = monaco.editor.create(rxEditorContainer, {
+                value: rxOldTextarea.value,
+                language: 'java',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                roundedSelection: true
+            });
         });
 
-        updateLineNums();
+        function getRxEditorValue() {
+            return monacoEditor ? monacoEditor.getValue() : rxOldTextarea.value;
+        }
+
+        function setRxEditorValue(val) {
+            if (monacoEditor) {
+                monacoEditor.setValue(val);
+                monacoEditor.focus();
+            } else {
+                rxOldTextarea.value = val;
+            }
+        }
 
         function limpiarRxEditor() {
-            editorEl.value = '';
-            updateLineNums();
+            setRxEditorValue('');
             document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
             document.getElementById('rxValidateResult').textContent = '';
         }
@@ -1024,7 +1053,7 @@ public class Main {
                 const res = await fetch('/run-java-reactivo', {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
-                    body: editorEl.value
+                    body: getRxEditorValue()
                 });
                 out.textContent = await res.text();
             } catch (err) {
@@ -1087,12 +1116,10 @@ public class Main {
         function cargarRxReto(repoId, idx) {
             const reto = rxCollections[repoId].retos[idx];
             if (!reto) return;
-            editorEl.value = reto.template || '';
-            updateLineNums();
+            setRxEditorValue(reto.template || '');
             document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
             document.getElementById('rxValidateResult').textContent = '';
             document.getElementById('rxEditorLabel').textContent = `${reto.titulo} — WebFlux Playground`;
-            editorEl.focus();
         }
 
         function validarRxReto(repoId, idx) {

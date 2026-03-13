@@ -250,6 +250,90 @@ body {
   box-shadow: var(--shadow);
 }
 
+/* Card destacada: Programación Reactiva / WebFlux */
+.card-webflux {
+  background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #a855f7 100%);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 40px rgba(56, 189, 248, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-webflux::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  pointer-events: none;
+}
+
+.card-webflux:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(56, 189, 248, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+}
+
+.card-webflux .card-webflux-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 4px 10px;
+  border-radius: 99px;
+  margin-bottom: 8px;
+}
+
+.card-webflux h3 {
+  color: #fff;
+  margin: 0 0 8px 0;
+  font-weight: 800;
+}
+
+.card-webflux p {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.85rem;
+  margin: 0 0 14px 0;
+  line-height: 1.4;
+}
+
+.btn-webflux {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0c4a6e;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-webflux:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  color: #0c4a6e;
+}
+
+.btn-webflux:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+.btn-webflux svg {
+  flex-shrink: 0;
+}
+
 /* Cards & Content */
 .section-grid {
   display: grid;

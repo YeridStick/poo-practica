@@ -65,6 +65,7 @@ public class HttpEstudioServer {
         server.createContext("/repo/load", new RepoLoadHandler());
         server.createContext("/index.css", new StaticFileHandler("/static/index.css", "text/css; charset=UTF-8"));
         server.createContext("/index.js", new StaticFileHandler("/static/index.js", "application/javascript; charset=UTF-8"));
+        server.createContext("/referencia.json", new StaticFileHandler("/static/referencia.json", "application/json; charset=UTF-8"));
         server.setExecutor(null);
         server.start();
 
@@ -75,6 +76,11 @@ public class HttpEstudioServer {
     static class HealthHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
             if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
                 byte[] cuerpo = "Metodo no permitido. Usa GET.".getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(405, cuerpo.length);
@@ -96,6 +102,11 @@ public class HttpEstudioServer {
     static class RunJavaHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 byte[] cuerpo = "Metodo no permitido. Usa POST.".getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(405, cuerpo.length);
@@ -120,6 +131,11 @@ public class HttpEstudioServer {
     static class RunJavaReactivoHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 byte[] cuerpo = "Metodo no permitido. Usa POST.".getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(405, cuerpo.length);
@@ -144,6 +160,11 @@ public class HttpEstudioServer {
     static class SetupReactivoHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 responder(exchange, 405, "text/plain; charset=UTF-8", "Metodo no permitido. Usa POST.");
                 return;
@@ -156,6 +177,11 @@ public class HttpEstudioServer {
     static class RepoLoadHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 responder(exchange, 405, "text/plain; charset=UTF-8", "Metodo no permitido. Usa POST.");
                 return;
@@ -581,7 +607,16 @@ public class HttpEstudioServer {
         }
     }
 
+    /** Añade cabeceras CORS para que el frontend pueda consumir la API desde otro origen. */
+    private static void addCorsHeaders(HttpExchange exchange) {
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+        exchange.getResponseHeaders().add("Access-Control-Max-Age", "86400");
+    }
+
     private static void responder(HttpExchange exchange, int status, String contentType, String body) throws IOException {
+        addCorsHeaders(exchange);
         byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().set("Content-Type", contentType);
         exchange.sendResponseHeaders(status, bytes.length);
