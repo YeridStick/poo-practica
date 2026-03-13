@@ -34,7 +34,8 @@
             padding: 0;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -102,6 +103,7 @@
             font-weight: 800;
             background: linear-gradient(90deg, var(--brand), var(--brand3));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -247,7 +249,8 @@
             padding: 18px 20px;
             transition: border-color 0.2s, transform 0.15s ease;
             cursor: default;
-            min-height: 150px;            /* altura mínima para que todas se vean del mismo tamaño */
+            min-height: 150px;
+            /* altura mínima para que todas se vean del mismo tamaño */
             display: flex;
             flex-direction: column;
         }
@@ -304,7 +307,8 @@
             display: flex;
             gap: 6px;
             align-items: center;
-            margin-top: auto;             /* empuja acciones al fondo de la card */
+            margin-top: auto;
+            /* empuja acciones al fondo de la card */
         }
 
         .status-dot {
@@ -350,7 +354,8 @@
             gap: 14px;
             flex: 1;
             width: 100%;
-            max-width: 900px;   /* ancho objetivo en desktop, sin forzar scroll horizontal */
+            max-width: 900px;
+            /* ancho objetivo en desktop, sin forzar scroll horizontal */
         }
 
         /* Concepts strip */
@@ -529,6 +534,7 @@
             margin-bottom: 10px;
             background: linear-gradient(90deg, var(--brand), var(--brand3));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -615,25 +621,31 @@
             .main-grid {
                 grid-template-columns: minmax(0, 1fr);
             }
+
             .left-panel {
                 order: 2;
             }
+
             .right-panel {
                 order: 1;
                 width: 100%;
-                max-width: 100%;  /* ocupa todo el ancho disponible en pantallas medianas/pequeñas */
+                max-width: 100%;
+                /* ocupa todo el ancho disponible en pantallas medianas/pequeñas */
             }
         }
 
         @media (max-width: 900px) {
             .app {
-                margin-top: 2.5rem; /* separa el contenido del topbar en vista móvil */
+                margin-top: 2.5rem;
+                /* separa el contenido del topbar en vista móvil */
             }
+
             .panel-card,
             .editor-shell,
             .output-panel {
                 border-radius: 16px;
             }
+
             .challenge-list {
                 max-height: none;
             }
@@ -642,461 +654,510 @@
 </head>
 
 <body>
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="logo-icon">JP</div>
-      <a href="/" class="nav-item" title="Inicio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </a>
-      <a href="/entrevista" class="nav-item" title="Ruta">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-      </a>
-      <a href="/entrevista/docs" class="nav-item" title="Documentación">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-        </svg>
-      </a>
-      <a href="/entrevista/ia" class="nav-item" title="IA">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="19" cy="12" r="1" />
-          <circle cx="5" cy="12" r="1" />
-        </svg>
-      </a>
-      <a href="/entrevista/mock" class="nav-item" title="Mock">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-          <path d="M12 6v6l4 2" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux" class="nav-item active" title="WebFlux">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6" />
-          <polyline points="8 6 2 12 8 18" />
-        </svg>
-      </a>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo-icon">JP</div>
+            <a href="/" class="nav-item" title="Inicio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+            </a>
+            <a href="/entrevista" class="nav-item" title="Ruta">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+            </a>
+            <a href="/entrevista/docs" class="nav-item" title="Documentación">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+            </a>
+            <a href="/entrevista/ia" class="nav-item" title="IA">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="19" cy="12" r="1" />
+                    <circle cx="5" cy="12" r="1" />
+                </svg>
+            </a>
+            <a href="/entrevista/mock" class="nav-item" title="Mock">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                    <path d="M12 6v6l4 2" />
+                </svg>
+            </a>
+            <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
+                </svg>
+            </a>
+            <a href="/entrevista/webflux" class="nav-item active" title="WebFlux">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                </svg>
+            </a>
 
-      <div class="sidebar-footer">
-        <div class="nav-item" id="btnConfig" title="Configuracion">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-        </div>
-      </div>
-    </aside>
+            <div class="sidebar-footer">
+                <div class="nav-item" id="btnConfig" title="Configuracion">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                </div>
+            </div>
+        </aside>
 
-    <main class="main-content" style="padding: 0; overflow: auto;">
-      <!-- TOPBAR -->
-      <header class="topbar">
-        <a href="/" class="back-btn">← Volver</a>
-        <div id="rxStatusMsg" class="status-bar" style="text-align:right;"></div>
-      </header>
+        <main class="main-content" style="padding: 0; overflow: auto;">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <a href="/" class="back-btn">← Volver</a>
+                <div id="rxStatusMsg" class="status-bar" style="text-align:right;"></div>
+            </header>
 
-    <div class="app">
-      <!-- MAIN -->
-        <div class="main-grid">
+            <div class="app">
+                <!-- MAIN -->
+                <div class="main-grid">
 
-            <!-- LEFT: Challenges + Repo loader -->
-            <aside class="left-panel">
+                    <!-- LEFT: Challenges + Repo loader -->
+                    <aside class="left-panel">
 
-                <!-- Repo Loader -->
-                <div class="panel-card">
-                    <div class="panel-header">
-                        <span>📦 Cargar Retos desde GitHub</span>
-                        <button id="btnSaveRxRepo" class="btn" onclick="guardarRxRepo()">Guardar</button>
-                    </div>
-                    <div class="panel-body">
-                        <div class="repo-row">
-                            <input type="text" id="rxRepoUrl" class="rx-input"
-                                placeholder="https://github.com/user/repo">
-                            <button class="btn" onclick="cargarRxRepo()">Cargar</button>
-                        </div>
-                        <div id="rxSavedRepos" style="margin-bottom:10px;"></div>
-                        <div class="repo-tabs" id="rxRepoTabs">
-                            <div class="repo-tab active" id="tab-standard" onclick="switchRxRepo('standard')">Standard
+                        <!-- Repo Loader -->
+                        <div class="panel-card">
+                            <div class="panel-header">
+                                <span>📦 Cargar Retos desde GitHub</span>
+                                <button id="btnSaveRxRepo" class="btn" onclick="guardarRxRepo()">Guardar</button>
+                            </div>
+                            <div class="panel-body">
+                                <div class="repo-row">
+                                    <input type="text" id="rxRepoUrl" class="rx-input"
+                                        placeholder="https://github.com/user/repo">
+                                    <button class="btn" onclick="cargarRxRepo()">Cargar</button>
+                                </div>
+                                <div id="rxSavedRepos" style="margin-bottom:10px;"></div>
+                                <div class="repo-tabs" id="rxRepoTabs">
+                                    <div class="repo-tab active" id="tab-standard" onclick="switchRxRepo('standard')">
+                                        Standard
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Challenge list -->
-                <div class="panel-card" style="flex:1;">
-                    <div class="panel-header">
-                        <span>🎯 Retos</span>
-                        <span id="rxProgressLabel" style="font-size:0.72rem;color:var(--ink-dim);font-weight:600;">0
-                            completados</span>
-                    </div>
-                    <div class="panel-body" style="padding:10px 14px;">
-                        <div class="challenge-list" id="rxChallengeList">
-                            <!-- Injected by JS -->
+                        <!-- Challenge list -->
+                        <div class="panel-card" style="flex:1;">
+                            <div class="panel-header">
+                                <span>🎯 Retos</span>
+                                <span id="rxProgressLabel"
+                                    style="font-size:0.72rem;color:var(--ink-dim);font-weight:600;">0
+                                    completados</span>
+                            </div>
+                            <div class="panel-body" style="padding:10px 14px;">
+                                <div class="challenge-list" id="rxChallengeList">
+                                    <!-- Injected by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </aside>
+
+                    <!-- RIGHT: Editor + Output + Concepts -->
+                    <div class="right-panel">
+
+                        <!-- Concept chips -->
+                        <div class="concept-strip">
+                            <div class="concept-chip" onclick="showConcept('mono')">Mono&lt;T&gt;</div>
+                            <div class="concept-chip" onclick="showConcept('flux')">Flux&lt;T&gt;</div>
+                            <div class="concept-chip" onclick="showConcept('flatmap')">flatMap</div>
+                            <div class="concept-chip" onclick="showConcept('operators')">Operadores</div>
+                            <div class="concept-chip" onclick="showConcept('error')">Error Handling</div>
+                            <div class="concept-chip" onclick="showConcept('scheduler')">Schedulers</div>
+                        </div>
+
+                        <!-- Concept info panel -->
+                        <div class="concept-panel" id="conceptPanel" style="display:none;">
+                            <div class="concept-block" id="concept-mono">
+                                <h3>Mono&lt;T&gt; — 0 o 1 item</h3>
+                                <p><strong>Mono</strong> es un Publisher que emite como máximo <em>un</em> elemento y
+                                    luego
+                                    completa (o emite error). Equivale a un <code>Optional</code> reactivo.</p>
+                                <div class="code-snippet">Mono.just("Hola WebFlux")
+                                    .map(String::toUpperCase)
+                                    .subscribe(System.out::println);
+
+                                    // Con creacion diferida
+                                    Mono.fromSupplier(() -> calcularPrecio())
+                                    .doOnSuccess(p -> log("precio: " + p))
+                                    .subscribe();</div>
+                            </div>
+                            <div class="concept-block" id="concept-flux">
+                                <h3>Flux&lt;T&gt; — 0..N items</h3>
+                                <p><strong>Flux</strong> es un Publisher que emite <em>múltiples</em> elementos. Es el
+                                    equivalente reactivo de una lista o stream.</p>
+                                <div class="code-snippet">Flux.just(1, 2, 3, 4, 5)
+                                    .filter(n -> n % 2 == 0)
+                                    .map(n -> n * 10)
+                                    .subscribe(System.out::println);
+
+                                    Flux.range(1, 100)
+                                    .take(5)
+                                    .collectList()
+                                    .subscribe(System.out::println);</div>
+                            </div>
+                            <div class="concept-block" id="concept-flatmap">
+                                <h3>flatMap vs concatMap vs switchMap</h3>
+                                <p><strong>flatMap</strong> → concurrente, no garantiza orden.
+                                    <strong>concatMap</strong> →
+                                    secuencial, mantiene orden. <strong>switchMap</strong> → cancela la anterior al
+                                    llegar nueva
+                                    señal.
+                                </p>
+                                <div class="code-snippet">// flatMap: concurrente
+                                    Flux.just("a","b","c")
+                                    .flatMap(s -> llamadaAsync(s))
+                                    .subscribe();
+
+                                    // concatMap: orden garantizado
+                                    Flux.just("a","b","c")
+                                    .concatMap(s -> llamadaAsync(s))
+                                    .subscribe();</div>
+                            </div>
+                            <div class="concept-block" id="concept-operators">
+                                <h3>Operadores clave</h3>
+                                <p>Los operadores transforman el stream sin suscribirse. Son lazy: nada ocurre hasta que
+                                    alguien
+                                    se suscribe.</p>
+                                <div class="code-snippet">flux.map() // transforma 1:1
+                                    flux.flatMap() // transforma 1:N asincrono
+                                    flux.filter() // filtra segun predicado
+                                    flux.reduce() // acumula en un Mono
+                                    flux.collectList()// Flux -> Mono&lt;List&gt;
+                                    flux.zip() // combina dos Flux
+                                    flux.merge() // une Flux concurrentes
+                                    flux.take(n) // tomar N elementos
+                                    flux.timeout() // falla si tarda mucho
+                                    flux.retry(n) // reintentar N veces</div>
+                            </div>
+                            <div class="concept-block" id="concept-error">
+                                <h3>Manejo de Errores</h3>
+                                <p>A diferencia del try-catch imperativo, los errores son señales en el stream y se
+                                    manejan con
+                                    operadores.</p>
+                                <div class="code-snippet">Mono.just(0)
+                                    .map(n -> 10 / n) // ArithmeticException
+                                    .onErrorReturn(-1) // valor por defecto
+
+                                    Flux.error(new RuntimeException("fallo"))
+                                    .onErrorResume(e -> Flux.just("fallback"))
+
+                                    flux.doOnError(e -> log.error("Error:", e))
+                                    .retry(3) // reintentar 3x
+                                    .timeout(Duration.ofSeconds(5))</div>
+                            </div>
+                            <div class="concept-block" id="concept-scheduler">
+                                <h3>Schedulers &amp; Hilos</h3>
+                                <p>Reactive es <em>single-thread by default</em>. Los <strong>Schedulers</strong>
+                                    controlan en
+                                    qué hilo se ejecuta cada parte del pipeline.</p>
+                                <div class="code-snippet">Flux.just(1,2,3)
+                                    .subscribeOn(Schedulers.boundedElastic()) // hilo de suscripcion
+                                    .publishOn(Schedulers.parallel()) // hilo de publicacion
+                                    .subscribe();
+
+                                    // Para I/O bloqueante (JPA, calls HTTP sincronas):
+                                    Mono.fromCallable(() -> repoBlocking.save(entity))
+                                    .subscribeOn(Schedulers.boundedElastic())</div>
+                            </div>
+                        </div>
+
+                        <!-- Editor Shell -->
+                        <div class="editor-shell">
+                            <div class="editor-topbar">
+                                <div class="dot-group">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <span class="editor-file-label" id="rxEditorLabel">Main.java — WebFlux Playground</span>
+                                <div class="editor-actions">
+                                    <button id="btnVscode" class="btn ghost btn-sm"
+                                        style="background: #24292e; color: white; border: 1px solid #444d56; display: inline-flex; align-items: center; gap: 6px;"
+                                        onclick="window.open('https://vscode.dev/github/YeridStick/poo-practica', '_blank')">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M23.15 2.58L19.8 1.45c-.32-.11-.66.03-.82.33L12 15.67 5.02 1.78c-.16-.3-.5-.44-.82-.33L.85 2.58c-.36.12-.5.54-.26.82l6.21 7.08L.59 17.56c-.24.28-.1.7.26.82l3.35 1.13c.32.11.66-.03.82-.33L12 5.31l6.98 13.88c.16.3.5.44.82.33l3.35-1.13c.36-.12.5-.54.26-.82l-6.21-7.08 6.21-7.08c.24-.28.1-.7-.26-.82z" />
+                                        </svg>
+                                        VS Code
+                                    </button>
+                                    <button class="btn ghost btn-sm" onclick="limpiarRxEditor()">Limpiar</button>
+                                    <button class="btn btn-sm" onclick="ejecutarRxJava()">▶ Ejecutar</button>
+                                </div>
+                            </div>
+                            <div class="editor-body"
+                                style="height: 480px; position: relative; display: block; background: #1e1e1e;">
+                                <div id="monacoEditor" style="width: 100%;"></div>
+                                <!-- Viejo editor oculto para compatibilidad -->
+                                <textarea id="rxEditor" class="rx-editor" spellcheck="false" style="display:none;">import reactor.core.publisher.Flux;
+                                    import reactor.core.publisher.Mono;
+
+                                    public class Main {
+                                        public static void main(String[] args) {
+                                            // Tu primer Flux reactivo
+                                            Flux.just(1, 2, 3, 4, 5)
+                                                .filter(n -> n % 2 == 0)
+                                                .map(n -> "Par: " + n)
+                                                .subscribe(System.out::println);
+                                        }
+                                    }
+                                </textarea>
+                            </div>
+                        </div>
+
+                        <!-- Output -->
+                        <div class="output-panel">
+                            <div class="output-header">
+                                <div class="output-dot"></div>
+                                <span>Salida del programa</span>
+                                <span id="rxValidateResult" style="margin-left:auto;font-size:0.72rem;"></span>
+                            </div>
+                            <pre class="output-body" id="rxOutput">La salida aparecerá aquí...</pre>
+                        </div>
+
+                    </div><!-- /right-panel -->
+                </div><!-- /main-grid -->
+            </div><!-- /app -->
+
+            <!-- Alert Modal -->
+            <div class="rx-modal" id="rxAlertModal">
+                <div class="rx-modal-box">
+                    <div class="modal-top" id="rxAlertTitle">Mensaje</div>
+                    <div class="modal-body">
+                        <p id="rxAlertMsg"></p>
+                        <div class="modal-actions">
+                            <button class="btn-cancel" id="rxAlertCancelBtn" style="display:none;"
+                                onclick="closeRxModal('rxAlertModal')">Cancelar</button>
+                            <button class="btn btn-sm" id="rxAlertConfirmBtn"
+                                onclick="closeRxModal('rxAlertModal')">Aceptar</button>
                         </div>
                     </div>
-                </div>
-
-            </aside>
-
-            <!-- RIGHT: Editor + Output + Concepts -->
-            <div class="right-panel">
-
-                <!-- Concept chips -->
-                <div class="concept-strip">
-                    <div class="concept-chip" onclick="showConcept('mono')">Mono&lt;T&gt;</div>
-                    <div class="concept-chip" onclick="showConcept('flux')">Flux&lt;T&gt;</div>
-                    <div class="concept-chip" onclick="showConcept('flatmap')">flatMap</div>
-                    <div class="concept-chip" onclick="showConcept('operators')">Operadores</div>
-                    <div class="concept-chip" onclick="showConcept('error')">Error Handling</div>
-                    <div class="concept-chip" onclick="showConcept('scheduler')">Schedulers</div>
-                </div>
-
-                <!-- Concept info panel -->
-                <div class="concept-panel" id="conceptPanel" style="display:none;">
-                    <div class="concept-block" id="concept-mono">
-                        <h3>Mono&lt;T&gt; — 0 o 1 item</h3>
-                        <p><strong>Mono</strong> es un Publisher que emite como máximo <em>un</em> elemento y luego
-                            completa (o emite error). Equivale a un <code>Optional</code> reactivo.</p>
-                        <div class="code-snippet">Mono.just("Hola WebFlux")
-                            .map(String::toUpperCase)
-                            .subscribe(System.out::println);
-
-                            // Con creacion diferida
-                            Mono.fromSupplier(() -> calcularPrecio())
-                            .doOnSuccess(p -> log("precio: " + p))
-                            .subscribe();</div>
-                    </div>
-                    <div class="concept-block" id="concept-flux">
-                        <h3>Flux&lt;T&gt; — 0..N items</h3>
-                        <p><strong>Flux</strong> es un Publisher que emite <em>múltiples</em> elementos. Es el
-                            equivalente reactivo de una lista o stream.</p>
-                        <div class="code-snippet">Flux.just(1, 2, 3, 4, 5)
-                            .filter(n -> n % 2 == 0)
-                            .map(n -> n * 10)
-                            .subscribe(System.out::println);
-
-                            Flux.range(1, 100)
-                            .take(5)
-                            .collectList()
-                            .subscribe(System.out::println);</div>
-                    </div>
-                    <div class="concept-block" id="concept-flatmap">
-                        <h3>flatMap vs concatMap vs switchMap</h3>
-                        <p><strong>flatMap</strong> → concurrente, no garantiza orden. <strong>concatMap</strong> →
-                            secuencial, mantiene orden. <strong>switchMap</strong> → cancela la anterior al llegar nueva
-                            señal.</p>
-                        <div class="code-snippet">// flatMap: concurrente
-                            Flux.just("a","b","c")
-                            .flatMap(s -> llamadaAsync(s))
-                            .subscribe();
-
-                            // concatMap: orden garantizado
-                            Flux.just("a","b","c")
-                            .concatMap(s -> llamadaAsync(s))
-                            .subscribe();</div>
-                    </div>
-                    <div class="concept-block" id="concept-operators">
-                        <h3>Operadores clave</h3>
-                        <p>Los operadores transforman el stream sin suscribirse. Son lazy: nada ocurre hasta que alguien
-                            se suscribe.</p>
-                        <div class="code-snippet">flux.map() // transforma 1:1
-                            flux.flatMap() // transforma 1:N asincrono
-                            flux.filter() // filtra segun predicado
-                            flux.reduce() // acumula en un Mono
-                            flux.collectList()// Flux -> Mono&lt;List&gt;
-                            flux.zip() // combina dos Flux
-                            flux.merge() // une Flux concurrentes
-                            flux.take(n) // tomar N elementos
-                            flux.timeout() // falla si tarda mucho
-                            flux.retry(n) // reintentar N veces</div>
-                    </div>
-                    <div class="concept-block" id="concept-error">
-                        <h3>Manejo de Errores</h3>
-                        <p>A diferencia del try-catch imperativo, los errores son señales en el stream y se manejan con
-                            operadores.</p>
-                        <div class="code-snippet">Mono.just(0)
-                            .map(n -> 10 / n) // ArithmeticException
-                            .onErrorReturn(-1) // valor por defecto
-
-                            Flux.error(new RuntimeException("fallo"))
-                            .onErrorResume(e -> Flux.just("fallback"))
-
-                            flux.doOnError(e -> log.error("Error:", e))
-                            .retry(3) // reintentar 3x
-                            .timeout(Duration.ofSeconds(5))</div>
-                    </div>
-                    <div class="concept-block" id="concept-scheduler">
-                        <h3>Schedulers &amp; Hilos</h3>
-                        <p>Reactive es <em>single-thread by default</em>. Los <strong>Schedulers</strong> controlan en
-                            qué hilo se ejecuta cada parte del pipeline.</p>
-                        <div class="code-snippet">Flux.just(1,2,3)
-                            .subscribeOn(Schedulers.boundedElastic()) // hilo de suscripcion
-                            .publishOn(Schedulers.parallel()) // hilo de publicacion
-                            .subscribe();
-
-                            // Para I/O bloqueante (JPA, calls HTTP sincronas):
-                            Mono.fromCallable(() -> repoBlocking.save(entity))
-                            .subscribeOn(Schedulers.boundedElastic())</div>
-                    </div>
-                </div>
-
-                <!-- Editor Shell -->
-                <div class="editor-shell">
-                    <div class="editor-topbar">
-                        <div class="dot-group">
-                            <div class="dot red"></div>
-                            <div class="dot yellow"></div>
-                            <div class="dot green"></div>
-                        </div>
-                        <span class="editor-file-label" id="rxEditorLabel">Main.java — WebFlux Playground</span>
-                        <div class="editor-actions">
-                            <button class="btn ghost btn-sm" onclick="limpiarRxEditor()">Limpiar</button>
-                            <button class="btn btn-sm" onclick="ejecutarRxJava()">▶ Ejecutar</button>
-                        </div>
-                    </div>
-                    <div class="editor-body" style="height: 480px; position: relative;">
-                        <div id="monacoEditor" style="width: 100%; height: 100%;"></div>
-                        <!-- Viejo editor oculto para compatibilidad -->
-                        <textarea id="rxEditor" class="rx-editor" spellcheck="false" style="display:none;">import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-public class Main {
-    public static void main(String[] args) {
-        // Tu primer Flux reactivo
-        Flux.just(1, 2, 3, 4, 5)
-            .filter(n -> n % 2 == 0)
-            .map(n -> "Par: " + n)
-            .subscribe(System.out::println);
-    }
-}</textarea>
-                    </div>
-                </div>
-
-                <!-- Output -->
-                <div class="output-panel">
-                    <div class="output-header">
-                        <div class="output-dot"></div>
-                        <span>Salida del programa</span>
-                        <span id="rxValidateResult" style="margin-left:auto;font-size:0.72rem;"></span>
-                    </div>
-                    <pre class="output-body" id="rxOutput">La salida aparecerá aquí...</pre>
-                </div>
-
-            </div><!-- /right-panel -->
-        </div><!-- /main-grid -->
-    </div><!-- /app -->
-
-    <!-- Alert Modal -->
-    <div class="rx-modal" id="rxAlertModal">
-        <div class="rx-modal-box">
-            <div class="modal-top" id="rxAlertTitle">Mensaje</div>
-            <div class="modal-body">
-                <p id="rxAlertMsg"></p>
-                <div class="modal-actions">
-                    <button class="btn-cancel" id="rxAlertCancelBtn" style="display:none;"
-                        onclick="closeRxModal('rxAlertModal')">Cancelar</button>
-                    <button class="btn btn-sm" id="rxAlertConfirmBtn"
-                        onclick="closeRxModal('rxAlertModal')">Aceptar</button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Input Modal -->
-    <div class="rx-modal" id="rxInputModal">
-        <div class="rx-modal-box">
-            <div class="modal-top" id="rxInputTitle">Nombre del repositorio</div>
-            <div class="modal-body">
-                <input type="text" id="rxInputField" class="rx-input" style="width:100%;margin-bottom:14px;"
-                    placeholder="">
-                <div class="modal-actions">
-                    <button class="btn-cancel" onclick="closeRxModal('rxInputModal')">Cancelar</button>
-                    <button class="btn btn-sm" id="rxInputConfirmBtn">Aceptar</button>
+            <!-- Input Modal -->
+            <div class="rx-modal" id="rxInputModal">
+                <div class="rx-modal-box">
+                    <div class="modal-top" id="rxInputTitle">Nombre del repositorio</div>
+                    <div class="modal-body">
+                        <input type="text" id="rxInputField" class="rx-input" style="width:100%;margin-bottom:14px;"
+                            placeholder="">
+                        <div class="modal-actions">
+                            <button class="btn-cancel" onclick="closeRxModal('rxInputModal')">Cancelar</button>
+                            <button class="btn btn-sm" id="rxInputConfirmBtn">Aceptar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <script>
-        // ============================================================
-        // STATE
-        // ============================================================
-        const STANDARD_CHALLENGES = [
-            {
-                id: 'rx1', order: 1,
-                titulo: 'Tu primer Flux',
-                descripcion: 'Crea un Flux de números del 1 al 5, filtra los pares y multiplícalos por 10. Imprime cada resultado.',
-                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            // filtra pares, multiplica x10\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['20', '40']
-            },
-            {
-                id: 'rx2', order: 2,
-                titulo: 'Mono y transformación',
-                descripcion: 'Crea un Mono con tu nombre, transforma a mayúsculas e imprime "Hola: NOMBRE".',
-                template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.just("nombre")\n            // .map() para transformar\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['Hola:']
-            },
-            {
-                id: 'rx3', order: 3,
-                titulo: 'flatMap: de IDs a Objetos',
-                descripcion: 'Dado un Flux de IDs (1,2,3), usa flatMap para obtener "Producto-N" por cada ID.',
-                template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just(1, 2, 3)\n            .flatMap(id -> Mono.just("Producto-" + id))\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['Producto-1', 'Producto-2', 'Producto-3']
-            },
-            {
-                id: 'rx4', order: 4,
-                titulo: 'collectList y reduce',
-                descripcion: 'Usa Flux.range(1,5) con reduce para sumar todos. Imprime "Suma: 15".',
-                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            .reduce(0, Integer::sum)\n            .subscribe(s -> System.out.println("Suma: " + s));\n    }\n}`,
-                expected: ['Suma: 15']
-            },
-            {
-                id: 'rx5', order: 5,
-                titulo: 'onErrorReturn — Resilencia',
-                descripcion: 'Crea un Mono que lanza RuntimeException. Usa onErrorReturn para devolver "fallback" e imprimirlo.',
-                template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.error(new RuntimeException("fallo"))\n            // maneja el error\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['fallback']
-            },
-            {
-                id: 'rx6', order: 6,
-                titulo: 'zip — Combinar Flujos',
-                descripcion: 'Combina Flux.just("A","B","C") con Flux.just(1,2,3) usando zip. Imprime "A-1", "B-2", "C-3".',
-                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux<String> letras = Flux.just("A","B","C");\n        Flux<Integer> nums = Flux.just(1,2,3);\n        Flux.zip(letras, nums, (l,n) -> l + "-" + n)\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['A-1', 'B-2', 'C-3']
-            },
-            {
-                id: 'rx7', order: 7,
-                titulo: 'concatMap — Orden Garantizado',
-                descripcion: 'Con concatMap, convierte Flux de ["uno","dos","tres"] a sus longitudes. Imprime 3, 3, 4.',
-                template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just("uno","dos","tres")\n            .concatMap(s -> Mono.just(s.length()))\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['3', '3', '4']
-            },
-            {
-                id: 'rx8', order: 8,
-                titulo: 'groupBy — Clasificación',
-                descripcion: 'Clasifica Flux.just(1..6) en pares e impares. Imprime "PARES:" seguido de todos los pares.',
-                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1,6)\n            .groupBy(n -> n % 2 == 0 ? "PARES" : "IMPARES")\n            .flatMap(g -> g.collectList().map(l -> g.key() + ": " + l))\n            .subscribe(System.out::println);\n    }\n}`,
-                expected: ['PARES:']
-            }
-        ];
+            <script>
+                // ============================================================
+                // STATE
+                // ============================================================
+                const STANDARD_CHALLENGES = [
+                    {
+                        id: 'rx1', order: 1,
+                        titulo: 'Tu primer Flux',
+                        descripcion: 'Crea un Flux de números del 1 al 5, filtra los pares y multiplícalos por 10. Imprime cada resultado.',
+                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            // filtra pares, multiplica x10\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['20', '40']
+                    },
+                    {
+                        id: 'rx2', order: 2,
+                        titulo: 'Mono y transformación',
+                        descripcion: 'Crea un Mono con tu nombre, transforma a mayúsculas e imprime "Hola: NOMBRE".',
+                        template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.just("nombre")\n            // .map() para transformar\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['Hola:']
+                    },
+                    {
+                        id: 'rx3', order: 3,
+                        titulo: 'flatMap: de IDs a Objetos',
+                        descripcion: 'Dado un Flux de IDs (1,2,3), usa flatMap para obtener "Producto-N" por cada ID.',
+                        template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just(1, 2, 3)\n            .flatMap(id -> Mono.just("Producto-" + id))\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['Producto-1', 'Producto-2', 'Producto-3']
+                    },
+                    {
+                        id: 'rx4', order: 4,
+                        titulo: 'collectList y reduce',
+                        descripcion: 'Usa Flux.range(1,5) con reduce para sumar todos. Imprime "Suma: 15".',
+                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            .reduce(0, Integer::sum)\n            .subscribe(s -> System.out.println("Suma: " + s));\n    }\n}`,
+                        expected: ['Suma: 15']
+                    },
+                    {
+                        id: 'rx5', order: 5,
+                        titulo: 'onErrorReturn — Resilencia',
+                        descripcion: 'Crea un Mono que lanza RuntimeException. Usa onErrorReturn para devolver "fallback" e imprimirlo.',
+                        template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.error(new RuntimeException("fallo"))\n            // maneja el error\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['fallback']
+                    },
+                    {
+                        id: 'rx6', order: 6,
+                        titulo: 'zip — Combinar Flujos',
+                        descripcion: 'Combina Flux.just("A","B","C") con Flux.just(1,2,3) usando zip. Imprime "A-1", "B-2", "C-3".',
+                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux<String> letras = Flux.just("A","B","C");\n        Flux<Integer> nums = Flux.just(1,2,3);\n        Flux.zip(letras, nums, (l,n) -> l + "-" + n)\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['A-1', 'B-2', 'C-3']
+                    },
+                    {
+                        id: 'rx7', order: 7,
+                        titulo: 'concatMap — Orden Garantizado',
+                        descripcion: 'Con concatMap, convierte Flux de ["uno","dos","tres"] a sus longitudes. Imprime 3, 3, 4.',
+                        template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just("uno","dos","tres")\n            .concatMap(s -> Mono.just(s.length()))\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['3', '3', '4']
+                    },
+                    {
+                        id: 'rx8', order: 8,
+                        titulo: 'groupBy — Clasificación',
+                        descripcion: 'Clasifica Flux.just(1..6) en pares e impares. Imprime "PARES:" seguido de todos los pares.',
+                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1,6)\n            .groupBy(n -> n % 2 == 0 ? "PARES" : "IMPARES")\n            .flatMap(g -> g.collectList().map(l -> g.key() + ": " + l))\n            .subscribe(System.out::println);\n    }\n}`,
+                        expected: ['PARES:']
+                    }
+                ];
 
-        let rxCollections = {
-            standard: { nombre: 'Standard', retos: STANDARD_CHALLENGES }
-        };
-        let rxCurrentRepo = 'standard';
-        let rxTempRepo = null;
+                let rxCollections = {
+                    standard: { nombre: 'Standard', retos: STANDARD_CHALLENGES }
+                };
+                let rxCurrentRepo = 'standard';
+                let rxTempRepo = null;
 
-        // ============================================================
-        // EDITOR
-        // ============================================================
-        const rxEditorContainer = document.getElementById('monacoEditor');
-        const rxOldTextarea = document.getElementById('rxEditor');
-        let monacoEditor;
+                // ============================================================
+                // EDITOR
+                // ============================================================
+                const rxEditorContainer = document.getElementById('monacoEditor');
+                const rxOldTextarea = document.getElementById('rxEditor');
+                let monacoEditor;
 
-        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
-        require(['vs/editor/editor.main'], function () {
-            monacoEditor = monaco.editor.create(rxEditorContainer, {
-                value: rxOldTextarea.value,
-                language: 'java',
-                theme: 'vs-dark',
-                automaticLayout: true,
-                fontSize: 14,
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-                roundedSelection: true
-            });
-        });
+                require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+                require(['vs/editor/editor.main'], function () {
+                    monacoEditor = monaco.editor.create(rxEditorContainer, {
+                        value: rxOldTextarea.value || "// Escribe tu código reactivo aquí...",
+                        language: 'java',
+                        theme: 'vs-dark',
+                        automaticLayout: true,
+                        fontSize: 14,
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
+                        roundedSelection: true,
+                        scrollbar: {
+                            vertical: 'auto',
+                            horizontal: 'auto'
+                        },
+                        fixedOverflowWidgets: true
+                    });
 
-        function getRxEditorValue() {
-            return monacoEditor ? monacoEditor.getValue() : rxOldTextarea.value;
-        }
+                    // Forzar layout y foco con reintentos para evitar el problema de "angosta"
+                    let layoutAttempts = 0;
+                    const forceInit = setInterval(() => {
+                        if (monacoEditor) {
+                            monacoEditor.layout();
+                            monacoEditor.focus();
+                        }
+                        layoutAttempts++;
+                        if (layoutAttempts > 10) clearInterval(forceInit);
+                    }, 300);
 
-        function setRxEditorValue(val) {
-            if (monacoEditor) {
-                monacoEditor.setValue(val);
-                monacoEditor.focus();
-            } else {
-                rxOldTextarea.value = val;
-            }
-        }
-
-        function limpiarRxEditor() {
-            setRxEditorValue('');
-            document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
-            document.getElementById('rxValidateResult').textContent = '';
-        }
-
-        async function ejecutarRxJava() {
-            const out = document.getElementById('rxOutput');
-            out.textContent = '⏳ Ejecutando...';
-            document.getElementById('rxValidateResult').textContent = '';
-            try {
-                const res = await fetch('/run-java-reactivo', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
-                    body: getRxEditorValue()
+                    monacoEditor.onKeyDown((e) => {
+                        if (e.ctrlKey && e.keyCode === monaco.KeyCode.Enter) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            ejecutarRxJava();
+                        }
+                        if (e.ctrlKey && e.keyCode === monaco.KeyCode.KeyL) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            limpiarRxEditor();
+                        }
+                    });
                 });
-                out.textContent = await res.text();
-            } catch (err) {
-                out.textContent = '❌ Error de red: ' + err;
-            }
-        }
 
-        // ============================================================
-        // CONCEPTS PANEL
-        // ============================================================
-        function showConcept(id) {
-            const panel = document.getElementById('conceptPanel');
-            panel.style.display = 'block';
-            document.querySelectorAll('.concept-block').forEach(b => b.classList.remove('active'));
-            const block = document.getElementById('concept-' + id);
-            if (block) block.classList.add('active');
-        }
+                function getRxEditorValue() {
+                    return monacoEditor ? monacoEditor.getValue() : rxOldTextarea.value;
+                }
 
-        // ============================================================
-        // CHALLENGE RENDERING
-        // ============================================================
-        function renderRxChallenges() {
-            const container = document.getElementById('rxChallengeList');
-            container.innerHTML = '';
-            const repoData = rxCollections[rxCurrentRepo];
-            if (!repoData) return;
+                function setRxEditorValue(val) {
+                    if (monacoEditor) {
+                        monacoEditor.setValue(val);
+                        monacoEditor.focus();
+                    } else {
+                        rxOldTextarea.value = val;
+                    }
+                }
 
-            const retos = repoData.retos;
-            let done = 0;
+                function limpiarRxEditor() {
+                    setRxEditorValue('');
+                    document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
+                    document.getElementById('rxValidateResult').textContent = '';
+                }
 
-            retos.forEach((reto, idx) => {
-                const isDone = localStorage.getItem(`rx_${rxCurrentRepo}_${reto.id || idx}`) === '1';
-                if (isDone) done++;
-                const locked = idx > 0 && localStorage.getItem(`rx_${rxCurrentRepo}_${retos[idx - 1].id || (idx - 1)}`) !== '1';
+                async function ejecutarRxJava() {
+                    const out = document.getElementById('rxOutput');
+                    out.textContent = '⏳ Ejecutando...';
+                    document.getElementById('rxValidateResult').textContent = '';
+                    try {
+                        const res = await fetch('/run-java-reactivo', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
+                            body: getRxEditorValue()
+                        });
+                        out.textContent = await res.text();
+                    } catch (err) {
+                        out.textContent = '❌ Error de red: ' + err;
+                    }
+                }
 
-                const card = document.createElement('div');
-                card.className = `challenge-card ${isDone ? 'done' : ''} ${locked ? 'locked' : ''}`;
+                // ============================================================
+                // CONCEPTS PANEL
+                // ============================================================
+                function showConcept(id) {
+                    const panel = document.getElementById('conceptPanel');
+                    panel.style.display = 'block';
+                    document.querySelectorAll('.concept-block').forEach(b => b.classList.remove('active'));
+                    const block = document.getElementById('concept-' + id);
+                    if (block) block.classList.add('active');
+                }
 
-                const expectedHtml = reto.expected
-                    ? `<div class="ch-expected">✦ ${reto.expected.map(t => `<span class="expected-chip">${t}</span>`).join('')}</div>`
-                    : '';
+                // ============================================================
+                // CHALLENGE RENDERING
+                // ============================================================
+                function renderRxChallenges() {
+                    const container = document.getElementById('rxChallengeList');
+                    container.innerHTML = '';
+                    const repoData = rxCollections[rxCurrentRepo];
+                    if (!repoData) return;
 
-                card.innerHTML = `
+                    const retos = repoData.retos;
+                    let done = 0;
+
+                    retos.forEach((reto, idx) => {
+                        const isDone = localStorage.getItem(`rx_${rxCurrentRepo}_${reto.id || idx}`) === '1';
+                        if (isDone) done++;
+                        const locked = idx > 0 && localStorage.getItem(`rx_${rxCurrentRepo}_${retos[idx - 1].id || (idx - 1)}`) !== '1';
+
+                        const card = document.createElement('div');
+                        card.className = `challenge-card ${isDone ? 'done' : ''} ${locked ? 'locked' : ''}`;
+
+                        const expectedHtml = reto.expected
+                            ? `<div class="ch-expected">✦ ${reto.expected.map(t => `<span class="expected-chip">${t}</span>`).join('')}</div>`
+                            : '';
+
+                        card.innerHTML = `
           <div class="ch-title">${reto.titulo || 'Reto ' + (idx + 1)}</div>
           <div class="ch-desc">${reto.descripcion || ''}</div>
           ${expectedHtml}
@@ -1106,199 +1167,199 @@ public class Main {
             <button class="btn btn-sm" onclick="cargarRxReto('${rxCurrentRepo}', ${idx})">Cargar</button>
           </div>
         `;
-                container.appendChild(card);
-            });
+                        container.appendChild(card);
+                    });
 
-            document.getElementById('rxProgressLabel').textContent =
-                `${done} / ${retos.length} completados`;
-        }
-
-        function cargarRxReto(repoId, idx) {
-            const reto = rxCollections[repoId].retos[idx];
-            if (!reto) return;
-            setRxEditorValue(reto.template || '');
-            document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
-            document.getElementById('rxValidateResult').textContent = '';
-            document.getElementById('rxEditorLabel').textContent = `${reto.titulo} — WebFlux Playground`;
-        }
-
-        function validarRxReto(repoId, idx) {
-            const reto = rxCollections[repoId].retos[idx];
-            if (!reto) return;
-            const salida = document.getElementById('rxOutput').textContent || '';
-
-            let ok = false;
-            if (reto.expected && reto.expected.length > 0) {
-                ok = reto.expected.every(token => salida.includes(token));
-            } else {
-                ok = salida.trim().length > 0;
-            }
-
-            const resultEl = document.getElementById('rxValidateResult');
-            const retoKey = `rx_${repoId}_${reto.id || idx}`;
-
-            if (ok) {
-                localStorage.setItem(retoKey, '1');
-                // Racha diaria
-                const today = new Date().toISOString().slice(0, 10);
-                const dayKey = `poo_done_day_${today}`;
-                localStorage.setItem(dayKey, parseInt(localStorage.getItem(dayKey) || '0') + 1);
-                if (typeof updateDailyProgress === 'function') updateDailyProgress();
-                resultEl.textContent = '✅ ¡Correcto!';
-                resultEl.style.color = '#22c55e';
-                showRxAlert('¡Reto completado!', '¡Excelente! Dominas este concepto. Avanza al siguiente reto.');
-            } else {
-                resultEl.textContent = '❌ No coincide, sigue intentando';
-                resultEl.style.color = '#ef4444';
-            }
-            renderRxChallenges();
-        }
-
-        // ============================================================
-        // REPO TABS
-        // ============================================================
-        function switchRxRepo(repoId) {
-            rxCurrentRepo = repoId;
-            document.querySelectorAll('.repo-tab').forEach(t => t.classList.remove('active'));
-            const tab = document.getElementById('tab-' + repoId);
-            if (tab) tab.classList.add('active');
-            renderRxChallenges();
-        }
-
-        function addRxTab(id, nombre) {
-            const tabs = document.getElementById('rxRepoTabs');
-            if (document.getElementById('tab-' + id)) return;
-            const tab = document.createElement('div');
-            tab.className = 'repo-tab';
-            tab.id = 'tab-' + id;
-            tab.textContent = nombre;
-            tab.onclick = () => switchRxRepo(id);
-            tabs.appendChild(tab);
-        }
-
-        // ============================================================
-        // GITHUB REPO LOADER
-        // ============================================================
-        async function cargarRxRepo() {
-            const url = document.getElementById('rxRepoUrl').value.trim();
-            const statusEl = document.getElementById('rxStatusMsg');
-            if (!url) { showRxAlert('Atención', 'Introduce una URL de repositorio de GitHub.'); return; }
-
-            statusEl.textContent = '⏳ Clonando repositorio...';
-            try {
-                const res = await fetch('/repo/load', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
-                    body: url
-                });
-
-                if (!res.ok) {
-                    statusEl.textContent = '❌ Error: ' + await res.text();
-                    return;
+                    document.getElementById('rxProgressLabel').textContent =
+                        `${done} / ${retos.length} completados`;
                 }
 
-                const data = await res.json();
-                const repoNombre = url.split('/').pop().replace('.git', '');
-                const repoId = 'rxrepo_' + Date.now();
+                function cargarRxReto(repoId, idx) {
+                    const reto = rxCollections[repoId].retos[idx];
+                    if (!reto) return;
+                    setRxEditorValue(reto.template || '');
+                    document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
+                    document.getElementById('rxValidateResult').textContent = '';
+                    document.getElementById('rxEditorLabel').textContent = `${reto.titulo} — WebFlux Playground`;
+                }
 
-                rxCollections[repoId] = {
-                    nombre: repoNombre,
-                    retos: data.ejercicios.map((ej, idx) => ({
-                        id: ej.id || ('ej' + idx),
-                        order: idx + 1,
-                        titulo: ej.titulo,
-                        descripcion: ej.descripcion,
-                        template: ej.template,
-                        expected: ej.output_esperado || ej.expected || null
-                    }))
-                };
+                function validarRxReto(repoId, idx) {
+                    const reto = rxCollections[repoId].retos[idx];
+                    if (!reto) return;
+                    const salida = document.getElementById('rxOutput').textContent || '';
 
-                rxTempRepo = { id: repoId, nombre: repoNombre, data: rxCollections[repoId] };
-                document.getElementById('btnSaveRxRepo').style.display = 'inline-flex';
-                addRxTab(repoId, repoNombre);
-                switchRxRepo(repoId);
-                statusEl.textContent = `✅ ${data.ejercicios.length} retos cargados de "${repoNombre}"`;
-            } catch (err) {
-                statusEl.textContent = '❌ Error de red: ' + err;
-            }
-        }
+                    let ok = false;
+                    if (reto.expected && reto.expected.length > 0) {
+                        ok = reto.expected.every(token => salida.includes(token));
+                    } else {
+                        ok = salida.trim().length > 0;
+                    }
 
-        function guardarRxRepo() {
-            if (!rxTempRepo) return;
-            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-            saved[rxTempRepo.id] = { id: rxTempRepo.id, nombre: rxTempRepo.nombre, retos: rxTempRepo.data.retos };
-            localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
-            document.getElementById('btnSaveRxRepo').style.display = 'none';
-            renderRxSavedRepos();
-            document.getElementById('rxStatusMsg').textContent = '💾 Repositorio guardado.';
-        }
+                    const resultEl = document.getElementById('rxValidateResult');
+                    const retoKey = `rx_${repoId}_${reto.id || idx}`;
 
-        function renderRxSavedRepos() {
-            const container = document.getElementById('rxSavedRepos');
-            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-            const ids = Object.keys(saved);
-            if (ids.length === 0) { container.innerHTML = ''; return; }
+                    if (ok) {
+                        localStorage.setItem(retoKey, '1');
+                        // Racha diaria
+                        const today = new Date().toISOString().slice(0, 10);
+                        const dayKey = `poo_done_day_${today}`;
+                        localStorage.setItem(dayKey, parseInt(localStorage.getItem(dayKey) || '0') + 1);
+                        if (typeof updateDailyProgress === 'function') updateDailyProgress();
+                        resultEl.textContent = '✅ ¡Correcto!';
+                        resultEl.style.color = '#22c55e';
+                        showRxAlert('¡Reto completado!', '¡Excelente! Dominas este concepto. Avanza al siguiente reto.');
+                    } else {
+                        resultEl.textContent = '❌ No coincide, sigue intentando';
+                        resultEl.style.color = '#ef4444';
+                    }
+                    renderRxChallenges();
+                }
 
-            container.innerHTML = '<div style="font-size:0.72rem;color:var(--ink-dim);margin-bottom:6px;">Guardados:</div>';
-            ids.forEach(id => {
-                const repo = saved[id];
-                const chip = document.createElement('div');
-                chip.style.cssText = 'display:inline-flex;align-items:center;gap:6px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:99px;padding:3px 10px;font-size:0.72rem;margin:2px;cursor:pointer;';
-                chip.innerHTML = `<span onclick="cargarRxSaved('${id}')">${repo.nombre}</span><span onclick="eliminarRxRepo('${id}')" style="color:#ef4444;cursor:pointer;font-weight:bold;">×</span>`;
-                container.appendChild(chip);
-            });
-        }
+                // ============================================================
+                // REPO TABS
+                // ============================================================
+                function switchRxRepo(repoId) {
+                    rxCurrentRepo = repoId;
+                    document.querySelectorAll('.repo-tab').forEach(t => t.classList.remove('active'));
+                    const tab = document.getElementById('tab-' + repoId);
+                    if (tab) tab.classList.add('active');
+                    renderRxChallenges();
+                }
 
-        function cargarRxSaved(id) {
-            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-            if (!saved[id]) return;
-            rxCollections[id] = { nombre: saved[id].nombre, retos: saved[id].retos };
-            addRxTab(id, saved[id].nombre);
-            switchRxRepo(id);
-        }
+                function addRxTab(id, nombre) {
+                    const tabs = document.getElementById('rxRepoTabs');
+                    if (document.getElementById('tab-' + id)) return;
+                    const tab = document.createElement('div');
+                    tab.className = 'repo-tab';
+                    tab.id = 'tab-' + id;
+                    tab.textContent = nombre;
+                    tab.onclick = () => switchRxRepo(id);
+                    tabs.appendChild(tab);
+                }
 
-        function eliminarRxRepo(id) {
-            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-            delete saved[id];
-            delete rxCollections[id];
-            localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
-            const tab = document.getElementById('tab-' + id);
-            if (tab) tab.remove();
-            if (rxCurrentRepo === id) switchRxRepo('standard');
-            renderRxSavedRepos();
-        }
+                // ============================================================
+                // GITHUB REPO LOADER
+                // ============================================================
+                async function cargarRxRepo() {
+                    const url = document.getElementById('rxRepoUrl').value.trim();
+                    const statusEl = document.getElementById('rxStatusMsg');
+                    if (!url) { showRxAlert('Atención', 'Introduce una URL de repositorio de GitHub.'); return; }
 
-        // ============================================================
-        // MODALS
-        // ============================================================
-        function showRxAlert(title, msg, onConfirm, showCancel) {
-            document.getElementById('rxAlertTitle').textContent = title;
-            document.getElementById('rxAlertMsg').textContent = msg;
-            document.getElementById('rxAlertCancelBtn').style.display = showCancel ? 'block' : 'none';
-            document.getElementById('rxAlertConfirmBtn').onclick = () => {
-                closeRxModal('rxAlertModal');
-                if (onConfirm) onConfirm();
-            };
-            document.getElementById('rxAlertModal').classList.add('active');
-        }
+                    statusEl.textContent = '⏳ Clonando repositorio...';
+                    try {
+                        const res = await fetch('/repo/load', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
+                            body: url
+                        });
 
-        function closeRxModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+                        if (!res.ok) {
+                            statusEl.textContent = '❌ Error: ' + await res.text();
+                            return;
+                        }
 
-        // ============================================================
-        // INIT
-        // ============================================================
-        renderRxSavedRepos();
-        renderRxChallenges();
-    </script>
+                        const data = await res.json();
+                        const repoNombre = url.split('/').pop().replace('.git', '');
+                        const repoId = 'rxrepo_' + Date.now();
 
-      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
-        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
-      </footer>
+                        rxCollections[repoId] = {
+                            nombre: repoNombre,
+                            retos: data.ejercicios.map((ej, idx) => ({
+                                id: ej.id || ('ej' + idx),
+                                order: idx + 1,
+                                titulo: ej.titulo,
+                                descripcion: ej.descripcion,
+                                template: ej.template,
+                                expected: ej.output_esperado || ej.expected || null
+                            }))
+                        };
+
+                        rxTempRepo = { id: repoId, nombre: repoNombre, data: rxCollections[repoId] };
+                        document.getElementById('btnSaveRxRepo').style.display = 'inline-flex';
+                        addRxTab(repoId, repoNombre);
+                        switchRxRepo(repoId);
+                        statusEl.textContent = `✅ ${data.ejercicios.length} retos cargados de "${repoNombre}"`;
+                    } catch (err) {
+                        statusEl.textContent = '❌ Error de red: ' + err;
+                    }
+                }
+
+                function guardarRxRepo() {
+                    if (!rxTempRepo) return;
+                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+                    saved[rxTempRepo.id] = { id: rxTempRepo.id, nombre: rxTempRepo.nombre, retos: rxTempRepo.data.retos };
+                    localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
+                    document.getElementById('btnSaveRxRepo').style.display = 'none';
+                    renderRxSavedRepos();
+                    document.getElementById('rxStatusMsg').textContent = '💾 Repositorio guardado.';
+                }
+
+                function renderRxSavedRepos() {
+                    const container = document.getElementById('rxSavedRepos');
+                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+                    const ids = Object.keys(saved);
+                    if (ids.length === 0) { container.innerHTML = ''; return; }
+
+                    container.innerHTML = '<div style="font-size:0.72rem;color:var(--ink-dim);margin-bottom:6px;">Guardados:</div>';
+                    ids.forEach(id => {
+                        const repo = saved[id];
+                        const chip = document.createElement('div');
+                        chip.style.cssText = 'display:inline-flex;align-items:center;gap:6px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:99px;padding:3px 10px;font-size:0.72rem;margin:2px;cursor:pointer;';
+                        chip.innerHTML = `<span onclick="cargarRxSaved('${id}')">${repo.nombre}</span><span onclick="eliminarRxRepo('${id}')" style="color:#ef4444;cursor:pointer;font-weight:bold;">×</span>`;
+                        container.appendChild(chip);
+                    });
+                }
+
+                function cargarRxSaved(id) {
+                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+                    if (!saved[id]) return;
+                    rxCollections[id] = { nombre: saved[id].nombre, retos: saved[id].retos };
+                    addRxTab(id, saved[id].nombre);
+                    switchRxRepo(id);
+                }
+
+                function eliminarRxRepo(id) {
+                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+                    delete saved[id];
+                    delete rxCollections[id];
+                    localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
+                    const tab = document.getElementById('tab-' + id);
+                    if (tab) tab.remove();
+                    if (rxCurrentRepo === id) switchRxRepo('standard');
+                    renderRxSavedRepos();
+                }
+
+                // ============================================================
+                // MODALS
+                // ============================================================
+                function showRxAlert(title, msg, onConfirm, showCancel) {
+                    document.getElementById('rxAlertTitle').textContent = title;
+                    document.getElementById('rxAlertMsg').textContent = msg;
+                    document.getElementById('rxAlertCancelBtn').style.display = showCancel ? 'block' : 'none';
+                    document.getElementById('rxAlertConfirmBtn').onclick = () => {
+                        closeRxModal('rxAlertModal');
+                        if (onConfirm) onConfirm();
+                    };
+                    document.getElementById('rxAlertModal').classList.add('active');
+                }
+
+                function closeRxModal(id) {
+                    document.getElementById(id).classList.remove('active');
+                }
+
+                // ============================================================
+                // INIT
+                // ============================================================
+                renderRxSavedRepos();
+                renderRxChallenges();
+            </script>
+
+            <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
+                <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
+            </footer>
     </div>
     </main>
-  </div>
+    </div>
 </body>
 
 </html>

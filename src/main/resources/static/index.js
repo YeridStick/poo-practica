@@ -44,6 +44,7 @@ const infoLevelOutputEl = document.getElementById('infoLevelOutput');
 let monacoEditor;
 const editorContainer = document.getElementById('monacoEditor');
 const oldTextarea = document.getElementById('javaEditor');
+const editorEl = oldTextarea;
 
 require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
 require(['vs/editor/editor.main'], function () {
@@ -73,11 +74,25 @@ require(['vs/editor/editor.main'], function () {
                 e.stopPropagation();
             }
         }
+        if (e.ctrlKey && e.keyCode === monaco.KeyCode.Enter) {
+            e.preventDefault();
+            e.stopPropagation();
+            ejecutarJava();
+        }
     });
 
     monacoEditor.onMouseDown(() => renderSnippetSuggestions());
     monacoEditor.onDidScrollChange(() => {
         // syncLineScroll ya no es necesario
+    });
+
+    // Dot completion for Monaco
+    monacoEditor.onKeyUp((e) => {
+        if (e.browserEvent.key === '.') {
+            handleDotCompletion();
+        } else if (e.keyCode === monaco.KeyCode.Escape || e.keyCode === monaco.KeyCode.Enter) {
+            suggestionBox.classList.remove('active');
+        }
     });
 });
 
@@ -1177,13 +1192,13 @@ function withAutoImports(source) {
 }
 
 async function ejecutarJava() {
-  const editor = document.getElementById('javaEditor');
+  const currentCode = getEditorValue();
   const out = document.getElementById('runOutput');
   out.textContent = "Ejecutando...";
   try {
-    const codeWithImports = withAutoImports(editor.value);
-    if (codeWithImports !== editor.value) {
-      editor.value = codeWithImports;
+    const codeWithImports = withAutoImports(currentCode);
+    if (codeWithImports !== currentCode) {
+      setEditorValue(codeWithImports);
       updateLineNumbers();
     }
     const res = await fetch('/run-java', {
@@ -1652,9 +1667,9 @@ function insertBoilerplate(type) {
       break;
   }
 
-  getEditorValue() = code;
+  setEditorValue(code);
   updateLineNumbers();
-  renderHighlight();
+  // renderHighlight(); // Monaco ya lo hace
 }
 
 function injectCodeAtCursor(newCode) {
@@ -1678,6 +1693,8 @@ window.removeFile = removeFile;
 
 // --- DOT COMPLETION ENGINE ---
 
+// El listener keyup original ya no es necesario o se maneja vía monaco
+/*
 editorEl.addEventListener('keyup', (e) => {
   if (e.key === '.') {
     handleDotCompletion(e);
@@ -1685,11 +1702,16 @@ editorEl.addEventListener('keyup', (e) => {
     suggestionBox.classList.remove('active');
   }
 });
+*/
 
-function handleDotCompletion(e) {
-  const pos = editorEl.selectionStart;
+function handleDotCompletion() {
   const text = getEditorValue();
-  const beforeDot = text.substring(0, pos - 1);
+  if (!monacoEditor) return;
+  
+  const position = monacoEditor.getPosition();
+  const model = monacoEditor.getModel();
+  const lineContent = model.getLineContent(position.lineNumber);
+  const beforeDot = lineContent.substring(0, position.column - 1);
 
   // Encontrar el nombre de la variable antes del punto (ej: persona. )
   const varMatch = beforeDot.match(/([a-zA-Z0-9_]+)\s*$/);
