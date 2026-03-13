@@ -963,8 +963,13 @@ function validarNivelRepo(repoId, levelId) {
   const order = cfg.order || (Object.keys(collections[repoId].niveles).indexOf(levelId) + 1);
   if (ok) {
     localStorage.setItem(`poo_${repoId}_nivel_${order}`, '1');
+    // Guardar fecha de la primera completacion de hoy
+    const todayKey = `poo_done_day_${new Date().toISOString().slice(0, 10)}`;
+    const dayCount = parseInt(localStorage.getItem(todayKey) || '0') + 1;
+    localStorage.setItem(todayKey, dayCount);
     setEditorHint('Nivel completado! Buen trabajo.');
     renderRetos();
+    updateDailyProgress();
   } else {
     setEditorHint('La salida no coincide o esta vacia. Sigue intentando!');
   }
@@ -1012,7 +1017,11 @@ function validarNivel(id) {
     }
     desbloquearNivel(cfg.order);
     actualizarEstadoNiveles();
+    // Registrar completacion del dia
+    const todayKey = `poo_done_day_${new Date().toISOString().slice(0, 10)}`;
+    localStorage.setItem(todayKey, parseInt(localStorage.getItem(todayKey) || '0') + 1);
     setEditorHint('Nivel completado. Ya puedes avanzar al siguiente.');
+    updateDailyProgress();
   } else {
     if (status && status.textContent !== 'Completado') {
       status.textContent = 'Aun no pasa';
@@ -1022,6 +1031,57 @@ function validarNivel(id) {
   }
 }
 window.validarNivel = validarNivel;
+
+// =====================
+// PROGRESO DIARIO ENGINE
+// =====================
+function updateDailyProgress() {
+  const DAILY_GOAL = 2;
+  const today = new Date().toISOString().slice(0, 10);
+  const todayKey = `poo_done_day_${today}`;
+  const doneToday = parseInt(localStorage.getItem(todayKey) || '0');
+
+  // Calcular racha de dias consecutivos
+  let streak = 0;
+  const checkDate = new Date();
+  while (true) {
+    const dateStr = checkDate.toISOString().slice(0, 10);
+    const dayDone = parseInt(localStorage.getItem(`poo_done_day_${dateStr}`) || '0');
+    if (dayDone > 0) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else { break; }
+  }
+
+  const pct = Math.min(100, Math.round((doneToday / DAILY_GOAL) * 100));
+
+  const msgs = [
+    { min: DAILY_GOAL, msg: '¡Meta cumplida! ¡Sigue así crack! 🏆' },
+    { min: 1, msg: '¡Vas por buen camino! 💪' },
+    { min: 0, msg: '¡Hoy es un buen día para aprender! 🚀' },
+  ];
+  const msg = msgs.find(m => doneToday >= m.min)?.msg || '';
+
+  const barEl = document.getElementById('dailyProgressBar');
+  const doneEl = document.getElementById('dailyDone');
+  const goalEl = document.getElementById('dailyGoal');
+  const descEl = document.getElementById('dailyGoalDesc');
+  const streakEl = document.getElementById('streakCount');
+  const motivEl = document.getElementById('dailyMotivation');
+
+  if (!barEl) return;
+  barEl.style.width = pct + '%';
+  doneEl.textContent = doneToday;
+  goalEl.textContent = DAILY_GOAL;
+  streakEl.textContent = streak;
+  descEl.textContent = doneToday >= DAILY_GOAL
+    ? '¡Meta completada! Puedes seguir practicando.'
+    : `Completa ${DAILY_GOAL - doneToday} reto${DAILY_GOAL - doneToday !== 1 ? 's' : ''} más para tu meta de hoy.`;
+  if (motivEl) motivEl.textContent = msg;
+}
+
+window.updateDailyProgress = updateDailyProgress;
+updateDailyProgress(); // Inicializar al cargar la pagina
 
 const templates = {
   hola: `public class Main {

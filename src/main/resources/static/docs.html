@@ -4,166 +4,171 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cards de funciones</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Segoe UI, Tahoma, sans-serif;
-            background: #eef4f8;
-            color: #1b2635
-        }
-
-        .wrap {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 22px 14px
-        }
-
-        .hero {
-            background: linear-gradient(130deg, #0d5e86, #1f95ab);
-            color: #fff;
-            padding: 18px;
-            border-radius: 12px
-        }
-
-        .card {
-            margin-top: 12px;
-            background: #fff;
-            border: 1px solid #d3e1ec;
-            border-radius: 10px;
-            padding: 12px
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 10px
-        }
-
-        .item {
-            background: #f4f8fc;
-            border: 1px solid #d3e1ec;
-            border-radius: 10px;
-            padding: 10px
-        }
-
-        details {
-            margin-top: 6px
-        }
-
-        pre {
-            background: #111922;
-            color: #e6f2ff;
-            padding: 8px;
-            border-radius: 8px;
-            white-space: pre-wrap
-        }
-
-        input {
-            width: 100%;
-            padding: 9px;
-            border: 1px solid #c5d7e7;
-            border-radius: 8px
-        }
-
-        button {
-            background: #be4d00;
-            color: #fff;
-            border: 0;
-            border-radius: 8px;
-            padding: 9px 12px;
-            cursor: pointer
-        }
-
-        .out {
-            margin-top: 8px;
-            background: #101922;
-            color: #e6f2ff;
-            border-radius: 8px;
-            padding: 10px;
-            white-space: pre-wrap;
-            min-height: 88px
-        }
-
-        a {
-            color: #0d5e86
-        }
-    </style>
+    <title>Documentación de funciones</title>
+    <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
-    <main class="wrap">
-        <section class="hero">
-            <h1>Documentacion desplegable de funciones</h1>
-            <p>Cards para visualizar rapido que hace cada funcion y cuando conviene usarla.</p>
-        </section>
-        <section class="card">
-            <div class="grid">
-                <article class="item">
-                    <h3>map</h3>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="logo-icon">JP</div>
+      <a href="/" class="nav-item" title="Inicio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </a>
+      <a href="/entrevista" class="nav-item" title="Ruta">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>
+      </a>
+      <a href="/entrevista/docs" class="nav-item active" title="Documentación">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+      </a>
+      <a href="/entrevista/ia" class="nav-item" title="IA">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </svg>
+      </a>
+      <a href="/entrevista/mock" class="nav-item" title="Mock">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+      </a>
+      <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
+        </svg>
+      </a>
+      <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
+        </svg>
+      </a>
+
+      <div class="sidebar-footer">
+        <div class="nav-item" id="btnConfig" title="Configuracion">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="user-info">
+          <h2>Documentación</h2>
+          <p>Referencia rápida de conceptos y funciones</p>
+        </div>
+      </header>
+
+      <div style="max-width: 980px; margin: 0 auto; width: 100%;">
+        <section class="dashboard-card">
+            <div class="card-title">
+                <span>Documentación desplegable de funciones</span>
+                <span class="status-pill">Referencia</span>
+            </div>
+            <p>Cards para visualizar rápido qué hace cada función y cuándo conviene usarla.</p>
+            
+            <div class="section-grid">
+                <article class="dashboard-card">
+                    <h4>map</h4>
                     <p>Transforma elemento a elemento.</p>
                     <details>
-                        <summary>Ejemplo</summary>
-                        <pre>Flux.just(1,2,3).map(n -> n * 2)</pre>
+                        <summary style="cursor: pointer; font-weight: 600;">Ejemplo</summary>
+                        <pre style="background: #0f1721; color: #e6f2ff; padding: 8px; border-radius: 8px; margin-top: 8px;">Flux.just(1,2,3).map(n -> n * 2)</pre>
                     </details>
                 </article>
-                <article class="item">
-                    <h3>flatMap</h3>
+                <article class="dashboard-card">
+                    <h4>flatMap</h4>
                     <p>Encadena operaciones asincronas.</p>
                     <details>
-                        <summary>Ejemplo</summary>
-                        <pre>profile(id).flatMap(p -> score(p.id()))</pre>
+                        <summary style="cursor: pointer; font-weight: 600;">Ejemplo</summary>
+                        <pre style="background: #0f1721; color: #e6f2ff; padding: 8px; border-radius: 8px; margin-top: 8px;">profile(id).flatMap(p -> score(p.id()))</pre>
                     </details>
                 </article>
-                <article class="item">
-                    <h3>concatMap</h3>
+                <article class="dashboard-card">
+                    <h4>concatMap</h4>
                     <p>Mantiene orden en procesamiento secuencial.</p>
                     <details>
-                        <summary>Ejemplo</summary>
-                        <pre>Flux.just(a,b,c).concatMap(this::call)</pre>
+                        <summary style="cursor: pointer; font-weight: 600;">Ejemplo</summary>
+                        <pre style="background: #0f1721; color: #e6f2ff; padding: 8px; border-radius: 8px; margin-top: 8px;">Flux.just(a,b,c).concatMap(this::call)</pre>
                     </details>
                 </article>
-                <article class="item">
-                    <h3>zip</h3>
+                <article class="dashboard-card">
+                    <h4>zip</h4>
                     <p>Combina fuentes en paralelo y espera a todas.</p>
                     <details>
-                        <summary>Ejemplo</summary>
-                        <pre>Mono.zip(a,b,c).map(t -> t.getT1())</pre>
+                        <summary style="cursor: pointer; font-weight: 600;">Ejemplo</summary>
+                        <pre style="background: #0f1721; color: #e6f2ff; padding: 8px; border-radius: 8px; margin-top: 8px;">Mono.zip(a,b,c).map(t -> t.getT1())</pre>
                     </details>
                 </article>
-                <article class="item">
-                    <h3>timeout</h3>
-                    <p>Corta espera maxima para proteger latencia.</p>
+                <article class="dashboard-card">
+                    <h4>timeout</h4>
+                    <p>Corta espera máxima para proteger latencia.</p>
                     <details>
-                        <summary>Ejemplo</summary>
-                        <pre>service().timeout(Duration.ofMillis(250))</pre>
+                        <summary style="cursor: pointer; font-weight: 600;">Ejemplo</summary>
+                        <pre style="background: #0f1721; color: #e6f2ff; padding: 8px; border-radius: 8px; margin-top: 8px;">service().timeout(Duration.ofMillis(250))</pre>
                     </details>
                 </article>
-                <article class="item">
-                    <h3>sum en funcional</h3>
+                <article class="dashboard-card">
+                    <h4>sum en funcional</h4>
                     <p>Para sumar en streams usa mapToInt(...).sum().</p>
                     <details>
-                        <summary>Ejemplo</summary>
-                        <pre>int total = nums.stream().mapToInt(n -> n).sum();</pre>
+                        <summary style="cursor: pointer; font-weight: 600;">Ejemplo</summary>
+                        <pre style="background: #0f1721; color: #e6f2ff; padding: 8px; border-radius: 8px; margin-top: 8px;">int total = nums.stream().mapToInt(n -> n).sum();</pre>
                     </details>
                 </article>
             </div>
         </section>
-        <section class="card">
-            <h2>Pregunta rapida</h2>
-            <input id="pregunta" placeholder="Ej: no sabia que sum ya suma el arreglo, como funciona?" />
-            <button onclick="responderLocal()">Responder con docs</button>
-            <button onclick="preguntarIa()">Preguntar IA local</button>
-            <div id="out" class="out">Respuesta aqui...</div>
-            <p><a href="/entrevista">Volver a entrevista</a></p>
+
+        <section class="dashboard-card" style="margin-top: 20px;">
+            <h3 style="color: var(--brand); margin-top: 0;">Preguntas rápidas</h3>
+            <p>Haz una pregunta sobre conceptos para obtener respuestas rápidas:</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <input id="pregunta" placeholder="Ej: no sabía que sum ya suma el arreglo, cómo funciona?" 
+                       style="border: 1px solid var(--line); padding: 12px; border-radius: 8px; font-size: 0.95rem;">
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="responderLocal()" class="action" style="background: var(--brand); color: white; padding: 10px 15px; border: none;">Responder con docs</button>
+                    <button onclick="preguntarIa()" class="action" style="background: var(--brand2); color: white; padding: 10px 15px; border: none;">Preguntar IA local</button>
+                </div>
+                <div id="out" style="background: #0f1721; color: #e6f2ff; border-radius: 8px; padding: 15px; white-space: pre-wrap; min-height: 88px; border: 1px solid var(--line);">Respuesta aquí...</div>
+            </div>
         </section>
+      </div>
+
+      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
+        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
+      </footer>
     </main>
+  </div>
+
     <script>
         function responderLocal() {
             const q = (document.getElementById("pregunta").value || "").toLowerCase();
             const out = document.getElementById("out");
             if (q.includes("sum")) {
-                out.textContent = "En Java Stream<Integer> no tiene sum directo. Lo comun es mapToInt(...).sum(). Ejemplo: nums.stream().mapToInt(n -> n).sum().";
+                out.textContent = "En Java Stream<Integer> no tiene sum directo. Lo común es mapToInt(...).sum(). Ejemplo: nums.stream().mapToInt(n -> n).sum().";
                 return;
             }
             if (q.includes("flatmap") && q.includes("concatmap")) {
@@ -171,10 +176,10 @@
                 return;
             }
             if (q.includes("zip")) {
-                out.textContent = "zip combina varias fuentes y emite cuando todas completan. Es util cuando dependencias son independientes.";
+                out.textContent = "zip combina varias fuentes y emite cuando todas completan. Es útil cuando dependencias son independientes.";
                 return;
             }
-            out.textContent = "No encontre coincidencia local. Usa 'Preguntar IA local'.";
+            out.textContent = "No encontré coincidencia local. Usa 'Preguntar IA local'.";
         }
         window.responderLocal = responderLocal;
 

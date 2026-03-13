@@ -18,6 +18,8 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 public class HttpEstudioServer {
+    // Capturar el directorio del servidor al inicio para localizar dependencias
+    private static final Path PROJECT_DIR = Path.of(".").toAbsolutePath().normalize();
 
     public static void main(String[] args) throws IOException {
         int puerto = 8080;
@@ -52,6 +54,7 @@ public class HttpEstudioServer {
         server.createContext("/", new PaginaEstudioHandler());
         server.createContext("/entrevista", new EntrevistaHandler());
         server.createContext("/entrevista/mock", new EntrevistaMockHandler());
+        server.createContext("/entrevista/webflux", new EntrevistaWebfluxHandler());
         server.createContext("/entrevista/webflux2", new EntrevistaWebflux2Handler());
         server.createContext("/entrevista/ia", new EntrevistaIaHandler());
         server.createContext("/entrevista/docs", new EntrevistaDocsHandler());
@@ -313,15 +316,31 @@ public class HttpEstudioServer {
         } catch (IOException e) {
             return "No se pudo resolver classpath de Reactor: " + e.getMessage();
         }
+        
         if (reactorClasspath == null || reactorClasspath.isBlank()) {
-            return """
-                    No se encontro Reactor en tu cache local de Maven.
-                    Para habilitar Mono/Flux, ejecuta:
-                    mvn -q dependency:get -Dartifact=io.projectreactor:reactor-core:3.6.11
-                    mvn -q dependency:get -Dartifact=org.reactivestreams:reactive-streams:1.0.4
-                    Luego vuelve a intentar.
-                    """;
+            System.out.println("[WebFlux] Reactor no encontrado. Iniciando descarga forzada...");
+            
+            // Forzar descarga de dependencias
+            String setupResult = prepararEntornoReactivo();
+            System.out.println("[WebFlux] Resultado del setup: " + setupResult);
+            
+            // Intentar resolver nuevamente después de descargar
+            try {
+                Thread.sleep(1000); // Dar tiempo para que se escriban los archivos
+                reactorClasspath = construirClasspathReactor();
+            } catch (IOException | InterruptedException e) {
+                System.out.println("[WebFlux] Error al resolver classpath después del setup: " + e.getMessage());
+                return "No se encontraron dependencias. Resultado del setup: " + setupResult + "\nError: " + e.getMessage();
+            }
+            
+            // Si aun no se encuentra, error
+            if (reactorClasspath == null || reactorClasspath.isBlank()) {
+                return "No se pudo descargar Reactor. Intenta ejecutar manualmente en terminal:\n" +
+                       "mvn dependency:copy-dependencies -DincludeArtifactIds=reactor-core,reactive-streams -DoutputDirectory=target/dependency\n" + 
+                       "Luego recarga la página.";
+            }
         }
+
 
         Path tempDir = null;
         try {
@@ -329,7 +348,12 @@ public class HttpEstudioServer {
             Path archivo = tempDir.resolve("Main.java");
             Files.writeString(archivo, source, StandardCharsets.UTF_8);
 
+            System.out.println("[WebFlux] Compilando desde: " + tempDir);
+            System.out.println("[WebFlux] Classpath para javac: " + reactorClasspath);
+            System.out.println("[WebFlux] Archivo Main.java: " + archivo);
+
             CommandResult compilacion = runCommand(tempDir, 10, "javac", "-cp", reactorClasspath, "Main.java");
+            System.out.println("[WebFlux] Compilación - Exit code: " + compilacion.exitCode);
             if (compilacion.timeout) {
                 return "Timeout compilando reactivo (10s).\n" + compilacion.output;
             }
@@ -384,49 +408,86 @@ public class HttpEstudioServer {
     }
 
     private static String construirClasspathDesdeTargetDependency() throws IOException {
-        Path dep = Path.of("target", "dependency");
-        if (!Files.isDirectory(dep)) {
+        // Intenta en build/dependency primero
+        Path buildDep = PROJECT_DIR.resolve("build/dependency");
+        System.out.println("[Reactor] Buscando en build/dependency: " + buildDep);
+        
+        if (Files.isDirectory(buildDep)) {
+            Path reactor = buscarJarPorPrefijo(buildDep, "reactor-core-");
+            if (reactor != null) {
+                Path rs = buscarJarPorPrefijo(buildDep, "reactive-streams-");
+                System.out.println("[Reactor] ✓ Encontrado en build/dependency: " + reactor);
+                if (rs != null) {
+                    System.out.println("[Reactor] ✓ reactive-streams: " + rs);
+                    return reactor.toAbsolutePath() + File.pathSeparator + rs.toAbsolutePath();
+                }
+                return reactor.toAbsolutePath().toString();
+            }
+        }
+        
+        // Luego intenta en target/dependency
+        Path targetDep = PROJECT_DIR.resolve("target/dependency");
+        System.out.println("[Reactor] Buscando en target/dependency: " + targetDep);
+        
+        if (!Files.isDirectory(targetDep)) {
+            System.out.println("[Reactor] No encontrado en target/dependency");
             return null;
         }
-        Path reactor = buscarJarPorPrefijo(dep, "reactor-core-");
+        
+        Path reactor = buscarJarPorPrefijo(targetDep, "reactor-core-");
         if (reactor == null) {
+            System.out.println("[Reactor] reactor-core JAR no encontrado");
             return null;
         }
-        Path rs = buscarJarPorPrefijo(dep, "reactive-streams-");
+        System.out.println("[Reactor] ✓ Encontrado reactor-core en target: " + reactor);
+        
+        Path rs = buscarJarPorPrefijo(targetDep, "reactive-streams-");
         if (rs == null) {
-            return reactor.toString();
+            System.out.println("[Reactor] reactive-streams no encontrado, usando solo reactor-core");
+            return reactor.toAbsolutePath().toString();
         }
-        return reactor + File.pathSeparator + rs;
+        System.out.println("[Reactor] ✓ reactive-streams: " + rs);
+        return reactor.toAbsolutePath() + File.pathSeparator + rs.toAbsolutePath();
     }
 
     private static String prepararEntornoReactivo() {
         try {
             String actual = construirClasspathReactor();
             if (actual != null && !actual.isBlank()) {
+                System.out.println("✓ Reactor ya disponible en: " + actual);
                 return "Reactor ya disponible. Classpath detectado correctamente.";
             }
         } catch (IOException e) {
-            // Si falla la deteccion, intentamos setup por Maven.
+            System.out.println("Detección de Reactor falló: " + e.getMessage());
         }
 
+        System.out.println("[Setup] Descargando dependencias de Reactor con Maven desde: " + PROJECT_DIR);
         try {
             CommandResult result = runCommand(
-                    Path.of(".").toAbsolutePath().normalize(),
-                    45,
+                    PROJECT_DIR,
+                    60,
                     "mvn",
-                    "-q",
                     "dependency:copy-dependencies",
                     "-DincludeArtifactIds=reactor-core,reactive-streams",
                     "-DoutputDirectory=target/dependency");
+            
+            System.out.println("[Setup] Maven exit code: " + result.exitCode + ", Timeout: " + result.timeout);
+            if (!result.output.isBlank()) {
+                System.out.println("[Setup] Maven output:\n" + result.output);
+            }
+            
             if (result.timeout) {
-                return "Timeout preparando entorno reactivo (mvn dependency:copy-dependencies).";
+                return "Timeout descargando dependencias (60s).";
             }
             if (result.exitCode != 0) {
-                return "Error preparando entorno reactivo:\n" + result.output;
+                return "Error en Maven:\n" + result.output;
             }
-            return "Entorno reactivo listo. Dependencias en target/dependency.";
+            System.out.println("✓ Entorno reactivo preparado en: " + PROJECT_DIR.resolve("target/dependency"));
+            return "Entorno reactivo listo.";
         } catch (IOException e) {
-            return "No se pudo ejecutar Maven para setup reactivo: " + e.getMessage();
+            System.out.println("[Setup] Error ejecutando Maven: " + e.getMessage());
+            e.printStackTrace();
+            return "No se pudo ejecutar Maven: " + e.getMessage();
         }
     }
 
@@ -568,6 +629,17 @@ public class HttpEstudioServer {
                 return;
             }
             responder(exchange, 200, "text/html; charset=UTF-8", cargarRecurso("/static/mock.html"));
+        }
+    }
+
+    static class EntrevistaWebfluxHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
+                responder(exchange, 405, "text/plain; charset=UTF-8", "Metodo no permitido. Usa GET.");
+                return;
+            }
+            responder(exchange, 200, "text/html; charset=UTF-8", cargarRecurso("/static/webflux.html"));
         }
     }
 

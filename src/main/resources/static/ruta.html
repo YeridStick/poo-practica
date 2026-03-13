@@ -5,297 +5,213 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ruta de Entrevista: Java Avanzado + POO</title>
-    <style>
-        :root {
-            --bg: #f3f7fa;
-            --panel: #ffffff;
-            --ink: #1d2430;
-            --brand: #005f73;
-            --brand2: #ca6702;
-            --line: #d6e2ea;
-            --soft: #eff6fb;
-        }
-
-        * {
-            box-sizing: border-box
-        }
-
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, sans-serif;
-            color: var(--ink);
-            background:
-                radial-gradient(circle at 8% 8%, #e8f8ff 0, transparent 30%),
-                linear-gradient(180deg, #f0f6fa 0%, #eef4f7 50%, #e6eef3 100%);
-        }
-
-        .wrap {
-            max-width: 1040px;
-            margin: 0 auto;
-            padding: 24px 16px 40px
-        }
-
-        .hero {
-            background: linear-gradient(130deg, #005f73, #0a9396);
-            color: #fff;
-            padding: 24px;
-            border-radius: 14px;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, .16);
-        }
-
-        h1,
-        h2,
-        h3 {
-            margin-top: 0
-        }
-
-        p,
-        li {
-            line-height: 1.5
-        }
-
-        .card {
-            margin-top: 14px;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid var(--line);
-            background: var(--panel);
-            box-shadow: 0 5px 14px rgba(0, 0, 0, .06);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 12px
-        }
-
-        .item {
-            background: var(--soft);
-            padding: 10px;
-            border: 1px solid var(--line);
-            border-radius: 10px
-        }
-
-        code.inline {
-            font-family: Consolas, Monaco, monospace;
-            background: #eef2f5;
-            padding: 1px 5px;
-            border-radius: 5px
-        }
-
-        pre {
-            margin: 8px 0 0;
-            background: #111923;
-            color: #eef7ff;
-            padding: 12px;
-            border-radius: 10px;
-            overflow: auto
-        }
-
-        details {
-            margin-top: 8px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 8px;
-            background: #fff
-        }
-
-        summary {
-            cursor: pointer;
-            font-weight: 700
-        }
-
-        .action {
-            display: inline-block;
-            margin-top: 8px;
-            background: var(--brand2);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            padding: 9px 12px
-        }
-
-        .tag {
-            display: inline-block;
-            background: #d7edf5;
-            color: #003b48;
-            border-radius: 999px;
-            padding: 2px 8px;
-            font-size: .84rem
-        }
-    </style>
+    <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
-    <main class="wrap">
-        <section class="hero">
-            <h1>Ruta de entrevista: Java Avanzado + POO + Arquitectura</h1>
-            <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.
-            </p>
-            <span class="tag">Objetivo: dominar la herencia, polimorfismo y principios SOLID</span>
-        </section>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="logo-icon">JP</div>
+      <a href="/" class="nav-item" title="Inicio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </a>
+      <a href="/entrevista" class="nav-item active" title="Ruta">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>
+      </a>
+      <a href="/entrevista/docs" class="nav-item" title="Documentación">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+      </a>
+      <a href="/entrevista/ia" class="nav-item" title="IA">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </svg>
+      </a>
+      <a href="/entrevista/mock" class="nav-item" title="Mock">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+      </a>
+      <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
+        </svg>
+      </a>
+      <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
+        </svg>
+      </a>
 
-        <section class="card">
-            <h2>Modo practica interactiva</h2>
-            <p>Usa estas secciones para practicar POO, patrones de diseño, IA para revisión de código y documentación
-                técnica.</p>
-            <div class="grid">
-                <article class="item">
-                    <h3>Mock en tiempo real</h3>
-                    <p>Preguntas y repreguntas dinamicas con timer de entrevista.</p>
-                    <a class="action" href="/entrevista/mock">Abrir mock tecnico</a>
-                </article>
-                <article class="item">
-                    <h3>Laboratorio POO Avanzado</h3>
-                    <p>Practica con herencia, interfaces y polimorfismo complejo.</p>
-                    <a class="action" href="/entrevista/webflux2">Abrir laboratorio POO</a>
-                </article>
-                <article class="item">
-                    <h3>IA local con Ollama</h3>
-                    <p>Genera ejercicios aleatorios y revisa cumplimiento de tu solucion.</p>
-                    <a class="action" href="/entrevista/ia">Abrir seccion IA</a>
-                </article>
-                <article class="item">
-                    <h3>Cards de Conceptos</h3>
-                    <p>Documentacion desplegable para patrones y estructuras de datos.</p>
-                    <a class="action" href="/entrevista/docs">Abrir cards de conceptos</a>
-                </article>
+      <div class="sidebar-footer">
+        <div class="nav-item" id="btnConfig" title="Configuracion">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="user-info">
+          <h2>Ruta de Entrevista</h2>
+          <p>Plan intensivo de aprendizaje Java avanzado + POO + Arquitectura</p>
+        </div>
+      </header>
+
+      <div style="max-width: 1040px; margin: 0 auto; width: 100%;">
+        <section class="dashboard-card">
+            <div class="card-title">
+                <span>Ruta de entrevista: Java Avanzado + POO + Arquitectura</span>
+                <span class="status-pill">Documentacion</span>
             </div>
-        </section>
+            <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.</p>
 
-        <section class="card">
-            <h2>Mapa de temas que debes dominar</h2>
-            <div class="grid">
-                <article class="item">
-                    <h3>Backend</h3>
-                    <ul>
-                        <li>Java Core: Colecciones, Generics y Lambdas.</li>
-                        <li>POO: Herencia, Abstracción y Encapsulamiento.</li>
-                        <li>Patrones de Diseño: Creacionales, Estructurales y de Comportamiento.</li>
-                        <li>Arquitectura: SOLID, Clean Code y Hexagonal.</li>
-                    </ul>
-                </article>
-                <article class="item">
-                    <h3>Frontend</h3>
-                    <ul>
-                        <li>React con estado asincrono y UI responsiva.</li>
-                        <li>Integracion segura con APIs backend.</li>
-                        <li>Colaboracion UX/UI orientada a producto.</li>
-                    </ul>
-                </article>
-                <article class="item">
-                    <h3>Ingenieria</h3>
-                    <ul>
-                        <li>Tests unitarios, integracion y funcionales.</li>
-                        <li>Gradle/Maven + pipeline CI/CD.</li>
-                        <li>Code review con foco en riesgos y regresiones.</li>
-                    </ul>
-                </article>
-            </div>
-        </section>
+            <section style="margin-top: 20px;">
+                <h3 style="color: var(--brand);">Modo practica interactiva</h3>
+                <p>Usa estas secciones para practicar POO, patrones de diseño, IA para revisión de código y documentación técnica.</p>
+                <div class="section-grid">
+                    <article class="dashboard-card">
+                        <h4>Laboratorio POO Avanzado</h4>
+                        <p>Practica con herencia, interfaces y polimorfismo complejo.</p>
+                        <a class="action" href="/laboratorio.html" style="color: #fff; text-decoration: none;">Abrir laboratorio POO</a>
+                    </article>
+                    <article class="dashboard-card">
+                        <h4>IA local con Ollama</h4>
+                        <p>Genera ejercicios aleatorios y revisa cumplimiento de tu solucion.</p>
+                        <a class="action" href="/ia.html" style="color: #fff; text-decoration: none;">Abrir seccion IA</a>
+                    </article>
+                    <article class="dashboard-card">
+                        <h4>Cards de Conceptos</h4>
+                        <p>Documentacion desplegable para patrones y estructuras de datos.</p>
+                        <a class="action" href="/docs.html" style="color: #fff; text-decoration: none;">Abrir cards de conceptos</a>
+                    </article>
+                </div>
+            </section>
 
-        <section class="card">
-            <h2>Principios reactivos: repaso profundo</h2>
-            <ol>
-                <li><strong>Encapsulamiento:</strong> proteger el estado interno de los objetos.</li>
-                <li><strong>Abstracción:</strong> representar las características esenciales sin detalles de
-                    implementación.</li>
-                <li><strong>Herencia:</strong> reutilización de código y jerarquías de clases.</li>
-                <li><strong>Polimorfismo:</strong> múltiples formas de ejecutar un comportamiento.</li>
-                <li><strong>Interfaces:</strong> contratos que definen qué hace el sistema, no cómo.</li>
-            </ol>
-            <p><strong>Pregunta clave:</strong> Explica la diferencia entre composición y herencia. ¿Cuándo preferirías
-                una sobre la otra?</p>
-        </section>
+            <section style="margin-top: 30px;">
+                <h3 style="color: var(--brand);">Mapa de temas que debes dominar</h3>
+                <div class="section-grid">
+                    <article class="dashboard-card">
+                        <h4>Backend</h4>
+                        <ul style="font-size: 0.95rem; line-height: 1.6;">
+                            <li>Java Core: Colecciones, Generics y Lambdas.</li>
+                            <li>POO: Herencia, Abstracción y Encapsulamiento.</li>
+                            <li>Patrones de Diseño: Creacionales, Estructurales y de Comportamiento.</li>
+                            <li>Arquitectura: SOLID, Clean Code y Hexagonal.</li>
+                        </ul>
+                    </article>
+                    <article class="dashboard-card">
+                        <h4>Frontend</h4>
+                        <ul style="font-size: 0.95rem; line-height: 1.6;">
+                            <li>React con estado asincrono y UI responsiva.</li>
+                            <li>Integracion segura con APIs backend.</li>
+                            <li>Colaboracion UX/UI orientada a producto.</li>
+                        </ul>
+                    </article>
+                    <article class="dashboard-card">
+                        <h4>Ingenieria</h4>
+                        <ul style="font-size: 0.95rem; line-height: 1.6;">
+                            <li>Tests unitarios, integracion y funcionales.</li>
+                            <li>Gradle/Maven + pipeline CI/CD.</li>
+                            <li>Code review con foco en riesgos y regresiones.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
 
-        <section class="card">
-            <h2>Preguntas tecnicas para practicar</h2>
-            <details>
-                <summary>1) ¿Cuál es la diferencia entre una interfaz y una clase abstracta?</summary>
-                <p>Respuesta esperada: Las interfaces definen contratos (qué hacer), mientras que las clases abstractas
-                    pueden definir estado y comportamiento base (cómo hacerlo parcialmente).</p>
-            </details>
-            <details>
-                <summary>2) ¿Qué es el polimorfismo y cómo se aplica en Java?</summary>
-                <p>Respuesta esperada: Es la capacidad de un objeto de tomar varias formas. En Java se aplica mediante
-                    la sobrescritura de métodos (overriding) y el uso de referencias de interfaces/clases base.</p>
-            </details>
-            <details>
-                <summary>3) ¿Qué son los principios SOLID?</summary>
-                <p>Respuesta esperada: Single responsibility, Open-closed, Liskov substitution, Interface segregation y
-                    Dependency inversion. Son guías para crear software mantenible.</p>
-            </details>
-            <details>
-                <summary>4) Disena una API de fraude de alta carga</summary>
-                <p>Incluye versionado, idempotencia, limites, timeouts, retries, circuit breaker, cache y tracing.</p>
-            </details>
-            <details>
-                <summary>5) Frontend: como manejas estados loading/error/success en React para flujos de riesgo?
-                </summary>
-                <p>Respuesta esperada: estado explicito, cancelacion de requests, reintentos y feedback claro al
-                    analista.</p>
-            </details>
-        </section>
+            <section style="margin-top: 30px;">
+                <h3 style="color: var(--brand);">Principios reactivos: repaso profundo</h3>
+                <ol style="font-size: 0.95rem; line-height: 1.8;">
+                    <li><strong>Encapsulamiento:</strong> proteger el estado interno de los objetos.</li>
+                    <li><strong>Abstracción:</strong> representar las características esenciales sin detalles de implementación.</li>
+                    <li><strong>Herencia:</strong> reutilización de código y jerarquías de clases.</li>
+                    <li><strong>Polimorfismo:</strong> múltiples formas de ejecutar un comportamiento.</li>
+                    <li><strong>Interfaces:</strong> contratos que definen qué hace el sistema, no cómo.</li>
+                </ol>
+                <p><strong>Pregunta clave:</strong> Explica la diferencia entre composición y herencia. ¿Cuándo preferirías una sobre la otra?</p>
+            </section>
 
-        <section class="card">
-            <h2>Ejercicios Java POO (practica guiada)</h2>
-            <article class="item">
-                <h3>Ejercicio 1: Encapsulamiento y Modelado</h3>
-                <p>Crea un sistema de <code class="inline">CuentaBancaria</code> con validaciones de saldo y
-                    transacciones atómicas.</p>
-            </article>
-            <article class="item">
-                <h3>Ejercicio 2: Herencia y Polimorfismo</h3>
-                <p>Implementa un sistema de <code class="inline">FormasGeometricas</code> donde cada forma calcule su
-                    área y perímetro de forma única.</p>
-            </article>
-            <article class="item">
-                <h3>Ejercicio 3: Patrón Strategy</h3>
-                <p>Define diferentes algoritmos de cálculo de impuestos que se puedan intercambiar en tiempo de
-                    ejecución.</p>
-            </article>
-            <article class="item">
-                <h3>Ejercicio 4: Manejo de Colecciones y Streams</h3>
-                <p>Procesa una lista de empleados para agruparlos por departamento y calcular el salario promedio.</p>
-            </article>
-            <article class="item">
-                <h3>Ejercicio 5: testing serio</h3>
-                <p>Usa <code class="inline">StepVerifier</code> para servicios y <code
-                        class="inline">WebTestClient</code> para endpoints.</p>
-            </article>
-            <pre><code>// Ejemplo de Polimorfismo y Factory
-public void procesarNotificacion(String tipo, String mensaje) {
-    Notificador n = NotificadorFactory.crear(tipo);
-    n.enviar(mensaje);
-}
+            <section style="margin-top: 30px;">
+                <h3 style="color: var(--brand);">Preguntas tecnicas para practicar</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+                    <details class="dashboard-card" style="padding: 15px;">
+                        <summary style="cursor: pointer; font-weight: 700; color: var(--brand);">1) ¿Cuál es la diferencia entre una interfaz y una clase abstracta?</summary>
+                        <p style="margin-top: 10px;">Respuesta esperada: Las interfaces definen contratos (qué hacer), mientras que las clases abstractas pueden definir estado y comportamiento base (cómo hacerlo parcialmente).</p>
+                    </details>
+                    <details class="dashboard-card" style="padding: 15px;">
+                        <summary style="cursor: pointer; font-weight: 700; color: var(--brand);">2) ¿Qué es el polimorfismo y cómo se aplica en Java?</summary>
+                        <p style="margin-top: 10px;">Respuesta esperada: Es la capacidad de un objeto de tomar varias formas. En Java se aplica mediante la sobrescritura de métodos (overriding) y el uso de referencias de interfaces/clases base.</p>
+                    </details>
+                    <details class="dashboard-card" style="padding: 15px;">
+                        <summary style="cursor: pointer; font-weight: 700; color: var(--brand);">3) ¿Qué son los principios SOLID?</summary>
+                        <p style="margin-top: 10px;">Respuesta esperada: Single responsibility, Open-closed, Liskov substitution, Interface segregation y Dependency inversion. Son guías para crear software mantenible.</p>
+                    </details>
+                </div>
+            </section>
 
-// Ejemplo de Streams
-public double calcularVentasTotales(List<Pedido> pedidos) {
-    return pedidos.stream()
-                  .filter(p -> p.estado() == Estado.COMPLETADO)
-                  .mapToDouble(Pedido::total)
-                  .sum();
-}</code></pre>
-        </section>
+            <section style="margin-top: 30px;">
+                <h3 style="color: var(--brand);">Ejercicios Java POO (practica guiada)</h3>
+                <div class="section-grid">
+                    <article class="dashboard-card">
+                        <h4>Ejercicio 1: Encapsulamiento y Modelado</h4>
+                        <p>Crea un sistema de <code>CuentaBancaria</code> con validaciones de saldo y transacciones atómicas.</p>
+                    </article>
+                    <article class="dashboard-card">
+                        <h4>Ejercicio 2: Herencia y Polimorfismo</h4>
+                        <p>Implementa un sistema de <code>FormasGeometricas</code> donde cada forma calcule su área y perímetro de forma única.</p>
+                    </article>
+                    <article class="dashboard-card">
+                        <h4>Ejercicio 3: Patrón Strategy</h4>
+                        <p>Define diferentes algoritmos de cálculo de impuestos que se puedan intercambiar en tiempo de ejecución.</p>
+                    </article>
+                </div>
+            </section>
 
-        <section class="card">
-            <h2>Simulacion de entrevista (60 min)</h2>
-            <ol>
-                <li>10 min: explica arquitectura de un servicio reactivo de fraude.</li>
-                <li>20 min: resuelve un endpoint WebFlux con manejo de errores.</li>
-                <li>15 min: diseña integracion Kafka + contrato API.</li>
-                <li>10 min: estrategia de testing y CI/CD.</li>
-                <li>5 min: trade-offs y decisiones tecnicas.</li>
-            </ol>
-            <p>Tip: responde con estructura fija: contexto, decision, trade-off, medicion.</p>
+            <section style="margin-top: 30px; margin-bottom: 30px;">
+                <h3 style="color: var(--brand);">Simulacion de entrevista (60 min)</h3>
+                <ol style="font-size: 0.95rem; line-height: 1.8;">
+                    <li>10 min: explica arquitectura de un servicio reactivo de fraude.</li>
+                    <li>20 min: resuelve un endpoint WebFlux con manejo de errores.</li>
+                    <li>15 min: diseña integracion Kafka + contrato API.</li>
+                    <li>10 min: estrategia de testing y CI/CD.</li>
+                    <li>5 min: trade-offs y decisiones tecnicas.</li>
+                </ol>
+                <p><strong>Tip:</strong> responde con estructura fija: contexto, decision, trade-off, medicion.</p>
+            </section>
         </section>
+      </div>
 
-        <section class="card">
-            <h2>Siguiente paso recomendado</h2>
-            <p>Empieza por el Ejercicio 2 y luego explica en voz alta por que usaste cada operador de Reactor.</p>
-            <a class="action" href="/">Volver a la guia principal</a>
-        </section>
+      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
+        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
+      </footer>
     </main>
+  </div>
+
+  <script src="/index.js"></script>
 </body>
 
 </html>

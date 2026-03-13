@@ -4,145 +4,167 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mock tecnico reactivo</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Segoe UI, Tahoma, sans-serif;
-            background: #eef4f8;
-            color: #1b2635
-        }
-
-        .wrap {
-            max-width: 920px;
-            margin: 0 auto;
-            padding: 22px 14px
-        }
-
-        .hero {
-            background: linear-gradient(130deg, #0d5e86, #1f95ab);
-            color: #fff;
-            padding: 18px;
-            border-radius: 12px
-        }
-
-        .card {
-            margin-top: 12px;
-            background: #fff;
-            border: 1px solid #d3e1ec;
-            border-radius: 10px;
-            padding: 12px
-        }
-
-        .toolbar {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap
-        }
-
-        button {
-            background: #be4d00;
-            color: #fff;
-            border: 0;
-            border-radius: 8px;
-            padding: 9px 12px;
-            cursor: pointer
-        }
-
-        .ghost {
-            background: #f4f8fc;
-            color: #173048;
-            border: 1px solid #c5d7e7
-        }
-
-        .out {
-            margin-top: 8px;
-            background: #101922;
-            color: #e6f2ff;
-            border-radius: 8px;
-            padding: 10px;
-            white-space: pre-wrap;
-            min-height: 80px
-        }
-
-        .mini {
-            background: #f6fbff;
-            border-left: 4px solid #0d5e86;
-            padding: 8px
-        }
-
-        a {
-            color: #0d5e86
-        }
-    </style>
+    <title>Mock técnico reactivo</title>
+    <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
-    <main class="wrap">
-        <section class="hero">
-            <h1>Mock tecnico (preguntas y repreguntas en tiempo real)</h1>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="logo-icon">JP</div>
+      <a href="/" class="nav-item" title="Inicio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </a>
+      <a href="/entrevista" class="nav-item" title="Ruta">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>
+      </a>
+      <a href="/entrevista/docs" class="nav-item" title="Documentación">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+      </a>
+      <a href="/entrevista/ia" class="nav-item" title="IA">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </svg>
+      </a>
+      <a href="/entrevista/mock" class="nav-item active" title="Mock">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+      </a>
+      <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
+        </svg>
+      </a>
+      <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
+        </svg>
+      </a>
+
+      <div class="sidebar-footer">
+        <div class="nav-item" id="btnConfig" title="Configuracion">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="user-info">
+          <h2>Mock Técnico</h2>
+          <p>Práctica para entrevista con preguntas en tiempo real</p>
+        </div>
+      </header>
+
+      <div style="max-width: 920px; margin: 0 auto; width: 100%;">
+        <section class="dashboard-card">
+            <div class="card-title">
+                <span>Mock técnico (preguntas y repreguntas)</span>
+                <span class="status-pill">Entrevista</span>
+            </div>
             <p>Practica para entrevista: responde en voz alta y luego presiona repregunta para profundizar.</p>
-        </section>
-        <section class="card">
-            <div class="toolbar">
-                <button id="btnStartMock">Iniciar mock (15 min)</button>
-                <button id="btnNextMock" class="ghost">Siguiente pregunta</button>
-                <button id="btnFollowMock" class="ghost">Repregunta</button>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <button id="btnStartMock" class="action" style="background: var(--brand); color: white; padding: 10px 15px; border: none;">Iniciar mock (15 min)</button>
+                <button id="btnNextMock" class="action" style="background: var(--brand2); color: white; padding: 10px 15px; border: none;">Siguiente pregunta</button>
+                <button id="btnFollowMock" class="action" style="background: var(--brand); color: white; padding: 10px 15px; border: none;">Repregunta</button>
             </div>
-            <p class="mini"><strong>Timer:</strong> <span id="timer">No iniciado</span></p>
-            <div id="preguntaOut" class="out">Pulsa iniciar para comenzar.</div>
-            <div id="repreguntaOut" class="out">Las repreguntas apareceran aqui.</div>
-            <textarea id="respuestaInput" placeholder="Escribe aqui tu respuesta tecnica..."
-                style="margin-top:8px;width:100%;min-height:120px;border:1px solid #c5d7e7;border-radius:8px;padding:10px;font-family:Consolas,Monaco,monospace"></textarea>
-            <div class="toolbar">
-                <button id="btnSaveAnswer" class="ghost">Guardar respuesta</button>
-                <button id="btnClearAnswer" class="ghost">Limpiar</button>
-            </div>
-            <div id="respuestaStatus" class="out">Sin respuesta guardada.</div>
+            
+            <p style="background: rgba(13, 106, 99, 0.1); border-left: 4px solid var(--brand); padding: 12px; border-radius: 6px; margin-top: 15px;"><strong>Timer:</strong> <span id="timer">No iniciado</span></p>
+            
+            <h3 style="color: var(--brand); margin-top: 20px;">Pregunta actual</h3>
+            <div id="preguntaOut" style="background: #0f1721; color: #e6f2ff; border-radius: 8px; padding: 15px; white-space: pre-wrap; min-height: 80px; border: 1px solid var(--line);">Pulsa iniciar para comenzar.</div>
+            
+            <h3 style="color: var(--brand); margin-top: 20px;">Repreguntas</h3>
+            <div id="repreguntaOut" style="background: #0f1721; color: #e6f2ff; border-radius: 8px; padding: 15px; white-space: pre-wrap; min-height: 80px; border: 1px solid var(--line);">Las repreguntas aparecerán aquí.</div>
         </section>
-        <section class="card">
-            <h2>Guia de respuesta esperada</h2>
-            <ol>
+
+        <section class="dashboard-card" style="margin-top: 20px;">
+            <h3 style="color: var(--brand); margin-top: 0;">Tu respuesta</h3>
+            <textarea id="respuestaInput" placeholder="Escribe aquí tu respuesta técnica..."
+                style="width: 100%; min-height: 120px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-family: Consolas, Monaco, monospace; font-size: 0.95rem;"></textarea>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <button id="btnSaveAnswer" class="action" style="background: var(--brand); color: white; padding: 10px 15px; border: none;">Guardar respuesta</button>
+                <button id="btnClearAnswer" class="action" style="background: var(--brand2); color: white; padding: 10px 15px; border: none;">Limpiar</button>
+            </div>
+            <div id="respuestaStatus" style="background: #0f1721; color: #e6f2ff; border-radius: 8px; padding: 15px; white-space: pre-wrap; min-height: 80px; border: 1px solid var(--line); margin-top: 15px;">Sin respuesta guardada.</div>
+        </section>
+
+        <section class="dashboard-card" style="margin-top: 20px;">
+            <h3 style="color: var(--brand); margin-top: 0;">Guía de respuesta esperada</h3>
+            <ol style="font-size: 0.95rem; line-height: 1.8;">
                 <li>Contexto del problema.</li>
-                <li>Decision tecnica (operador, patron, arquitectura).</li>
+                <li>Decisión técnica (operador, patrón, arquitectura).</li>
                 <li>Trade-off (latencia, costo, complejidad).</li>
-                <li>Como mediras si fue buena decision.</li>
+                <li>Cómo medirías si fue buena decisión.</li>
             </ol>
-            <p><a href="/entrevista">Volver a entrevista</a></p>
         </section>
+      </div>
+
+      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
+        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
+      </footer>
     </main>
+  </div>
+
     <script>
         const bank = [
             {
-                q: "Disena un endpoint WebFlux para evaluar riesgo de fraude en menos de 300ms.",
+                q: "Diseña un endpoint WebFlux para evaluar riesgo de fraude en menos de 300ms.",
                 r: [
-                    "Que timeout pondrias por dependencia y por que?",
-                    "Como evitas que una dependencia lenta tumbe toda la respuesta?",
-                    "Que metricas exactas observarias en produccion?"
+                    "Qué timeout pondrías por dependencia y por qué?",
+                    "Cómo evitas que una dependencia lenta tumbe toda la respuesta?",
+                    "Qué métricas exactas observarías en producción?"
                 ]
             },
             {
                 q: "Explica flatMap vs concatMap en un caso real de eventos de pago.",
                 r: [
-                    "Cuando priorizas orden sobre throughput?",
-                    "Que pasa si subes demasiado la concurrencia?",
-                    "Como justificas esa decision en code review?"
+                    "Cuándo priorizas orden sobre throughput?",
+                    "Qué pasa si subes demasiado la concurrencia?",
+                    "Cómo justificas esa decisión en code review?"
                 ]
             },
             {
-                q: "Como integrarias Kafka en un flujo reactivo con idempotencia?",
+                q: "Cómo integrarías Kafka en un flujo reactivo con idempotencia?",
                 r: [
-                    "Como manejas retrys y dead-letter queue?",
-                    "Donde guardas deduplicacion y con que TTL?",
-                    "Que haria fallar ese diseno?"
+                    "Cómo manejas retries y dead-letter queue?",
+                    "Dónde guardas deduplicación y con qué TTL?",
+                    "Qué haría fallar ese diseño?"
                 ]
             },
             {
-                q: "Desde frontend React, como manejas loading/error/success sin race conditions?",
+                q: "Desde frontend React, cómo manejas loading/error/success sin race conditions?",
                 r: [
-                    "Como cancelas requests al cambiar de vista?",
-                    "Que contrato de errores expones al usuario final?",
-                    "Como validas que no hay estado inconsistente?"
+                    "Cómo cancelas requests al cambiar de vista?",
+                    "Qué contrato de errores expones al usuario final?",
+                    "Cómo validas que no hay estado inconsistente?"
                 ]
             }
         ];
