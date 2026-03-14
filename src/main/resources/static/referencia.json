@@ -34,6 +34,28 @@
       "resumen": "Estructuras que permiten almacenar múltiples valores del mismo tipo en una sola variable.",
       "ejemplo": "int[] numeros = {1, 2, 3, 4, 5};\nSystem.out.println(numeros[0]);",
       "link": "https://www.abrirllave.com/java/arrays.php"
+    },
+    {
+      "categoria": "Spring Reactivo",
+      "id": "webflux-reactor",
+      "titulo": "Spring WebFlux & Reactor",
+      "resumen": "Framework reactivo para Spring Boot basado en Project Reactor.",
+      "preguntas": [
+        {
+          "id": 1,
+          "titulo": "Mono vs Flux",
+          "descripcion": "Diferencia fundamental en el manejo de flujos de datos.",
+          "cli_ejercicio": "./gradlew test --tests *WorkshopServiceTest.testEjercicio1*",
+          "tip": "Mono es para 0..1, Flux para 0..N elementos."
+        },
+        {
+          "id": 2,
+          "titulo": "El Operador flatMap",
+          "descripcion": "¿Por qué usar flatMap en lugar de map para llamadas asíncronas?",
+          "cli_ejercicio": "./gradlew test --tests *WorkshopServiceTest.testGetPostsByUserId*",
+          "tip": "flatMap aplana editores (Publishers), evitando Monos anidados."
+        }
+      ]
     }
   ]
 }

@@ -1777,3 +1777,67 @@ window.addEventListener('click', (e) => {
     suggestionBox.classList.remove('active');
   }
 });
+
+
+// --- Reactive Search Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const reactiveSearch = document.getElementById('reactiveSearch');
+    const reactiveCards = document.querySelectorAll('.flashcard');
+
+    if (reactiveSearch) {
+        reactiveSearch.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            reactiveCards.forEach(card => {
+                const title = card.querySelector('h4').textContent.toLowerCase();
+                const desc = card.innerText.toLowerCase();
+                if (title.includes(term) || desc.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
+// --- Reactive Comparison Toggle Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const codeViews = document.querySelectorAll('.code-view');
+
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.getAttribute('data-view');
+            
+            // Update buttons
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update views
+            codeViews.forEach(v => {
+                if (v.id === 'view-' + view) {
+                    v.classList.add('active');
+                } else {
+                    v.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    // Enhanced Reactive Search
+    const reactiveSearch = document.getElementById('reactiveSearch');
+    if (reactiveSearch) {
+        reactiveSearch.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const text = section.innerText.toLowerCase();
+                if (text.includes(term) || term === '') {
+                    section.style.display = 'block';
+                } else {
+                    // Only hide if it's a sub-section or card, but for simplicity we'll just filter cards within sections if needed
+                }
+            });
+        });
+    }
+});

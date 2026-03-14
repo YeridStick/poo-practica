@@ -2,10 +2,10 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruta de Entrevista: Java Avanzado + POO</title>
-    <link rel="stylesheet" href="/index.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruta de Entrevista: Java Avanzado + POO</title>
+  <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
@@ -84,124 +84,189 @@
 
       <div style="max-width: 1040px; margin: 0 auto; width: 100%;">
         <section class="dashboard-card">
-            <div class="card-title">
-                <span>Ruta de entrevista: Java Avanzado + POO + Arquitectura</span>
-                <span class="status-pill">Documentacion</span>
+          <div class="card-title">
+            <span>Ruta de entrevista: Java Avanzado + POO + Arquitectura</span>
+            <span class="status-pill">Documentacion</span>
+          </div>
+          <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.</p>
+
+          <section style="margin-top: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2 style="color: var(--brand); margin: 0;">El Cambio de Paradigma Reactivo</h2>
+              <div class="search-bar" style="width: 350px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input type="text" id="reactiveSearch" placeholder="Buscar conceptos reactivos...">
+              </div>
             </div>
-            <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.</p>
 
-            <section style="margin-top: 20px;">
-                <h3 style="color: var(--brand);">Modo practica interactiva</h3>
-                <p>Usa estas secciones para practicar POO, patrones de diseño, IA para revisión de código y documentación técnica.</p>
-                <div class="section-grid">
-                    <article class="dashboard-card">
-                        <h4>Laboratorio POO Avanzado</h4>
-                        <p>Practica con herencia, interfaces y polimorfismo complejo.</p>
-                        <a class="action" href="/laboratorio.html" style="color: #fff; text-decoration: none;">Abrir laboratorio POO</a>
-                    </article>
-                    <article class="dashboard-card">
-                        <h4>IA local con Ollama</h4>
-                        <p>Genera ejercicios aleatorios y revisa cumplimiento de tu solucion.</p>
-                        <a class="action" href="/ia.html" style="color: #fff; text-decoration: none;">Abrir seccion IA</a>
-                    </article>
-                    <article class="dashboard-card">
-                        <h4>Cards de Conceptos</h4>
-                        <p>Documentacion desplegable para patrones y estructuras de datos.</p>
-                        <a class="action" href="/docs.html" style="color: #fff; text-decoration: none;">Abrir cards de conceptos</a>
-                    </article>
+            <div class="reactive-visual">
+              <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/Paradigmas_ljqxlw.png"
+                alt="Paradigma Reactivo vs Imperativo">
+              <div class="visual-caption">Infografía: Del flujo secuencial bloqueante al Event Loop no bloqueante.</div>
+            </div>
+
+            <p style="line-height: 1.6; font-size: 1.05rem;">
+              La programación reactiva no es solo una librería, es un <strong>cambio de mentalidad</strong>. Pasamos de
+              un modelo donde el hilo espera por la respuesta (Bloqueo) a uno donde el hilo se libera inmediatamente y
+              reacciona cuando los datos están listos.
+            </p>
+          </section>
+
+          <!-- Sección de Bloqueo -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand2);">¿Cuándo se genera un bloqueo?</h3>
+            <div class="comparative-grid">
+              <div class="dashboard-card">
+                <p>En el modelo tradicional, operaciones como <strong>consultas a DB, llamadas a APIs o lectura de
+                    archivos</strong> detienen el hilo de ejecución por completo.</p>
+                <div class="reactive-visual" style="max-width: 100%; margin: 10px 0;">
+                  <img
+                    src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/blocking_vs_non_blocking_flow_girchu.png"
+                    alt="Flujo de Bloqueo">
                 </div>
-            </section>
-
-            <section style="margin-top: 30px;">
-                <h3 style="color: var(--brand);">Mapa de temas que debes dominar</h3>
-                <div class="section-grid">
-                    <article class="dashboard-card">
-                        <h4>Backend</h4>
-                        <ul style="font-size: 0.95rem; line-height: 1.6;">
-                            <li>Java Core: Colecciones, Generics y Lambdas.</li>
-                            <li>POO: Herencia, Abstracción y Encapsulamiento.</li>
-                            <li>Patrones de Diseño: Creacionales, Estructurales y de Comportamiento.</li>
-                            <li>Arquitectura: SOLID, Clean Code y Hexagonal.</li>
-                        </ul>
-                    </article>
-                    <article class="dashboard-card">
-                        <h4>Frontend</h4>
-                        <ul style="font-size: 0.95rem; line-height: 1.6;">
-                            <li>React con estado asincrono y UI responsiva.</li>
-                            <li>Integracion segura con APIs backend.</li>
-                            <li>Colaboracion UX/UI orientada a producto.</li>
-                        </ul>
-                    </article>
-                    <article class="dashboard-card">
-                        <h4>Ingenieria</h4>
-                        <ul style="font-size: 0.95rem; line-height: 1.6;">
-                            <li>Tests unitarios, integracion y funcionales.</li>
-                            <li>Gradle/Maven + pipeline CI/CD.</li>
-                            <li>Code review con foco en riesgos y regresiones.</li>
-                        </ul>
-                    </article>
+              </div>
+              <div class="dashboard-card">
+                <h4>Context Shift</h4>
+                <p>Cambiar entre hilos bloqueados es costoso para la CPU. WebFlux optimiza esto usando pocos hilos
+                  (Event Loop) que nunca se detienen.</p>
+                <div class="dependency-card">
+                  <h5>Dependencias Necesarias (Spring)</h5>
+                  <pre style="font-size: 0.8rem; border: none; background: transparent; padding: 0;">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-webflux&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
                 </div>
-            </section>
+              </div>
+            </div>
+          </section>
 
-            <section style="margin-top: 30px;">
-                <h3 style="color: var(--brand);">Principios reactivos: repaso profundo</h3>
-                <ol style="font-size: 0.95rem; line-height: 1.8;">
-                    <li><strong>Encapsulamiento:</strong> proteger el estado interno de los objetos.</li>
-                    <li><strong>Abstracción:</strong> representar las características esenciales sin detalles de implementación.</li>
-                    <li><strong>Herencia:</strong> reutilización de código y jerarquías de clases.</li>
-                    <li><strong>Polimorfismo:</strong> múltiples formas de ejecutar un comportamiento.</li>
-                    <li><strong>Interfaces:</strong> contratos que definen qué hace el sistema, no cómo.</li>
-                </ol>
-                <p><strong>Pregunta clave:</strong> Explica la diferencia entre composición y herencia. ¿Cuándo preferirías una sobre la otra?</p>
-            </section>
-
-            <section style="margin-top: 30px;">
-                <h3 style="color: var(--brand);">Preguntas tecnicas para practicar</h3>
-                <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
-                    <details class="dashboard-card" style="padding: 15px;">
-                        <summary style="cursor: pointer; font-weight: 700; color: var(--brand);">1) ¿Cuál es la diferencia entre una interfaz y una clase abstracta?</summary>
-                        <p style="margin-top: 10px;">Respuesta esperada: Las interfaces definen contratos (qué hacer), mientras que las clases abstractas pueden definir estado y comportamiento base (cómo hacerlo parcialmente).</p>
-                    </details>
-                    <details class="dashboard-card" style="padding: 15px;">
-                        <summary style="cursor: pointer; font-weight: 700; color: var(--brand);">2) ¿Qué es el polimorfismo y cómo se aplica en Java?</summary>
-                        <p style="margin-top: 10px;">Respuesta esperada: Es la capacidad de un objeto de tomar varias formas. En Java se aplica mediante la sobrescritura de métodos (overriding) y el uso de referencias de interfaces/clases base.</p>
-                    </details>
-                    <details class="dashboard-card" style="padding: 15px;">
-                        <summary style="cursor: pointer; font-weight: 700; color: var(--brand);">3) ¿Qué son los principios SOLID?</summary>
-                        <p style="margin-top: 10px;">Respuesta esperada: Single responsibility, Open-closed, Liskov substitution, Interface segregation y Dependency inversion. Son guías para crear software mantenible.</p>
-                    </details>
+          <!-- Comparativa Interactiva de Código -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand);">Diferencia de Rendimiento: Ejercicio de Latencia</h3>
+            <div class="comparison-toggle-card">
+              <div class="toggle-header">
+                <span>Simulación de 3 tareas con latencia de 1s</span>
+                <div class="toggle-switch">
+                  <button class="toggle-btn active" data-view="imperative">Imperativo</button>
+                  <button class="toggle-btn" data-view="reactive">Reactivo</button>
                 </div>
-            </section>
-
-            <section style="margin-top: 30px;">
-                <h3 style="color: var(--brand);">Ejercicios Java POO (practica guiada)</h3>
-                <div class="section-grid">
-                    <article class="dashboard-card">
-                        <h4>Ejercicio 1: Encapsulamiento y Modelado</h4>
-                        <p>Crea un sistema de <code>CuentaBancaria</code> con validaciones de saldo y transacciones atómicas.</p>
-                    </article>
-                    <article class="dashboard-card">
-                        <h4>Ejercicio 2: Herencia y Polimorfismo</h4>
-                        <p>Implementa un sistema de <code>FormasGeometricas</code> donde cada forma calcule su área y perímetro de forma única.</p>
-                    </article>
-                    <article class="dashboard-card">
-                        <h4>Ejercicio 3: Patrón Strategy</h4>
-                        <p>Define diferentes algoritmos de cálculo de impuestos que se puedan intercambiar en tiempo de ejecución.</p>
-                    </article>
+              </div>
+              <div class="comparison-content">
+                <!-- Vista Imperativa -->
+                <div class="code-view active" id="view-imperative">
+                  <pre class="code">public void procesoImperativo() {
+    List&lt;String&gt; datos = List.of("Tarea 1", "Tarea 2", "Tarea 3");
+    for (String dato : datos) {
+        try {
+            Thread.sleep(1000); // Bloqueo total del hilo
+            System.out.println("Procesado: " + dato);
+        } catch (InterruptedException e) { ... }
+    }
+    System.out.println("Fin"); // ¡Sale después de 3 SEGUNDOS!
+}</pre>
+                  <div class="tip-card"><strong>Resultado:</strong> Tiempo total ≈ 3s. El hilo estuvo "dormido" y
+                    desperdiciado la mayor parte del tiempo.</div>
                 </div>
-            </section>
+                <!-- Vista Reactiva -->
+                <div class="code-view" id="view-reactive">
+                  <pre class="code">public void procesoReactivo() {
+    Flux.just("Tarea 1", "Tarea 2", "Tarea 3")
+        .delayElements(Duration.ofSeconds(1)) // Latencia no bloqueante
+        .doOnNext(dato -> System.out.println("Procesado: " + dato))
+        .subscribe();
+    
+    System.out.println("Fin del hilo principal"); // ¡Sale INMEDIATAMENTE!
+}</pre>
+                  <div class="tip-card"><strong>Ventaja:</strong> El hilo principal se libera al instante para atender
+                    otras 10,000 peticiones mientras Reactor gestiona la espera de fondo.</div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-            <section style="margin-top: 30px; margin-bottom: 30px;">
-                <h3 style="color: var(--brand);">Simulacion de entrevista (60 min)</h3>
-                <ol style="font-size: 0.95rem; line-height: 1.8;">
-                    <li>10 min: explica arquitectura de un servicio reactivo de fraude.</li>
-                    <li>20 min: resuelve un endpoint WebFlux con manejo de errores.</li>
-                    <li>15 min: diseña integracion Kafka + contrato API.</li>
-                    <li>10 min: estrategia de testing y CI/CD.</li>
-                    <li>5 min: trade-offs y decisiones tecnicas.</li>
-                </ol>
-                <p><strong>Tip:</strong> responde con estructura fija: contexto, decision, trade-off, medicion.</p>
-            </section>
+          <!-- Los 4 Pilares -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand);">Los 4 Pilares del Manifiesto Reactivo</h3>
+            <div class="reactive-visual">
+              <img
+                src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/reactive_manifesto_pillars_diagram_ax0b92.png"
+                alt="4 Pilares del Manifiesto Reactivo">
+            </div>
+            <div class="flashcards-container" style="margin-top: 20px;">
+              <div class="flashcard">
+                <div class="flashcard-inner">
+                  <div class="flashcard-front">
+                    <h5>⚡ Responsivo</h5>
+                    <p>Tiempos de respuesta rápidos y predecibles.</p>
+                  </div>
+                  <div class="flashcard-back">
+                    <pre style="font-size: 0.7rem; color: #fff; background: transparent;">Mono.just(data)
+.timeout(Duration.ofMillis(500))</pre>
+                  </div>
+                </div>
+              </div>
+              <div class="flashcard">
+                <div class="flashcard-inner">
+                  <div class="flashcard-front">
+                    <h5>🛡️ Resiliente</h5>
+                    <p>Manejo elegante de fallos por aislamiento.</p>
+                  </div>
+                  <div class="flashcard-back">
+                    <pre
+                      style="font-size: 0.7rem; color: #fff; background: transparent;">.onErrorResume(e -> fallback())</pre>
+                  </div>
+                </div>
+              </div>
+              <div class="flashcard">
+                <div class="flashcard-inner">
+                  <div class="flashcard-front">
+                    <h5>📈 Elástico</h5>
+                    <p>Escalamiento fluido bajo demanda.</p>
+                  </div>
+                  <div class="flashcard-back">
+                    <p style="font-size: 0.8rem;">Optimización de hilos Event Loop para manejar miles de conexiones con
+                      mínima RAM.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flashcard">
+                <div class="flashcard-inner">
+                  <div class="flashcard-front">
+                    <h5>✉️ Mensajes</h5>
+                    <p>Comunicación asíncrona y desacoplada.</p>
+                  </div>
+                  <div class="flashcard-back">
+                    <pre
+                      style="font-size: 0.7rem; color: #fff; background: transparent;">Sinks.Many&lt;T&gt; sink;</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Operadores Principales -->
+          <section style="margin-top: 40px; margin-bottom: 50px;">
+            <h3 style="color: var(--brand);">Operadores Maestros: Reactor Core</h3>
+            <div class="section-grid">
+              <article class="dashboard-card">
+                <h4>Transformación y Filtrado</h4>
+                <pre class="code" style="font-size: 0.75rem;">flux.filter(n -> n > 10)
+    .map(n -> "ID: " + n)
+    .flatMap(id -> service.call(id))</pre>
+              </article>
+              <article class="dashboard-card">
+                <h4>Combinación y Resiliencia</h4>
+                <pre class="code" style="font-size: 0.75rem;">Flux.zip(flux1, flux2)
+    .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+    .onErrorReturn("Error final");</pre>
+                <p style="font-size: 0.85rem; margin-top: 10px;"><code>zip</code> combina flujos. <code>retryWhen</code>
+                  permite reintentar peticiones fallidas automáticamente.</p>
+              </article>
+            </div>
+          </section>
         </section>
       </div>
 
