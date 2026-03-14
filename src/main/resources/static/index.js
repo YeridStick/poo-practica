@@ -1779,52 +1779,29 @@ window.addEventListener('click', (e) => {
 });
 
 
-// --- Reactive Search Logic ---
+// --- Unified Reactive UI Logic ---
 document.addEventListener('DOMContentLoaded', () => {
-    const reactiveSearch = document.getElementById('reactiveSearch');
-    const reactiveCards = document.querySelectorAll('.flashcard');
-
-    if (reactiveSearch) {
-        reactiveSearch.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            reactiveCards.forEach(card => {
-                const title = card.querySelector('h4').textContent.toLowerCase();
-                const desc = card.innerText.toLowerCase();
-                if (title.includes(term) || desc.includes(term)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    }
-});
-
-// --- Reactive Comparison Toggle Logic ---
-document.addEventListener('DOMContentLoaded', () => {
+    // 1. Comparison Toggles
     const toggleBtns = document.querySelectorAll('.toggle-btn');
     const codeViews = document.querySelectorAll('.code-view');
 
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const view = btn.getAttribute('data-view');
+            const parent = btn.closest('.comparison-toggle-card');
             
-            // Update buttons
-            toggleBtns.forEach(b => b.classList.remove('active'));
+            // Update buttons in THIS card
+            parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Update views
-            codeViews.forEach(v => {
-                if (v.id === 'view-' + view) {
-                    v.classList.add('active');
-                } else {
-                    v.classList.remove('active');
-                }
+            // Update views in THIS card
+            parent.querySelectorAll('.code-view').forEach(v => {
+                v.classList.toggle('active', v.id === 'view-' + view);
             });
         });
     });
 
-    // Enhanced Reactive Search
+    // 2. Enhanced Pedagogical Search
     const reactiveSearch = document.getElementById('reactiveSearch');
     if (reactiveSearch) {
         reactiveSearch.addEventListener('input', (e) => {
@@ -1835,9 +1812,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (text.includes(term) || term === '') {
                     section.style.display = 'block';
                 } else {
-                    // Only hide if it's a sub-section or card, but for simplicity we'll just filter cards within sections if needed
+                    section.style.display = 'none';
                 }
             });
         });
     }
 });
+
+// 3. Checkpoint Reveal Logic
+function revealCheckpoint(id) {
+    const card = document.getElementById(id);
+    if (card) {
+        card.classList.add('revealed');
+        const btn = card.querySelector('.reveal-btn');
+        if (btn) btn.style.display = 'none';
+    }
+}
+window.revealCheckpoint = revealCheckpoint;
+
+// 4. Image Modal Logic
+function openImgModal(url) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    if (modal && modalImg) {
+        modalImg.src = url;
+        modal.classList.add('active');
+    }
+}
+window.openImgModal = openImgModal;
+
+function closeImgModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+window.closeImgModal = closeImgModal;

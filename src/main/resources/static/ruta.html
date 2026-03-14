@@ -90,183 +90,224 @@
           </div>
           <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.</p>
 
+          <!-- CAPÍTULO 1: El Despertar Reactivo -->
           <section style="margin-top: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-              <h2 style="color: var(--brand); margin: 0;">El Cambio de Paradigma Reactivo</h2>
+              <h2 style="color: var(--brand); margin: 0;">🚀 Capítulo 1: El Despertar Reactivo</h2>
               <div class="search-bar" style="width: 350px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="11" cy="11" r="8" />
                   <path d="m21 21-4.3-4.3" />
                 </svg>
-                <input type="text" id="reactiveSearch" placeholder="Buscar conceptos reactivos...">
+                <input type="text" id="reactiveSearch" placeholder="¿Qué quieres aprender hoy?">
               </div>
             </div>
 
+            <div class="pedagogical-box">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center;">
+                <div>
+                  <h3 style="color: var(--brand);">La Analogía del Mesero 🍽️</h3>
+                  <p style="line-height: 1.6;">
+                    Imagina un restaurante con <strong>un solo mesero</strong> (Event Loop).
+                    <br><br>
+                    <strong>Modelo Imperativo:</strong> El mesero toma tu pedido, va a la cocina y <strong>espera</strong> a que la comida esté lista.
+                    <br><br>
+                    <strong>Modelo Reactivo:</strong> El mesero toma tu pedido, lo deja en la cocina y <strong>vuelve inmediatamente</strong> a atender otra mesa.
+                  </p>
+                  <div style="display: flex; gap: 10px; margin-top: 15px;">
+                      <button class="action" onclick="openImgModal('https://res.cloudinary.com/drkzojdxq/image/upload/v1773467088/f01c31f6-0b03-485f-959c-426a4445d467.png')">
+                        Ver Flujo Event Loop
+                      </button>
+                      <button class="action" style="background: var(--brand2);" onclick="openImgModal('https://res.cloudinary.com/drkzojdxq/image/upload/v1773453284/e1b4b45e-bada-45d8-b6fa-12e1f9d5090e.png')">
+                        Ver Context Shift
+                      </button>
+                  </div>
+                </div>
+                <div class="reactive-visual">
+                  <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/Paradigmas_ljqxlw.png" alt="Analogía del Mesero" class="img-trigger" onclick="openImgModal(this.src)">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Modal para Imágenes -->
+          <div id="imageModal" class="img-modal" onclick="closeImgModal()">
+            <span class="img-modal-close" onclick="closeImgModal()">&times;</span>
+            <img class="img-modal-content" id="modalImg">
+          </div>
+
+          <!-- CAPÍTULO 2: El Glosario de Poder -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand2);">📚 Capítulo 2: El Glosario de Poder</h3>
+            <div class="glossary-grid">
+              <article class="glossary-item">
+                <h5>Flux & Mono</h5>
+                <p><strong>Mono:</strong> Una promesa de 0 o 1 elemento.<br><strong>Flux:</strong> Un flujo de 0 a N elementos.</p>
+              </article>
+              <article class="glossary-item">
+                <h5>Backpressure</h5>
+                <p>El consumidor le dice al productor: "Oye, vas muy rápido, envíame solo 5 elementos por ahora".</p>
+              </article>
+              <article class="glossary-item">
+                <h5>Schedulers</h5>
+                <p>Los directores de orquesta. Deciden en qué "pool" de hilos se ejecuta cada tarea.</p>
+              </article>
+              <article class="glossary-item">
+                <h5>Cold vs Hot</h5>
+                <p><strong>Cold:</strong> Empieza cuando te suscribes (Netflix).<br><strong>Hot:</strong> Emite datos siempre (Radio).</p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Checkpoint interactivo 1 -->
+          <div class="checkpoint-card" id="checkpoint1">
+            <div class="checkpoint-header">
+              <span class="checkpoint-icon">🛑</span>
+              <h4 style="margin: 0; color: #1e293b;">¡Alto ahí! El error más común</h4>
+            </div>
+            <p>¿Qué pasa si usas <code>.block()</code> dentro de un controlador de WebFlux?</p>
+            <button class="reveal-btn" onclick="revealCheckpoint('checkpoint1')">Ver respuesta</button>
+            <div class="checkpoint-answer">
+              <div class="pitfall-card">
+                <h5>⚠️ ¡Catástrofe!</h5>
+                <p>Estás deteniendo el Event Loop. Como solo hay pocos hilos, si bloqueas uno, ¡toda la aplicación dejará de responder a nuevos usuarios!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CAPÍTULO 3: La Tubería Mágica (Pipeline) -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand);">🏗️ Capítulo 3: La Tubería Mágica</h3>
             <div class="reactive-visual">
-              <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/Paradigmas_ljqxlw.png"
-                alt="Paradigma Reactivo vs Imperativo">
-              <div class="visual-caption">Infografía: Del flujo secuencial bloqueante al Event Loop no bloqueante.</div>
+              <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/blocking_vs_non_blocking_flow_girchu.png" alt="Pipeline Reactivo">
+              <div class="visual-caption">El flujo de datos: Filtrado, Transformación y Entrega.</div>
             </div>
-
-            <p style="line-height: 1.6; font-size: 1.05rem;">
-              La programación reactiva no es solo una librería, es un <strong>cambio de mentalidad</strong>. Pasamos de
-              un modelo donde el hilo espera por la respuesta (Bloqueo) a uno donde el hilo se libera inmediatamente y
-              reacciona cuando los datos están listos.
-            </p>
-          </section>
-
-          <!-- Sección de Bloqueo -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand2);">¿Cuándo se genera un bloqueo?</h3>
-            <div class="comparative-grid">
-              <div class="dashboard-card">
-                <p>En el modelo tradicional, operaciones como <strong>consultas a DB, llamadas a APIs o lectura de
-                    archivos</strong> detienen el hilo de ejecución por completo.</p>
-                <div class="reactive-visual" style="max-width: 100%; margin: 10px 0;">
-                  <img
-                    src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/blocking_vs_non_blocking_flow_girchu.png"
-                    alt="Flujo de Bloqueo">
-                </div>
-              </div>
-              <div class="dashboard-card">
-                <h4>Context Shift</h4>
-                <p>Cambiar entre hilos bloqueados es costoso para la CPU. WebFlux optimiza esto usando pocos hilos
-                  (Event Loop) que nunca se detienen.</p>
-                <div class="dependency-card">
-                  <h5>Dependencias Necesarias (Spring)</h5>
-                  <pre style="font-size: 0.8rem; border: none; background: transparent; padding: 0;">&lt;dependency&gt;
-  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-  &lt;artifactId&gt;spring-boot-starter-webflux&lt;/artifactId&gt;
-&lt;/dependency&gt;</pre>
-                </div>
-              </div>
+            
+            <div class="comparative-grid" style="margin-top: 25px;">
+              <article class="dashboard-card" style="border-top: 4px solid var(--brand2);">
+                <h4>map()</h4>
+                <p>Transforma el dato de forma síncrona. Como cambiar el color de una pelota.</p>
+                <pre class="code">.map(user -> user.getName())</pre>
+              </article>
+              <article class="dashboard-card" style="border-top: 4px solid var(--brand);">
+                <h4>flatMap()</h4>
+                <p>Inicia una tarea asíncrona (como ir a la DB) y espera el resultado sin bloquear.</p>
+                <pre class="code">.flatMap(id -> db.find(id))</pre>
+              </article>
             </div>
           </section>
 
-          <!-- Comparativa Interactiva de Código -->
+          <!-- Diferencia de Rendimiento (Mantenemos la comparativa interactiva por su valor pedagógico) -->
           <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand);">Diferencia de Rendimiento: Ejercicio de Latencia</h3>
+            <h3 style="color: var(--brand2);">¿Por qué molestarse? Rendimiento Real</h3>
             <div class="comparison-toggle-card">
               <div class="toggle-header">
-                <span>Simulación de 3 tareas con latencia de 1s</span>
+                <span>Simulación de Red: 3 Tareas x 1s latencia</span>
                 <div class="toggle-switch">
                   <button class="toggle-btn active" data-view="imperative">Imperativo</button>
                   <button class="toggle-btn" data-view="reactive">Reactivo</button>
                 </div>
               </div>
               <div class="comparison-content">
-                <!-- Vista Imperativa -->
                 <div class="code-view active" id="view-imperative">
-                  <pre class="code">public void procesoImperativo() {
-    List&lt;String&gt; datos = List.of("Tarea 1", "Tarea 2", "Tarea 3");
-    for (String dato : datos) {
-        try {
-            Thread.sleep(1000); // Bloqueo total del hilo
-            System.out.println("Procesado: " + dato);
-        } catch (InterruptedException e) { ... }
-    }
-    System.out.println("Fin"); // ¡Sale después de 3 SEGUNDOS!
-}</pre>
-                  <div class="tip-card"><strong>Resultado:</strong> Tiempo total ≈ 3s. El hilo estuvo "dormido" y
-                    desperdiciado la mayor parte del tiempo.</div>
+                  <pre class="code">for (String d : datos) { Thread.sleep(1000); }</pre>
+                  <div class="tip-card"><strong>Bloqueo:</strong> Hilo dormido por 3s. No hace nada productivo.</div>
                 </div>
-                <!-- Vista Reactiva -->
                 <div class="code-view" id="view-reactive">
-                  <pre class="code">public void procesoReactivo() {
-    Flux.just("Tarea 1", "Tarea 2", "Tarea 3")
-        .delayElements(Duration.ofSeconds(1)) // Latencia no bloqueante
-        .doOnNext(dato -> System.out.println("Procesado: " + dato))
-        .subscribe();
-    
-    System.out.println("Fin del hilo principal"); // ¡Sale INMEDIATAMENTE!
-}</pre>
-                  <div class="tip-card"><strong>Ventaja:</strong> El hilo principal se libera al instante para atender
-                    otras 10,000 peticiones mientras Reactor gestiona la espera de fondo.</div>
+                  <pre class="code">Flux.fromIterable(datos).delayElements(Duration.ofSeconds(1))</pre>
+                  <div class="tip-card"><strong>No Bloqueo:</strong> El hilo queda libre para atender a otros 10,000 usuarios mientras Reactor espera.</div>
                 </div>
               </div>
             </div>
           </section>
 
-          <!-- Los 4 Pilares -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand);">Los 4 Pilares del Manifiesto Reactivo</h3>
-            <div class="reactive-visual">
-              <img
-                src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/reactive_manifesto_pillars_diagram_ax0b92.png"
-                alt="4 Pilares del Manifiesto Reactivo">
-            </div>
-            <div class="flashcards-container" style="margin-top: 20px;">
-              <div class="flashcard">
-                <div class="flashcard-inner">
-                  <div class="flashcard-front">
-                    <h5>⚡ Responsivo</h5>
-                    <p>Tiempos de respuesta rápidos y predecibles.</p>
-                  </div>
-                  <div class="flashcard-back">
-                    <pre style="font-size: 0.7rem; color: #fff; background: transparent;">Mono.just(data)
-.timeout(Duration.ofMillis(500))</pre>
-                  </div>
-                </div>
-              </div>
-              <div class="flashcard">
-                <div class="flashcard-inner">
-                  <div class="flashcard-front">
-                    <h5>🛡️ Resiliente</h5>
-                    <p>Manejo elegante de fallos por aislamiento.</p>
-                  </div>
-                  <div class="flashcard-back">
-                    <pre
-                      style="font-size: 0.7rem; color: #fff; background: transparent;">.onErrorResume(e -> fallback())</pre>
-                  </div>
-                </div>
-              </div>
-              <div class="flashcard">
-                <div class="flashcard-inner">
-                  <div class="flashcard-front">
-                    <h5>📈 Elástico</h5>
-                    <p>Escalamiento fluido bajo demanda.</p>
-                  </div>
-                  <div class="flashcard-back">
-                    <p style="font-size: 0.8rem;">Optimización de hilos Event Loop para manejar miles de conexiones con
-                      mínima RAM.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flashcard">
-                <div class="flashcard-inner">
-                  <div class="flashcard-front">
-                    <h5>✉️ Mensajes</h5>
-                    <p>Comunicación asíncrona y desacoplada.</p>
-                  </div>
-                  <div class="flashcard-back">
-                    <pre
-                      style="font-size: 0.7rem; color: #fff; background: transparent;">Sinks.Many&lt;T&gt; sink;</pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Operadores Principales -->
-          <section style="margin-top: 40px; margin-bottom: 50px;">
-            <h3 style="color: var(--brand);">Operadores Maestros: Reactor Core</h3>
+          <!-- CAPÍTULO 4: Trinity Reactive Workshop -->
+          <section style="margin-top: 40px; border-top: 2px solid var(--glass-border); padding-top: 30px;">
+            <h3 style="color: var(--brand);">⚔️ Capítulo 4: Trinity Reactive Workshop</h3>
+            <p>Es hora de ensuciarse las manos. Sigue estos pasos para dominar el código:</p>
+            
             <div class="section-grid">
-              <article class="dashboard-card">
-                <h4>Transformación y Filtrado</h4>
-                <pre class="code" style="font-size: 0.75rem;">flux.filter(n -> n > 10)
-    .map(n -> "ID: " + n)
-    .flatMap(id -> service.call(id))</pre>
-              </article>
-              <article class="dashboard-card">
-                <h4>Combinación y Resiliencia</h4>
-                <pre class="code" style="font-size: 0.75rem;">Flux.zip(flux1, flux2)
-    .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-    .onErrorReturn("Error final");</pre>
-                <p style="font-size: 0.85rem; margin-top: 10px;"><code>zip</code> combina flujos. <code>retryWhen</code>
-                  permite reintentar peticiones fallidas automáticamente.</p>
-              </article>
+              <div class="dashboard-card">
+                <h5>1. El Escenario 🏗️</h5>
+                <p>Abre <code>WorkshopService.java</code>. Verás métodos con <code>TODO</code>. Tu misión es transformarlos de imperativos a reactivos.</p>
+              </div>
+              <div class="dashboard-card">
+                <h5>2. El Pool Especial (I/O) 🧱</h5>
+                <p>Si tienes una base de datos vieja (JDBC) que bloquea, usa esto:</p>
+                <pre class="code" style="font-size: 0.75rem;">Mono.fromCallable(() -> {
+  return jdbcRepo.getData(); 
+})
+.subscribeOn(Schedulers.boundedElastic())</pre>
+              </div>
+            </div>
+
+            <div class="dependency-card" style="margin-top: 20px;">
+              <h5>Comando Mágico de Validación 🪄</h5>
+              <p>Ejecuta esto en tu terminal para saber si lo lograste:</p>
+              <pre style="color: #58a6ff;">.\gradlew.bat test  # Windows</pre>
             </div>
           </section>
+
+          <!-- CAPÍTULO 5: La Chispa de la Vida (.subscribe) -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand);">✨ Capítulo 5: La Chispa de la Vida (.subscribe)</h3>
+            <div class="pedagogical-box" style="border-left: 4px solid var(--brand2);">
+              <p>En WebFlux, un flujo es <strong>Lazy</strong> (perezoso). Esto significa que el código no se ejecuta hasta que alguien pide los datos.</p>
+              <div class="comparative-grid">
+                <article class="dashboard-card">
+                  <h5>Sin .subscribe() 🌑</h5>
+                  <p>Es como una manguera conectada al grifo, pero el grifo está <strong>cerrado</strong>. El agua no fluye.</p>
+                  <pre class="code" style="opacity: 0.6;">Flux.just("Dato").map(v -> v.upper()); // No pasa nada</pre>
+                </article>
+                <article class="dashboard-card">
+                  <h5>Con .subscribe() 🌟</h5>
+                  <p>Es abrir el grifo. En ese momento, los datos empiezan a viajar por la tubería.</p>
+                  <pre class="code">flux.subscribe(value -> System.out.println(value));</pre>
+                </article>
+              </div>
+              <p style="margin-top: 15px; font-size: 0.9rem; color: var(--ink-dim);"><em>Tip: En Spring WebFlux (WebClient/Controllers), el framework suele hacer el .subscribe() por ti al retornar un Mono o Flux.</em></p>
+            </div>
+          </section>
+
+          <!-- CAPÍTULO 6: El Arte de No Ahogarse (Backpressure) -->
+          <section style="margin-top: 40px;">
+            <h3 style="color: var(--brand2);">🌊 Capítulo 6: El Arte de No Ahogarse (Backpressure)</h3>
+            <div class="pedagogical-box">
+              <p>¿Qué pasa si un servidor nos envía 1,000,000 de registros por segundo pero nosotros solo podemos procesar 100?</p>
+              <div class="pitfall-card" style="background: rgba(255,255,255,0.5); border: 1px solid var(--brand);">
+                <p><strong>El Backpressure</strong> es el mecanismo por el cual el <strong>consumidor</strong> controla la velocidad de emisión del productor, evitando sobrecargas de memoria.</p>
+              </div>
+              
+              <div class="section-grid" style="margin-top: 20px;">
+                <article class="dashboard-card">
+                  <h6>Controlando la Tasa</h6>
+                  <p>Podemos limitar cuántos elementos pedimos a la vez:</p>
+                  <pre class="code">flux.limitRate(10) // Pide de 10 en 10
+    .subscribe(data -> process(data));</pre>
+                </article>
+                <article class="dashboard-card">
+                  <h6>Estrategias de Desborde</h6>
+                  <p>¿Qué hacer si hay demasiados datos?</p>
+                  <pre class="code">.onBackpressureBuffer(100) // Guarda 100 en memoria
+.onBackpressureDrop()      // Descarta el exceso</pre>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <!-- Checkpoint interactivo 2 -->
+          <div class="checkpoint-card" id="checkpoint2">
+            <div class="checkpoint-header">
+              <span class="checkpoint-icon">🤔</span>
+              <h4 style="margin: 0; color: #1e293b;">Mini-Reto: ¿Qué operador usarías?</h4>
+            </div>
+            <p>Si necesitas combinar los datos de dos APIs diferentes para crear un solo objeto, ¿cuál usarías?</p>
+            <button class="reveal-btn" onclick="revealCheckpoint('checkpoint2')">Ver respuesta</button>
+            <div class="checkpoint-answer">
+              <p><strong>Respuesta:</strong> <code>Flux.zip()</code> o <code>Mono.zip()</code>. <br><br> Es como una cremallera: junta los elementos de ambos flujos en parejas.</p>
+            </div>
+          </div>
+
         </section>
       </div>
 
