@@ -6,20 +6,23 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn -q dependency:go-offline
 
-# Copiamos el código fuente y construimos el proyecto + dependencias (incluye Reactor)
+# Copiamos el código fuente y construimos el proyecto + dependencias
 COPY src ./src
 RUN mvn -q clean package -DskipTests \
-    dependency:copy-dependencies -DincludeArtifactIds=reactor-core,reactive-streams -DoutputDirectory=target/dependency
+    dependency:copy-dependencies -DincludeArtifactIds=reactor-core,reactive-streams -DoutputDirectory=build/dependency
 
-## Etapa 2: Runtime (JDK completo, se usa javac dentro del playground)
+## Etapa 2: Runtime (JDK completo para el playground)
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Copiamos clases compiladas y dependencias
-COPY --from=build /app/target/classes /app/target/classes
-COPY --from=build /app/target/dependency /app/target/dependency
+# Copiamos clases compiladas y dependencias (usamos 'build' en lugar de 'target' según pom.xml)
+COPY --from=build /app/build/classes /app/build/classes
+COPY --from=build /app/build/dependency /app/build/dependency
+COPY --from=build /app/src/main/resources/static /app/build/classes/static
 
-EXPOSE 8080
+# Configuraciones de puerto y memoria para optimizar consumo en Railway
+ENV PORT=7860
+EXPOSE ${PORT}
 
-# Ejecutar el servidor HTTP del dashboard (monolito)
-CMD ["java", "-cp", "target/classes:target/dependency/*", "HttpEstudioServer", "8080"]
+# Ejecutar el servidor con flags de optimización de memoria para contenedores
+CMD ["sh", "-c", "java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -cp build/classes:build/dependency/* HttpEstudioServer ${PORT}"]
