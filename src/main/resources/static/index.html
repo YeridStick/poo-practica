@@ -202,20 +202,20 @@
     /* ── Hero row ──────────────────────────────── */
     .hero-row {
       display: grid;
-      grid-template-columns: 1fr 290px 280px;
+      grid-template-columns: minmax(0, 1fr) 290px 280px;
       gap: 16px;
       align-items: stretch
     }
 
     @media(max-width:1100px) {
       .hero-row {
-        grid-template-columns: 1fr 1fr
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)
       }
     }
 
     @media(max-width:700px) {
       .hero-row {
-        grid-template-columns: 1fr
+        grid-template-columns: minmax(0, 1fr)
       }
     }
 
@@ -225,7 +225,8 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: var(--shadow)
+      box-shadow: var(--shadow);
+      min-width: 0;
     }
 
     .panel-header {
@@ -396,20 +397,20 @@
     /* ── Main 3-col grid ────────────────────────── */
     .main-grid {
       display: grid;
-      grid-template-columns: 320px 1fr 1fr;
+      grid-template-columns: 320px minmax(0, 1fr) minmax(0, 1fr);
       gap: 16px;
       align-items: flex-start
     }
 
     @media(max-width:1200px) {
       .main-grid {
-        grid-template-columns: 1fr 1fr
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)
       }
     }
 
     @media(max-width:800px) {
       .main-grid {
-        grid-template-columns: 1fr
+        grid-template-columns: minmax(0, 1fr)
       }
     }
 
@@ -538,7 +539,8 @@
 
     .tab-panel {
       display: none;
-      padding: 14px 16px
+      padding: 14px 16px;
+      min-width: 0;
     }
 
     .tab-panel.active {
@@ -550,7 +552,10 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 14px 16px
+      padding: 14px 16px;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
     }
 
     .doc-article h4 {
@@ -623,6 +628,73 @@
       line-height: 1.65;
       white-space: pre
     }
+
+    /* ── Doc Slider Internals ────────────────── */
+    #docTrack {
+      min-width: 0;
+    }
+
+    .doc-slide {
+      min-width: 100%;
+      max-width: 100%;
+      flex-shrink: 0;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .slide-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--brand);
+      margin-bottom: 4px;
+      overflow-wrap: break-word;
+    }
+
+    .slide-body {
+      font-size: .86rem;
+      color: var(--ink-dim);
+      line-height: 1.6;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .slide-code {
+      background: #0d1117;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 12px;
+      margin-top: 5px;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    .slide-code pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      padding: 14px;
+      margin: 0;
+      white-space: pre;
+      color: #e6edf3;
+    }
+
+    .slide-badge {
+      font-size: .62rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 5px;
+      width: fit-content;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .slide-badge.concept { background: var(--brand-lt); color: var(--brand); }
+    .slide-badge.example { background: rgba(34, 197, 94, .1); color: var(--success); }
+    .slide-badge.pitfall { background: rgba(239, 68, 68, .1); color: var(--danger); }
+    .slide-badge.practice { background: rgba(167, 139, 250, .1); color: var(--brand3); }
 
     /* ── Repo section ───────────────────────────── */
     .repo-row {
@@ -2467,80 +2539,11 @@ class Gato extends Animal {
 
     async function fetchSlides(concept, hint, extra) {
       const statusEl = document.getElementById('docStatus');
-      statusEl.textContent = '⚡ Generando con IA...';
-      const prompt = `Eres un instructor experto en Java y POO.
-Genera exactamente 4 slides de documentación sobre el concepto Java: "${concept}".
-${hint ? `Descripción: ${hint}` : ''}
-${extra ? `Instrucción adicional: ${extra}` : ''}
-
-Responde ÚNICAMENTE con JSON válido (sin markdown, sin texto extra antes/después).
-
-{
-  "slides": [
-    {
-      "type": "concept",
-      "title": "¿Qué son las ${concept} en Java?",
-      "body": "Explicación pedagógica en 3-4 oraciones. Usa saltos de línea \\n para párrafos. Solo texto plano, sin HTML.",
-      "code": "// Ejemplo básico\\npublic class Ejemplo {\\n    public static void main(String[] args) {\\n        System.out.println(\\"Hola\\");\\n    }\\n}",
-      "codeComment": "Descripción breve del código"
-    },
-    {
-      "type": "example",
-      "title": "Ejemplo práctico real de ${concept}",
-      "body": "Explicación del ejemplo en 2-3 oraciones.",
-      "code": "// Código Java real funcional y comentado",
-      "codeComment": "Qué hace y por qué es útil"
-    },
-    {
-      "type": "pitfall",
-      "title": "Error común con ${concept}",
-      "body": "Describe el error frecuente y sus consecuencias.",
-      "code": "// INCORRECTO:\\n// código con el error\\n\\n// CORRECTO:\\n// código bien escrito",
-      "codeComment": "Diferencia clave MAL vs BIEN"
-    },
-    {
-      "type": "practice",
-      "title": "Ejercicio práctico de ${concept}",
-      "body": "Enunciado claro del ejercicio con lo que debe implementar el estudiante.",
-      "code": "public class Ejercicio {\\n    public static void main(String[] args) {\\n        // TODO: tu solución aquí\\n    }\\n}",
-      "codeComment": "Plantilla base para resolver"
-    }
-  ]
-}
-
-Reglas: body es texto plano con \\n para párrafos. Code es Java real y comentado. Responde SOLO el JSON.`;
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 2400,
-            messages: [{ role: 'user', content: prompt }]
-          })
-        });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        const raw = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
-        if (!raw) throw new Error('Respuesta vacía');
-        let clean = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/i, '').trim();
-        let parsed;
-        try { parsed = JSON.parse(clean); }
-        catch {
-          const m = clean.match(/\{[\s\S]*\}/);
-          if (m) parsed = JSON.parse(m[0]);
-          else throw new Error('JSON inválido');
-        }
-        if (!Array.isArray(parsed.slides)) throw new Error('slides no es array');
-        statusEl.textContent = `✅ ${parsed.slides.length} slides`;
-        setTimeout(() => { statusEl.textContent = '' }, 2500);
-        return parsed.slides;
-      } catch (err) {
-        console.error('Doc Slider:', err);
-        statusEl.textContent = '⚠️ Cargando contenido local';
-        setTimeout(() => { statusEl.textContent = '' }, 2500);
-        return fallbackSlides(concept, hint);
-      }
+      statusEl.textContent = '📚 Cargando contenido local...';
+      // Simular una pequeña latencia para feedback visual
+      await new Promise(r => setTimeout(r, 400));
+      statusEl.textContent = '';
+      return fallbackSlides(concept, hint);
     }
 
     /* ── built-in fallback por concepto ─────── */

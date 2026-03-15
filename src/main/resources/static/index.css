@@ -74,8 +74,13 @@ body {
   font-family: "Outfit", "Segoe UI", Tahoma, sans-serif;
   color: var(--ink);
   background: #f0f2f5;
-  overflow: hidden;
-  /* Main scroll sits in content */
+  overflow-x: hidden;
+  /* Evitar scroll horizontal global */
+}
+
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Dashboard Layout */
@@ -164,6 +169,7 @@ body {
   height: 100%;
   padding: 30px;
   overflow-y: auto;
+  min-width: 0;
 }
 
 /* Header */
@@ -196,7 +202,8 @@ body {
   border: 1px solid var(--line);
   padding: 12px 20px;
   border-radius: var(--radius-sm);
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -337,7 +344,7 @@ body {
 /* Cards & Content */
 .section-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 25px;
 }
 
@@ -540,15 +547,15 @@ code.inline {
 
 .level-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 20px;
   height: 40vh;
   min-height: 180px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .level-card {
-  min-width: 280px;
   background: #fff;
   border-radius: 24px;
   padding: 25px;
@@ -989,6 +996,17 @@ code.inline {
   .featured-row {
     grid-template-columns: 1fr;
     gap: 15px;
+  }
+
+  /* Asegurar que el contenido no se desborde en móviles */
+  pre, code {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .editor-shell, .line-numbers, .editor {
+    white-space: pre;
+    word-break: normal;
   }
 }
 
