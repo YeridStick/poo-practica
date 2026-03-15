@@ -5,319 +5,2762 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ruta de Entrevista: Java Avanzado + POO</title>
-  <link rel="stylesheet" href="/index.css">
+  <style>
+    /* ── Reset & Base ─────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --brand: #6c63ff;
+      --brand2: #ff6584;
+      --brand3: #43c6ac;
+      --bg: #0f0f1a;
+      --bg2: #161627;
+      --bg3: #1e1e35;
+      --bg4: #12121f;
+      --glass: rgba(255, 255, 255, .04);
+      --glass-border: rgba(255, 255, 255, .08);
+      --ink: #e8e8f0;
+      --ink-dim: #9090a8;
+      --ink-faint: #5a5a72;
+      --success: #43c6ac;
+      --warn: #f7b731;
+      --danger: #ff4757;
+      --sidebar-w: 64px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Sidebar ──────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg2);
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+      gap: 6px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12px;
+      color: #fff;
+      margin-bottom: 14px;
+      letter-spacing: .05em;
+    }
+
+    .nav-item {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: var(--ink-dim);
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: var(--glass);
+      color: var(--brand);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* ── Main Content ─────────────────────────── */
+    .main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding-bottom: 80px;
+    }
+
+    .top-header {
+      padding: 22px 40px 18px;
+      border-bottom: 1px solid var(--glass-border);
+      background: var(--bg2);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .top-header .user-info h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .top-header .user-info p {
+      font-size: .8rem;
+      color: var(--ink-dim);
+      margin-top: 2px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 7px 14px;
+      margin-left: auto;
+    }
+
+    .search-bar input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--ink);
+      font-size: .83rem;
+      width: 200px;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--ink-faint);
+    }
+
+    /* ── Cards & Sections ─────────────────────── */
+    .page-wrap {
+      max-width: 1040px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 40px 40px;
+    }
+
+    .dashboard-card {
+      background: var(--bg3);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .status-pill {
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(108, 99, 255, .18);
+      color: var(--brand);
+      letter-spacing: .04em;
+    }
+
+    .status-pill.green {
+      background: rgba(67, 198, 172, .15);
+      color: var(--success);
+    }
+
+    .status-pill.orange {
+      background: rgba(247, 183, 49, .15);
+      color: var(--warn);
+    }
+
+    .status-pill.red {
+      background: rgba(255, 71, 87, .15);
+      color: var(--danger);
+    }
+
+    /* ── Chapter Headers ──────────────────────── */
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 38px 0 18px;
+    }
+
+    .ch-badge {
+      font-size: .68rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--brand);
+      color: #fff;
+      letter-spacing: .06em;
+    }
+
+    .ch-badge.b2 {
+      background: var(--brand2);
+    }
+
+    .ch-badge.b3 {
+      background: var(--brand3);
+      color: #001c18;
+    }
+
+    .chapter-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .chapter-header h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    /* ── Pedagogical Box ──────────────────────── */
+    .pedagogical-box {
+      background: rgba(108, 99, 255, .06);
+      border: 1px solid rgba(108, 99, 255, .22);
+      border-radius: 14px;
+      padding: 22px 24px;
+    }
+
+    .pedagogical-box.green {
+      background: rgba(67, 198, 172, .06);
+      border-color: rgba(67, 198, 172, .22);
+    }
+
+    .pedagogical-box.yellow {
+      background: rgba(247, 183, 49, .06);
+      border-color: rgba(247, 183, 49, .22);
+    }
+
+    .pedagogical-box.red {
+      background: rgba(255, 71, 87, .06);
+      border-color: rgba(255, 71, 87, .22);
+    }
+
+    /* ── Grids ────────────────────────────────── */
+    .section-grid,
+    .comparative-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .section-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 700px) {
+
+      .section-grid,
+      .comparative-grid,
+      .section-grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Glossary ─────────────────────────────── */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .glossary-item {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .glossary-item h5 {
+      font-size: .83rem;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 6px;
+    }
+
+    .glossary-item p {
+      font-size: .78rem;
+      line-height: 1.55;
+      color: var(--ink-dim);
+    }
+
+    /* ── Code ─────────────────────────────────── */
+    pre.code {
+      background: #0a0a14;
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'Fira Code', 'Cascadia Code', monospace;
+      font-size: .78rem;
+      color: #abb2bf;
+      overflow-x: auto;
+      line-height: 1.65;
+      margin-top: 10px;
+    }
+
+    code {
+      background: var(--bg4);
+      border: 1px solid var(--glass-border);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: .82em;
+      color: var(--brand2);
+    }
+
+    .kw {
+      color: #c678dd;
+    }
+
+    .fn {
+      color: #61afef;
+    }
+
+    .str {
+      color: #98c379;
+    }
+
+    .cm {
+      color: #5c6370;
+    }
+
+    .num {
+      color: #d19a66;
+    }
+
+    /* ── Checkpoints ──────────────────────────── */
+    .checkpoint-card {
+      background: var(--bg2);
+      border: 1px solid rgba(247, 183, 49, .3);
+      border-radius: 14px;
+      padding: 20px 22px;
+    }
+
+    .checkpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .checkpoint-icon {
+      font-size: 1.35rem;
+    }
+
+    .checkpoint-card h4 {
+      font-size: .93rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .checkpoint-card p {
+      font-size: .845rem;
+      color: var(--ink-dim);
+      line-height: 1.6;
+    }
+
+    .checkpoint-answer {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      background: rgba(108, 99, 255, .08);
+      border-radius: 10px;
+      font-size: .845rem;
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .checkpoint-answer.shown {
+      display: block;
+    }
+
+    .reveal-btn {
+      margin-top: 12px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 18px;
+      font-size: .78rem;
+      cursor: pointer;
+      transition: opacity .2s;
+      font-weight: 600;
+    }
+
+    .reveal-btn:hover {
+      opacity: .83;
+    }
+
+    .reveal-btn.b2 {
+      background: var(--brand2);
+    }
+
+    .reveal-btn.b3 {
+      background: var(--brand3);
+      color: #001c18;
+    }
+
+    /* ── Pitfall / Tip Cards ──────────────────── */
+    .pitfall-card {
+      background: rgba(255, 71, 87, .07);
+      border: 1px solid rgba(255, 71, 87, .2);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .pitfall-card h5 {
+      color: var(--danger);
+      margin-bottom: 6px;
+      font-size: .88rem;
+    }
+
+    .pitfall-card p {
+      font-size: .84rem;
+      color: var(--ink-dim);
+      line-height: 1.6;
+    }
+
+    .tip-card {
+      background: rgba(108, 99, 255, .08);
+      border: 1px solid rgba(108, 99, 255, .2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: .82rem;
+      color: var(--ink-dim);
+      margin-top: 10px;
+      line-height: 1.55;
+    }
+
+    .success-card {
+      background: rgba(67, 198, 172, .07);
+      border: 1px solid rgba(67, 198, 172, .2);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .success-card h5 {
+      color: var(--success);
+      margin-bottom: 6px;
+      font-size: .88rem;
+    }
+
+    /* ── Comparison Toggle ────────────────────── */
+    .comparison-toggle-card {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .toggle-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 13px 18px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .toggle-header span {
+      font-size: .82rem;
+      color: var(--ink-dim);
+    }
+
+    .toggle-switch {
+      display: flex;
+    }
+
+    .toggle-btn {
+      padding: 6px 16px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--ink-dim);
+      font-size: .76rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .toggle-btn:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .toggle-btn:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
+    .toggle-btn.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    .code-view {
+      display: none;
+      padding: 16px 18px;
+    }
+
+    .code-view.active {
+      display: block;
+    }
+
+    /* ── Images ───────────────────────────────── */
+    .reactive-visual {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .reactive-visual img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      transition: transform .25s;
+      border-radius: 12px;
+    }
+
+    .reactive-visual img:hover {
+      transform: scale(1.015);
+    }
+
+    .visual-caption {
+      text-align: center;
+      font-size: .74rem;
+      color: var(--ink-faint);
+      padding: 8px 0 4px;
+    }
+
+    .img-trigger {
+      cursor: zoom-in;
+    }
+
+    /* ── Image Modal ──────────────────────────── */
+    .img-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .9);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .img-modal.open {
+      display: flex;
+    }
+
+    .img-modal-content {
+      max-width: 92vw;
+      max-height: 92vh;
+      border-radius: 14px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .7);
+    }
+
+    .img-modal-close {
+      position: fixed;
+      top: 18px;
+      right: 24px;
+      font-size: 1.8rem;
+      color: rgba(255, 255, 255, .7);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, .1);
+      border-radius: 50%;
+      transition: background .2s;
+    }
+
+    .img-modal-close:hover {
+      background: rgba(255, 255, 255, .2);
+    }
+
+    /* ── Dependency / Command Card ────────────── */
+    .dependency-card {
+      background: var(--bg4);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .dependency-card h5 {
+      font-size: .85rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--brand);
+    }
+
+    /* ── Reactive Console ─────────────────────── */
+    .console-wrap {
+      background: #0a0a14;
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+
+    .console-topbar {
+      background: var(--bg3);
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-r {
+      background: #ff5f57;
+    }
+
+    .dot-y {
+      background: #febc2e;
+    }
+
+    .dot-g {
+      background: #28c840;
+    }
+
+    .console-topbar span {
+      font-size: .76rem;
+      color: var(--ink-faint);
+      margin-left: 6px;
+      font-family: monospace;
+    }
+
+    .console-tabs {
+      display: flex;
+      background: var(--bg4);
+      border-bottom: 1px solid var(--glass-border);
+      overflow-x: auto;
+    }
+
+    .c-tab {
+      padding: 8px 16px;
+      font-size: .76rem;
+      color: var(--ink-faint);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all .18s;
+    }
+
+    .c-tab.active {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
+      background: rgba(108, 99, 255, .07);
+    }
+
+    .c-editor {
+      display: none;
+    }
+
+    .c-editor.active {
+      display: block;
+    }
+
+    .c-editor textarea {
+      width: 100%;
+      min-height: 160px;
+      background: #0a0a14;
+      border: none;
+      outline: none;
+      color: #abb2bf;
+      font-family: 'Fira Code', monospace;
+      font-size: .8rem;
+      padding: 14px 16px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    .console-actions {
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border-top: 1px solid var(--glass-border);
+      background: var(--bg3);
+      flex-wrap: wrap;
+    }
+
+    .run-btn {
+      background: var(--success);
+      color: #001c18;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 20px;
+      font-weight: 700;
+      font-size: .78rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: opacity .18s;
+    }
+
+    .run-btn:hover {
+      opacity: .85;
+    }
+
+    .reset-btn {
+      background: transparent;
+      color: var(--ink-dim);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: .76rem;
+      cursor: pointer;
+      transition: all .18s;
+    }
+
+    .reset-btn:hover {
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    .console-hint {
+      font-size: .72rem;
+      color: var(--ink-faint);
+      margin-left: auto;
+    }
+
+    #console-output {
+      background: #050510;
+      border-top: 1px solid var(--glass-border);
+      padding: 12px 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: .78rem;
+      min-height: 72px;
+      max-height: 240px;
+      overflow-y: auto;
+      line-height: 1.85;
+    }
+
+    .out-emit {
+      color: #ff6584;
+    }
+
+    .out-complete {
+      color: #43c6ac;
+    }
+
+    .out-error {
+      color: #ff4757;
+    }
+
+    .out-info {
+      color: #61afef;
+    }
+
+    .out-prompt {
+      color: var(--ink-faint);
+    }
+
+    /* ── Exercise Cards ───────────────────────── */
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .exercise-item {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+
+    .exercise-item:hover {
+      border-color: var(--brand);
+      background: rgba(108, 99, 255, .05);
+    }
+
+    .exercise-item.solved {
+      border-color: var(--success);
+    }
+
+    .ex-num {
+      width: 30px;
+      height: 30px;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: .78rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .exercise-item.solved .ex-num {
+      background: var(--success);
+      color: #001c18;
+    }
+
+    .ex-body {
+      flex: 1;
+    }
+
+    .ex-title {
+      font-size: .88rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .ex-desc {
+      font-size: .78rem;
+      color: var(--ink-dim);
+      line-height: 1.5;
+    }
+
+    .ex-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .tag {
+      font-size: .68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .tag-easy {
+      background: rgba(67, 198, 172, .15);
+      color: var(--success);
+    }
+
+    .tag-medium {
+      background: rgba(247, 183, 49, .15);
+      color: var(--warn);
+    }
+
+    .tag-hard {
+      background: rgba(255, 71, 87, .15);
+      color: var(--danger);
+    }
+
+    .tag-op {
+      background: rgba(108, 99, 255, .15);
+      color: var(--brand);
+    }
+
+    /* ── Project Cards ────────────────────────── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--brand);
+    }
+
+    .project-card.b2:hover {
+      border-color: var(--brand2);
+    }
+
+    .project-card.b3:hover {
+      border-color: var(--brand3);
+    }
+
+    .project-emoji {
+      font-size: 1.9rem;
+    }
+
+    .project-card h4 {
+      font-size: .93rem;
+      font-weight: 700;
+    }
+
+    .project-card p {
+      font-size: .78rem;
+      color: var(--ink-dim);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .project-stack {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .stack-pill {
+      font-size: .66rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .07);
+      color: var(--ink-dim);
+    }
+
+    .diff-label {
+      font-size: .72rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .diff-beg {
+      color: var(--success);
+    }
+
+    .diff-mid {
+      color: var(--warn);
+    }
+
+    .diff-adv {
+      color: var(--danger);
+    }
+
+    /* ── Level Filter Tabs ────────────────────── */
+    .level-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .level-tab {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--ink-dim);
+      font-size: .78rem;
+      cursor: pointer;
+      transition: all .18s;
+      font-weight: 600;
+    }
+
+    .level-tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    /* ── Study Timeline ───────────────────────── */
+    .study-timeline {
+      position: relative;
+      padding-left: 24px;
+      border-left: 2px solid var(--glass-border);
+      margin-top: 14px;
+    }
+
+    .t-item {
+      position: relative;
+      padding: 12px 0 12px 18px;
+    }
+
+    .t-item::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 17px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--brand);
+      border: 2px solid var(--bg);
+    }
+
+    .t-item.done::before {
+      background: var(--success);
+    }
+
+    .t-item.current::before {
+      background: var(--warn);
+      box-shadow: 0 0 0 4px rgba(247, 183, 49, .2);
+    }
+
+    .t-week {
+      font-size: .68rem;
+      font-weight: 800;
+      color: var(--brand);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .t-item.done .t-week {
+      color: var(--success);
+    }
+
+    .t-item.current .t-week {
+      color: var(--warn);
+    }
+
+    .t-item h5 {
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .t-item p {
+      font-size: .78rem;
+      color: var(--ink-dim);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    /* ── Interview QA ─────────────────────────── */
+    .qa-item {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .qa-question {
+      padding: 14px 18px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .86rem;
+      font-weight: 700;
+      gap: 10px;
+    }
+
+    .qa-question:hover {
+      background: var(--glass);
+    }
+
+    .qa-chevron {
+      flex-shrink: 0;
+      color: var(--ink-faint);
+      transition: transform .2s;
+    }
+
+    .qa-chevron.open {
+      transform: rotate(180deg);
+    }
+
+    .qa-answer {
+      display: none;
+      padding: 14px 18px;
+      font-size: .82rem;
+      color: var(--ink-dim);
+      line-height: 1.65;
+      border-top: 1px solid var(--glass-border);
+      background: rgba(108, 99, 255, .04);
+    }
+
+    .qa-answer.shown {
+      display: block;
+    }
+
+    /* ── Marble Simulator ─────────────────────── */
+    .marble-sim {
+      background: #0a0a14;
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .marble-row {
+      margin-bottom: 12px;
+    }
+
+    .marble-label {
+      font-size: .72rem;
+      color: var(--ink-faint);
+      font-family: monospace;
+      margin-bottom: 5px;
+    }
+
+    .marble-track {
+      background: var(--bg3);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      height: 44px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .marble-ball {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      font-weight: 800;
+      color: #fff;
+      left: -35px;
+      top: 7px;
+    }
+
+    .track-id {
+      position: absolute;
+      left: 8px;
+      font-size: .66rem;
+      color: var(--ink-faint);
+      font-family: monospace;
+      pointer-events: none;
+    }
+
+    /* ── Operator Rows ────────────────────────── */
+    .op-tabs {
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .op-tab {
+      padding: 7px 16px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--ink-dim);
+      font-size: .76rem;
+      cursor: pointer;
+      transition: all .18s;
+      font-weight: 600;
+    }
+
+    .op-tab:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .op-tab:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
+    .op-tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    .op-panel {
+      display: none;
+    }
+
+    .op-panel.active {
+      display: block;
+    }
+
+    .op-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .op-row:last-child {
+      border-bottom: none;
+    }
+
+    .op-name {
+      font-family: 'Fira Code', monospace;
+      font-size: .84rem;
+      color: var(--brand2);
+      font-weight: 700;
+    }
+
+    .op-desc {
+      font-size: .81rem;
+      color: var(--ink-dim);
+      line-height: 1.55;
+    }
+
+    /* ── Flow Diagram ─────────────────────────── */
+    .flow-visual {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .flow-box {
+      background: var(--bg3);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: .76rem;
+      font-family: monospace;
+      color: var(--brand);
+    }
+
+    .flow-arr {
+      color: var(--ink-faint);
+      font-size: 1rem;
+    }
+
+    /* ── Progress Bar ─────────────────────────── */
+    .progress-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--bg4);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--brand);
+      transition: width .4s;
+    }
+
+    .progress-fill.g {
+      background: var(--success);
+    }
+
+    .progress-fill.o {
+      background: var(--warn);
+    }
+
+    .progress-pct {
+      font-size: .75rem;
+      color: var(--ink-dim);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Misc */
+    h2,
+    h3 {
+      font-weight: 700;
+    }
+
+    strong {
+      color: var(--ink);
+    }
+
+    a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      scroll-margin-top: 80px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--glass-border);
+      border-radius: 3px;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="logo-icon">JP</div>
-      <a href="/" class="nav-item" title="Inicio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </a>
-      <a href="/entrevista" class="nav-item active" title="Ruta">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-      </a>
-      <a href="/entrevista/docs" class="nav-item" title="Documentación">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-        </svg>
-      </a>
-      <a href="/entrevista/ia" class="nav-item" title="IA">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="19" cy="12" r="1" />
-          <circle cx="5" cy="12" r="1" />
-        </svg>
-      </a>
-      <a href="/entrevista/mock" class="nav-item" title="Mock">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-          <path d="M12 6v6l4 2" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6" />
-          <polyline points="8 6 2 12 8 18" />
-        </svg>
-      </a>
 
-      <div class="sidebar-footer">
-        <div class="nav-item" id="btnConfig" title="Configuracion">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-        </div>
+  <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+  <aside class="sidebar">
+    <div class="logo-icon">JP</div>
+    <a href="/" class="nav-item" title="Inicio">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    </a>
+    <a href="#" class="nav-item active" title="Ruta WebFlux">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      </svg>
+    </a>
+    <a href="#consola" class="nav-item" title="Consola Reactiva">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="4 17 10 11 4 5" />
+        <line x1="12" y1="19" x2="20" y2="19" />
+      </svg>
+    </a>
+    <a href="#retos" class="nav-item" title="Retos">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+      </svg>
+    </a>
+    <a href="#proyectos" class="nav-item" title="Proyectos">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+      </svg>
+    </a>
+    <a href="#entrevista" class="nav-item" title="Entrevista QA">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    </a>
+    <div class="sidebar-footer">
+      <div class="nav-item" id="btnConfig" title="Configuración">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
       </div>
-    </aside>
+    </div>
+  </aside>
 
-    <main class="main-content">
-      <header class="top-header">
-        <div class="user-info">
-          <h2>Ruta de Entrevista</h2>
-          <p>Plan intensivo de aprendizaje Java avanzado + POO + Arquitectura</p>
-        </div>
-      </header>
-
-      <div style="max-width: 1040px; margin: 0 auto; width: 100%;">
-        <section class="dashboard-card">
-          <div class="card-title">
-            <span>Ruta de entrevista: Java Avanzado + POO + Arquitectura</span>
-            <span class="status-pill">Documentacion</span>
-          </div>
-          <p>Plan intensivo para practicar conceptos de POO, patrones de diseño y arquitectura de sistemas en Java.</p>
-
-          <!-- CAPÍTULO 1: El Despertar Reactivo -->
-          <section style="margin-top: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-              <h2 style="color: var(--brand); margin: 0;">🚀 Capítulo 1: El Despertar Reactivo</h2>
-              <div class="search-bar" style="width: 350px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-                <input type="text" id="reactiveSearch" placeholder="¿Qué quieres aprender hoy?">
-              </div>
-            </div>
-
-            <div class="pedagogical-box">
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center;">
-                <div>
-                  <h3 style="color: var(--brand);">La Analogía del Mesero 🍽️</h3>
-                  <p style="line-height: 1.6;">
-                    Imagina un restaurante con <strong>un solo mesero</strong> (Event Loop).
-                    <br><br>
-                    <strong>Modelo Imperativo:</strong> El mesero toma tu pedido, va a la cocina y <strong>espera</strong> a que la comida esté lista.
-                    <br><br>
-                    <strong>Modelo Reactivo:</strong> El mesero toma tu pedido, lo deja en la cocina y <strong>vuelve inmediatamente</strong> a atender otra mesa.
-                  </p>
-                  <div style="display: flex; gap: 10px; margin-top: 15px;">
-                      <button class="action" onclick="openImgModal('https://res.cloudinary.com/drkzojdxq/image/upload/v1773467088/f01c31f6-0b03-485f-959c-426a4445d467.png')">
-                        Ver Flujo Event Loop
-                      </button>
-                      <button class="action" style="background: var(--brand2);" onclick="openImgModal('https://res.cloudinary.com/drkzojdxq/image/upload/v1773453284/e1b4b45e-bada-45d8-b6fa-12e1f9d5090e.png')">
-                        Ver Context Shift
-                      </button>
-                  </div>
-                </div>
-                <div class="reactive-visual">
-                  <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/Paradigmas_ljqxlw.png" alt="Analogía del Mesero" class="img-trigger" onclick="openImgModal(this.src)">
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Modal para Imágenes -->
-          <div id="imageModal" class="img-modal" onclick="closeImgModal()">
-            <span class="img-modal-close" onclick="closeImgModal()">&times;</span>
-            <img class="img-modal-content" id="modalImg">
-          </div>
-
-          <!-- CAPÍTULO 2: El Glosario de Poder -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand2);">📚 Capítulo 2: El Glosario de Poder</h3>
-            <div class="glossary-grid">
-              <article class="glossary-item">
-                <h5>Flux & Mono</h5>
-                <p><strong>Mono:</strong> Una promesa de 0 o 1 elemento.<br><strong>Flux:</strong> Un flujo de 0 a N elementos.</p>
-              </article>
-              <article class="glossary-item">
-                <h5>Backpressure</h5>
-                <p>El consumidor le dice al productor: "Oye, vas muy rápido, envíame solo 5 elementos por ahora".</p>
-              </article>
-              <article class="glossary-item">
-                <h5>Schedulers</h5>
-                <p>Los directores de orquesta. Deciden en qué "pool" de hilos se ejecuta cada tarea.</p>
-              </article>
-              <article class="glossary-item">
-                <h5>Cold vs Hot</h5>
-                <p><strong>Cold:</strong> Empieza cuando te suscribes (Netflix).<br><strong>Hot:</strong> Emite datos siempre (Radio).</p>
-              </article>
-            </div>
-          </section>
-
-          <!-- Checkpoint interactivo 1 -->
-          <div class="checkpoint-card" id="checkpoint1">
-            <div class="checkpoint-header">
-              <span class="checkpoint-icon">🛑</span>
-              <h4 style="margin: 0; color: #1e293b;">¡Alto ahí! El error más común</h4>
-            </div>
-            <p>¿Qué pasa si usas <code>.block()</code> dentro de un controlador de WebFlux?</p>
-            <button class="reveal-btn" onclick="revealCheckpoint('checkpoint1')">Ver respuesta</button>
-            <div class="checkpoint-answer">
-              <div class="pitfall-card">
-                <h5>⚠️ ¡Catástrofe!</h5>
-                <p>Estás deteniendo el Event Loop. Como solo hay pocos hilos, si bloqueas uno, ¡toda la aplicación dejará de responder a nuevos usuarios!</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- CAPÍTULO 3: La Tubería Mágica (Pipeline) -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand);">🏗️ Capítulo 3: La Tubería Mágica</h3>
-            <div class="reactive-visual">
-              <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/blocking_vs_non_blocking_flow_girchu.png" alt="Pipeline Reactivo">
-              <div class="visual-caption">El flujo de datos: Filtrado, Transformación y Entrega.</div>
-            </div>
-            
-            <div class="comparative-grid" style="margin-top: 25px;">
-              <article class="dashboard-card" style="border-top: 4px solid var(--brand2);">
-                <h4>map()</h4>
-                <p>Transforma el dato de forma síncrona. Como cambiar el color de una pelota.</p>
-                <pre class="code">.map(user -> user.getName())</pre>
-              </article>
-              <article class="dashboard-card" style="border-top: 4px solid var(--brand);">
-                <h4>flatMap()</h4>
-                <p>Inicia una tarea asíncrona (como ir a la DB) y espera el resultado sin bloquear.</p>
-                <pre class="code">.flatMap(id -> db.find(id))</pre>
-              </article>
-            </div>
-          </section>
-
-          <!-- Diferencia de Rendimiento (Mantenemos la comparativa interactiva por su valor pedagógico) -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand2);">¿Por qué molestarse? Rendimiento Real</h3>
-            <div class="comparison-toggle-card">
-              <div class="toggle-header">
-                <span>Simulación de Red: 3 Tareas x 1s latencia</span>
-                <div class="toggle-switch">
-                  <button class="toggle-btn active" data-view="imperative">Imperativo</button>
-                  <button class="toggle-btn" data-view="reactive">Reactivo</button>
-                </div>
-              </div>
-              <div class="comparison-content">
-                <div class="code-view active" id="view-imperative">
-                  <pre class="code">for (String d : datos) { Thread.sleep(1000); }</pre>
-                  <div class="tip-card"><strong>Bloqueo:</strong> Hilo dormido por 3s. No hace nada productivo.</div>
-                </div>
-                <div class="code-view" id="view-reactive">
-                  <pre class="code">Flux.fromIterable(datos).delayElements(Duration.ofSeconds(1))</pre>
-                  <div class="tip-card"><strong>No Bloqueo:</strong> El hilo queda libre para atender a otros 10,000 usuarios mientras Reactor espera.</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- CAPÍTULO 4: Trinity Reactive Workshop -->
-          <section style="margin-top: 40px; border-top: 2px solid var(--glass-border); padding-top: 30px;">
-            <h3 style="color: var(--brand);">⚔️ Capítulo 4: Trinity Reactive Workshop</h3>
-            <p>Es hora de ensuciarse las manos. Sigue estos pasos para dominar el código:</p>
-            
-            <div class="section-grid">
-              <div class="dashboard-card">
-                <h5>1. El Escenario 🏗️</h5>
-                <p>Abre <code>WorkshopService.java</code>. Verás métodos con <code>TODO</code>. Tu misión es transformarlos de imperativos a reactivos.</p>
-              </div>
-              <div class="dashboard-card">
-                <h5>2. El Pool Especial (I/O) 🧱</h5>
-                <p>Si tienes una base de datos vieja (JDBC) que bloquea, usa esto:</p>
-                <pre class="code" style="font-size: 0.75rem;">Mono.fromCallable(() -> {
-  return jdbcRepo.getData(); 
-})
-.subscribeOn(Schedulers.boundedElastic())</pre>
-              </div>
-            </div>
-
-            <div class="dependency-card" style="margin-top: 20px;">
-              <h5>Comando Mágico de Validación 🪄</h5>
-              <p>Ejecuta esto en tu terminal para saber si lo lograste:</p>
-              <pre style="color: #58a6ff;">.\gradlew.bat test  # Windows</pre>
-            </div>
-          </section>
-
-          <!-- CAPÍTULO 5: La Chispa de la Vida (.subscribe) -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand);">✨ Capítulo 5: La Chispa de la Vida (.subscribe)</h3>
-            <div class="pedagogical-box" style="border-left: 4px solid var(--brand2);">
-              <p>En WebFlux, un flujo es <strong>Lazy</strong> (perezoso). Esto significa que el código no se ejecuta hasta que alguien pide los datos.</p>
-              <div class="comparative-grid">
-                <article class="dashboard-card">
-                  <h5>Sin .subscribe() 🌑</h5>
-                  <p>Es como una manguera conectada al grifo, pero el grifo está <strong>cerrado</strong>. El agua no fluye.</p>
-                  <pre class="code" style="opacity: 0.6;">Flux.just("Dato").map(v -> v.upper()); // No pasa nada</pre>
-                </article>
-                <article class="dashboard-card">
-                  <h5>Con .subscribe() 🌟</h5>
-                  <p>Es abrir el grifo. En ese momento, los datos empiezan a viajar por la tubería.</p>
-                  <pre class="code">flux.subscribe(value -> System.out.println(value));</pre>
-                </article>
-              </div>
-              <p style="margin-top: 15px; font-size: 0.9rem; color: var(--ink-dim);"><em>Tip: En Spring WebFlux (WebClient/Controllers), el framework suele hacer el .subscribe() por ti al retornar un Mono o Flux.</em></p>
-            </div>
-          </section>
-
-          <!-- CAPÍTULO 6: El Arte de No Ahogarse (Backpressure) -->
-          <section style="margin-top: 40px;">
-            <h3 style="color: var(--brand2);">🌊 Capítulo 6: El Arte de No Ahogarse (Backpressure)</h3>
-            <div class="pedagogical-box">
-              <p>¿Qué pasa si un servidor nos envía 1,000,000 de registros por segundo pero nosotros solo podemos procesar 100?</p>
-              <div class="pitfall-card" style="background: rgba(255,255,255,0.5); border: 1px solid var(--brand);">
-                <p><strong>El Backpressure</strong> es el mecanismo por el cual el <strong>consumidor</strong> controla la velocidad de emisión del productor, evitando sobrecargas de memoria.</p>
-              </div>
-              
-              <div class="section-grid" style="margin-top: 20px;">
-                <article class="dashboard-card">
-                  <h6>Controlando la Tasa</h6>
-                  <p>Podemos limitar cuántos elementos pedimos a la vez:</p>
-                  <pre class="code">flux.limitRate(10) // Pide de 10 en 10
-    .subscribe(data -> process(data));</pre>
-                </article>
-                <article class="dashboard-card">
-                  <h6>Estrategias de Desborde</h6>
-                  <p>¿Qué hacer si hay demasiados datos?</p>
-                  <pre class="code">.onBackpressureBuffer(100) // Guarda 100 en memoria
-.onBackpressureDrop()      // Descarta el exceso</pre>
-                </article>
-              </div>
-            </div>
-          </section>
-
-          <!-- Checkpoint interactivo 2 -->
-          <div class="checkpoint-card" id="checkpoint2">
-            <div class="checkpoint-header">
-              <span class="checkpoint-icon">🤔</span>
-              <h4 style="margin: 0; color: #1e293b;">Mini-Reto: ¿Qué operador usarías?</h4>
-            </div>
-            <p>Si necesitas combinar los datos de dos APIs diferentes para crear un solo objeto, ¿cuál usarías?</p>
-            <button class="reveal-btn" onclick="revealCheckpoint('checkpoint2')">Ver respuesta</button>
-            <div class="checkpoint-answer">
-              <p><strong>Respuesta:</strong> <code>Flux.zip()</code> o <code>Mono.zip()</code>. <br><br> Es como una cremallera: junta los elementos de ambos flujos en parejas.</p>
-            </div>
-          </div>
-
-        </section>
-      </div>
-
-      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
-        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
-      </footer>
-    </main>
+  <!-- ═══════════════════ IMAGE MODAL ═══════════════════ -->
+  <div id="imageModal" class="img-modal" onclick="closeImgModal()">
+    <span class="img-modal-close" onclick="closeImgModal()">✕</span>
+    <img class="img-modal-content" id="modalImg" src="" alt="">
   </div>
 
-  <script src="/index.js"></script>
+  <!-- ═══════════════════ MAIN ═══════════════════ -->
+  <main class="main-content">
+    <header class="top-header">
+      <div class="user-info">
+        <h2>Ruta de Entrevista</h2>
+      </div>
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input type="text" id="reactiveSearch" placeholder="Buscar concepto...">
+      </div>
+    </header>
+
+    <div class="page-wrap" style="padding-top:32px;">
+      <!-- ═══════ CAPÍTULO 1: DESPERTAR REACTIVO ════════ -->
+      <section id="cap1">
+        <div class="chapter-header">
+          <span class="ch-badge">CAP 1</span>
+          <h2>🚀 El Despertar Reactivo</h2>
+          <span class="status-pill">Fundamentos</span>
+        </div>
+
+        <div class="pedagogical-box">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;">
+            <div>
+              <h3 style="color:var(--brand);">La Analogía del Mesero 🍽️</h3>
+              <p style="line-height:1.7;margin-top:10px;font-size:.875rem;">
+                Imagina un restaurante con <strong>un solo mesero</strong> (Event Loop).<br><br>
+                <strong style="color:var(--brand2);">Modelo Imperativo:</strong> El mesero toma tu pedido, va a la
+                cocina y <strong>espera</strong> a que la comida esté lista. Nadie más es atendido.<br><br>
+                <strong style="color:var(--success);">Modelo Reactivo:</strong> El mesero toma tu pedido, lo deja en la
+                cocina y <strong>vuelve inmediatamente</strong> a atender otra mesa. Cuando la cocina avisa, él entrega.
+              </p>
+              <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+                <button class="reveal-btn"
+                  onclick="openImgModal('https://res.cloudinary.com/drkzojdxq/image/upload/v1773467088/f01c31f6-0b03-485f-959c-426a4445d467.png')">
+                  📊 Ver Flujo Event Loop
+                </button>
+                <button class="reveal-btn b2"
+                  onclick="openImgModal('https://res.cloudinary.com/drkzojdxq/image/upload/v1773453284/e1b4b45e-bada-45d8-b6fa-12e1f9d5090e.png')">
+                  🔄 Ver Context Shift
+                </button>
+              </div>
+            </div>
+            <div class="reactive-visual">
+              <img src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/Paradigmas_ljqxlw.png"
+                alt="Paradigmas: Imperativo vs Reactivo" onclick="openImgModal(this.src)" title="Click para ampliar">
+              <div class="visual-caption">Imperativo vs Reactivo — hilo bloqueante vs event loop libre</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EVENT LOOP — imágenes explicativas con contexto -->
+        <div class="chapter-header" style="margin-top:30px;">
+          <span class="ch-badge b2">EVENT LOOP</span>
+          <h3>¿Qué es el Event Loop y cómo funciona?</h3>
+        </div>
+
+        <div class="pedagogical-box" style="margin-bottom:16px;">
+          <p style="font-size:.875rem;line-height:1.7;margin-bottom:16px;">
+            El <strong>Event Loop</strong> es el corazón del modelo reactivo. Es un único hilo que:
+            <br>1. Recibe eventos (requests, respuestas de DB, I/O)
+            <br>2. Los encola en un <strong>Event Queue</strong>
+            <br>3. Los procesa uno a uno, <em>sin bloquearse nunca</em>
+            <br>4. Delega las operaciones lentas (I/O, red, DB) a workers y continúa
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+            <div>
+              <p
+                style="font-size:.76rem;color:var(--brand);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">
+                Flujo del Event Loop</p>
+              <div class="reactive-visual">
+                <img
+                  src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773467088/f01c31f6-0b03-485f-959c-426a4445d467.png"
+                  alt="Flujo Event Loop" onclick="openImgModal(this.src)" title="Click para ampliar — Flujo Event Loop">
+              </div>
+              <div class="visual-caption">El Event Loop procesa la cola sin bloquearse. Cada operación I/O se delega y
+                el hilo queda libre.</div>
+            </div>
+            <div>
+              <p
+                style="font-size:.76rem;color:var(--brand2);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">
+                Context Switch vs Event-Driven</p>
+              <div class="reactive-visual">
+                <img
+                  src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773453284/e1b4b45e-bada-45d8-b6fa-12e1f9d5090e.png"
+                  alt="Context Shift" onclick="openImgModal(this.src)" title="Click para ampliar — Context Switch">
+              </div>
+              <div class="visual-caption">Modelo imperativo: muchos hilos, muchos context-switches, CPU desperdiciada
+                esperando. Reactivo: un hilo, cero bloqueos.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flujo pipeline -->
+        <div style="margin-top:18px;">
+          <div class="flow-visual">
+            <p style="font-size:.74rem;color:var(--ink-faint);margin-bottom:12px;">Pipeline Reactivo — datos fluyen a
+              través de operadores</p>
+            <div class="flow-row">
+              <div class="flow-box">Flux.from(DB)</div>
+              <span class="flow-arr">→</span>
+              <div class="flow-box">.filter(x &gt; 0)</div>
+              <span class="flow-arr">→</span>
+              <div class="flow-box">.map(x × 2)</div>
+              <span class="flow-arr">→</span>
+              <div class="flow-box">.flatMap(save)</div>
+              <span class="flow-arr">→</span>
+              <div class="flow-box">.subscribe()</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blocking vs Non-blocking visual -->
+        <div style="margin-top:18px;" class="reactive-visual">
+          <img
+            src="https://res.cloudinary.com/drkzojdxq/image/upload/v1773452786/blocking_vs_non_blocking_flow_girchu.png"
+            alt="Blocking vs Non-Blocking Flow" onclick="openImgModal(this.src)">
+          <div class="visual-caption">El flujo de datos: Filtrado → Transformación → Entrega. Nótese que en reactivo el
+            hilo nunca queda "durmiendo".</div>
+        </div>
+
+        <!-- Checkpoint 1 -->
+        <div class="checkpoint-card" id="checkpoint1" style="margin-top:22px;">
+          <div class="checkpoint-header">
+            <span class="checkpoint-icon">🛑</span>
+            <h4>¡Alto ahí! El error más común en WebFlux</h4>
+          </div>
+          <p>¿Qué pasa si usas <code>.block()</code> dentro de un controlador de WebFlux?</p>
+          <button class="reveal-btn" onclick="toggleAnswer('checkpoint1')">Ver respuesta</button>
+          <div class="checkpoint-answer">
+            <div class="pitfall-card">
+              <h5>⚠️ ¡Catástrofe total!</h5>
+              <p>Estás deteniendo el Event Loop. Como solo hay pocos hilos Netty (CPU × 2), si bloqueas uno, ¡toda la
+                aplicación deja de responder a nuevos usuarios!</p>
+            </div>
+            <pre
+              class="code"><span class="cm">// ❌ NUNCA en WebFlux:</span>
+<span class="kw">public</span> String getDatos() { <span class="kw">return</span> service.<span class="fn">getData</span>().<span class="fn">block</span>(); }
+
+<span class="cm">// ✅ Devuelve el Mono/Flux directamente:</span>
+<span class="kw">public</span> Mono&lt;String&gt; getDatos() { <span class="kw">return</span> service.<span class="fn">getData</span>(); }</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════ CAPÍTULO 2: GLOSARIO ════════════════ -->
+      <section id="cap2">
+        <div class="chapter-header">
+          <span class="ch-badge b2">CAP 2</span>
+          <h2>📚 El Glosario de Poder</h2>
+        </div>
+
+        <div class="glossary-grid">
+          <article class="glossary-item">
+            <h5>Flux &lt;T&gt;</h5>
+            <p><strong>0 a N elementos.</strong> Como un río de datos. Emite con <code>onNext</code>, termina con
+              <code>onComplete</code> o <code>onError</code>.
+            </p>
+            <pre class="code" style="margin-top:6px;font-size:.72rem;">Flux.just(1,2,3)</pre>
+          </article>
+          <article class="glossary-item">
+            <h5>Mono &lt;T&gt;</h5>
+            <p><strong>0 ó 1 elemento.</strong> La promesa reactiva. Ideal para operaciones CRUD que devuelven un solo
+              objeto.</p>
+            <pre class="code" style="margin-top:6px;font-size:.72rem;">Mono.just("hola")</pre>
+          </article>
+          <article class="glossary-item">
+            <h5>Backpressure</h5>
+            <p>El consumidor controla al productor: <em>"Oye, envíame solo 10 elementos por ahora"</em>. Evita OOM.</p>
+          </article>
+          <article class="glossary-item">
+            <h5>Schedulers</h5>
+            <p>Directores de orquesta. Deciden en qué pool de hilos se ejecuta cada tarea:
+              <code>boundedElastic()</code>, <code>parallel()</code>.
+            </p>
+          </article>
+          <article class="glossary-item">
+            <h5>Cold Observable</h5>
+            <p>Empieza desde el principio para cada suscriptor. Como Netflix: si llegas tarde, la película empieza desde
+              el inicio.</p>
+          </article>
+          <article class="glossary-item">
+            <h5>Hot Observable</h5>
+            <p>Emite datos siempre, independiente de suscriptores. Como la radio: llegas cuando llegas y escuchas lo
+              actual.</p>
+          </article>
+          <article class="glossary-item">
+            <h5>subscribeOn()</h5>
+            <p>Define el scheduler para el <strong>origen del flujo</strong>. Afecta todo hacia arriba. Úsalo con código
+              bloqueante.</p>
+          </article>
+          <article class="glossary-item">
+            <h5>publishOn()</h5>
+            <p>Cambia el scheduler para los operadores <strong>hacia abajo</strong>. Permite cambiar contexto a mitad
+              del pipeline.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════ CAPÍTULO 3: TUBERÍA MÁGICA ═══════════ -->
+      <section id="cap3">
+        <div class="chapter-header">
+          <span class="ch-badge">CAP 3</span>
+          <h2>🏗️ La Tubería Mágica — Operadores</h2>
+        </div>
+
+        <div class="op-tabs">
+          <button class="op-tab active" onclick="switchOpTab('transformacion',this)">Transformación</button>
+          <button class="op-tab" onclick="switchOpTab('filtracion',this)">Filtración</button>
+          <button class="op-tab" onclick="switchOpTab('combinacion',this)">Combinación</button>
+          <button class="op-tab" onclick="switchOpTab('errores',this)">Errores</button>
+        </div>
+
+        <div id="op-transformacion" class="op-panel active">
+          <div class="op-row">
+            <div class="op-name">map()</div>
+            <div class="op-desc">Transformación <strong>síncrona</strong> 1:1. Nunca genera nuevos flujos.
+              <pre class="code" style="font-size:.74rem;">.map(user -> user.<span class="fn">getName</span>())</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">flatMap()</div>
+            <div class="op-desc">Tarea <strong>asíncrona</strong>: devuelve un Publisher. Sin orden garantizado, máxima
+              concurrencia.
+              <pre class="code" style="font-size:.74rem;">.flatMap(id -> db.<span class="fn">find</span>(id))</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">concatMap()</div>
+            <div class="op-desc">Como flatMap pero <strong>mantiene el orden</strong>. Procesa uno a uno
+              secuencialmente.
+              <pre class="code"
+                style="font-size:.74rem;">.concatMap(id -> <span class="fn">processOrdered</span>(id))</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">switchMap()</div>
+            <div class="op-desc">Cancela el flujo anterior al llegar un nuevo elemento. Ideal para typeahead/búsqueda en
+              vivo.
+              <pre class="code" style="font-size:.74rem;">.switchMap(q -> api.<span class="fn">search</span>(q))</pre>
+            </div>
+          </div>
+        </div>
+
+        <div id="op-filtracion" class="op-panel">
+          <div class="op-row">
+            <div class="op-name">filter()</div>
+            <div class="op-desc">Solo pasan elementos que cumplan el predicado.
+              <pre class="code" style="font-size:.74rem;">.filter(x -> x > <span class="num">0</span>)</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">take(n)</div>
+            <div class="op-desc">Solo los primeros N elementos, luego cancela.
+              <pre class="code" style="font-size:.74rem;">.take(<span class="num">10</span>)</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">distinct()</div>
+            <div class="op-desc">Elimina duplicados. Cuidado con flujos infinitos (mantiene estado).
+              <pre class="code" style="font-size:.74rem;">.distinct()</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">debounce()</div>
+            <div class="op-desc">Espera X tiempo de silencio antes de emitir. Inputs de usuario.
+              <pre class="code"
+                style="font-size:.74rem;">.debounce(Duration.<span class="fn">ofMillis</span>(<span class="num">300</span>))</pre>
+            </div>
+          </div>
+        </div>
+
+        <div id="op-combinacion" class="op-panel">
+          <div class="op-row">
+            <div class="op-name">zip()</div>
+            <div class="op-desc">Combina N flujos en tuplas. Como una cremallera: espera uno de cada fuente.
+              <pre class="code" style="font-size:.74rem;">Mono.<span class="fn">zip</span>(getUserMono, getOrdersMono)
+     .map(t -> buildDto(t.getT1(), t.getT2()))</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">merge()</div>
+            <div class="op-desc">Fusiona N flujos sin esperar orden. Emite según van llegando.
+              <pre class="code" style="font-size:.74rem;">Flux.<span class="fn">merge</span>(stream1, stream2)</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">combineLatest()</div>
+            <div class="op-desc">Combina el último valor de cada fuente cada vez que alguna emite.
+              <pre class="code"
+                style="font-size:.74rem;">Flux.<span class="fn">combineLatest</span>(f1, f2, (a,b) -> a+b)</pre>
+            </div>
+          </div>
+        </div>
+
+        <div id="op-errores" class="op-panel">
+          <div class="op-row">
+            <div class="op-name">onErrorReturn()</div>
+            <div class="op-desc">Si hay error, devuelve un valor por defecto y el flujo completa normalmente.
+              <pre class="code"
+                style="font-size:.74rem;">.onErrorReturn(User.<span class="fn">defaultUser</span>())</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">onErrorResume()</div>
+            <div class="op-desc">Si hay error, continúa con un flujo alternativo (caché, fallback).
+              <pre class="code"
+                style="font-size:.74rem;">.onErrorResume(e -> cache.<span class="fn">get</span>(key))</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">retry(n)</div>
+            <div class="op-desc">Reinicia la suscripción N veces ante error. Errores transitorios de red.
+              <pre class="code"
+                style="font-size:.74rem;">.retry(<span class="num">3</span>).onErrorReturn(fallback)</pre>
+            </div>
+          </div>
+          <div class="op-row">
+            <div class="op-name">doOnError()</div>
+            <div class="op-desc">Side-effect al error: logging, métricas. No modifica el flujo.
+              <pre class="code"
+                style="font-size:.74rem;">.doOnError(e -> log.<span class="fn">error</span>(<span class="str">"Error"</span>, e))</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- comparativa map vs flatMap -->
+        <div class="comparative-grid" style="margin-top:20px;">
+          <article class="dashboard-card" style="border-top:3px solid var(--brand2);">
+            <h4 style="color:var(--brand2);">map()</h4>
+            <p style="font-size:.83rem;color:var(--ink-dim);">Transforma el dato de forma síncrona. Como cambiar el
+              color de una pelota.</p>
+            <pre class="code">.map(user -> user.<span class="fn">getName</span>())</pre>
+          </article>
+          <article class="dashboard-card" style="border-top:3px solid var(--brand);">
+            <h4 style="color:var(--brand);">flatMap()</h4>
+            <p style="font-size:.83rem;color:var(--ink-dim);">Inicia una tarea asíncrona (DB, HTTP) y espera el
+              resultado sin bloquear.</p>
+            <pre class="code">.flatMap(id -> db.<span class="fn">find</span>(id))</pre>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════ CAPÍTULO 4: RENDIMIENTO ══════════════ -->
+      <section id="cap4">
+        <div class="chapter-header">
+          <span class="ch-badge b3">CAP 4</span>
+          <h2>⚡ Rendimiento Real — ¿Por qué molestarse?</h2>
+        </div>
+
+        <div class="comparison-toggle-card">
+          <div class="toggle-header">
+            <span>Simulación: 100 requests × 200ms latencia cada una</span>
+            <div class="toggle-switch">
+              <button class="toggle-btn active" data-view="imperative" onclick="switchToggle(this)">Imperativo</button>
+              <button class="toggle-btn" data-view="reactive" onclick="switchToggle(this)">Reactivo</button>
+            </div>
+          </div>
+          <div class="code-view active" id="view-imperative">
+            <pre class="code"><span class="cm">// ❌ Imperativo — 1 hilo por request</span>
+<span class="cm">// 100 × 200ms = 20 segundos en secuencia</span>
+<span class="cm">// 100 hilos durmiendo consumiendo ~50MB RAM</span>
+<span class="kw">for</span> (String id : ids) {
+    User user = userService.<span class="fn">findById</span>(id); <span class="cm">// bloquea 200ms</span>
+    result.<span class="fn">add</span>(user);
+}</pre>
+            <div class="tip-card"><strong style="color:var(--danger);">🔴 Problema:</strong> Cada hilo queda dormido
+              esperando. Bajo carga: thread pool agotado → OutOfMemoryError.</div>
+          </div>
+          <div class="code-view" id="view-reactive">
+            <pre class="code"><span class="cm">// ✅ Reactivo — 1-2 threads, 1000+ requests concurrentes</span>
+<span class="cm">// 100 × 200ms ≈ 200ms totales (paralelo)</span>
+Flux.<span class="fn">fromIterable</span>(ids)
+    .<span class="fn">flatMap</span>(id -> userService.<span class="fn">findById</span>(id))
+    .<span class="fn">collectList</span>();
+<span class="cm">// El hilo queda libre durante el I/O</span></pre>
+            <div class="tip-card"><strong style="color:var(--success);">🟢 Ganancia:</strong> El mismo hilo atiende
+              miles de usuarios. Throughput hasta 10× mayor con menos memoria.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════ CAPÍTULO 5: SUBSCRIBE ════════════════ -->
+      <section id="cap5">
+        <div class="chapter-header">
+          <span class="ch-badge">CAP 5</span>
+          <h2>✨ La Chispa de la Vida — .subscribe()</h2>
+        </div>
+
+        <div class="pedagogical-box" style="border-left:4px solid var(--brand2);padding-left:20px;">
+          <p style="font-size:.875rem;">En WebFlux, un flujo es <strong>Lazy</strong> (perezoso). El código no se
+            ejecuta hasta que alguien se suscribe.</p>
+          <div class="comparative-grid" style="margin-top:16px;">
+            <article class="dashboard-card">
+              <h5 style="color:var(--ink-dim);">Sin .subscribe() 🌑</h5>
+              <p style="font-size:.82rem;color:var(--ink-dim);">Es como una manguera conectada al grifo, pero el grifo
+                está <strong>cerrado</strong>. El agua no fluye.</p>
+              <pre class="code"
+                style="opacity:.6;">Flux.<span class="fn">just</span>(<span class="str">"Dato"</span>).<span class="fn">map</span>(v -> v.upper()); <span class="cm">// nada</span></pre>
+            </article>
+            <article class="dashboard-card">
+              <h5 style="color:var(--success);">Con .subscribe() 🌟</h5>
+              <p style="font-size:.82rem;color:var(--ink-dim);">Abrir el grifo. En ese momento los datos empiezan a
+                viajar por la tubería.</p>
+              <pre
+                class="code">flux.<span class="fn">subscribe</span>(v -> System.out.<span class="fn">println</span>(v));</pre>
+            </article>
+          </div>
+          <p style="margin-top:14px;font-size:.82rem;color:var(--ink-dim);">
+            <em>💡 En Spring WebFlux, el framework hace el <code>.subscribe()</code> por ti cuando retornas un Mono o
+              Flux desde un controller.</em>
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════ CAPÍTULO 6: BACKPRESSURE ═════════════ -->
+      <section id="cap6">
+        <div class="chapter-header">
+          <span class="ch-badge b2">CAP 6</span>
+          <h2>🌊 El Arte de No Ahogarse — Backpressure</h2>
+        </div>
+
+        <div class="pedagogical-box">
+          <p style="font-size:.875rem;">¿Qué pasa si un servidor envía <strong>1.000.000 registros/seg</strong> pero
+            solo puedes procesar 100?</p>
+          <div
+            style="background:rgba(255,255,255,.04);border:1px solid var(--brand);border-radius:10px;padding:14px;margin-top:12px;font-size:.84rem;">
+            <strong>Backpressure</strong> es el mecanismo por el cual el <strong>consumidor</strong> controla la
+            velocidad del productor, evitando desbordamiento de memoria.
+          </div>
+          <div class="section-grid" style="margin-top:18px;">
+            <article class="dashboard-card">
+              <h5 style="margin-bottom:8px;">Controlando la tasa</h5>
+              <pre class="code">flux.<span class="fn">limitRate</span>(<span class="num">10</span>) <span class="cm">// pide de 10 en 10</span>
+    .<span class="fn">subscribe</span>(data -> <span class="fn">process</span>(data));</pre>
+            </article>
+            <article class="dashboard-card">
+              <h5 style="margin-bottom:8px;">Estrategias de desborde</h5>
+              <pre class="code">.<span class="fn">onBackpressureBuffer</span>(<span class="num">100</span>) <span class="cm">// buffer</span>
+.<span class="fn">onBackpressureDrop</span>()       <span class="cm">// descarta</span>
+.<span class="fn">onBackpressureLatest</span>()     <span class="cm">// solo último</span></pre>
+            </article>
+          </div>
+        </div>
+
+        <!-- Checkpoint 2 -->
+        <div class="checkpoint-card" id="checkpoint2" style="margin-top:20px;">
+          <div class="checkpoint-header">
+            <span class="checkpoint-icon">🤔</span>
+            <h4>Mini-Reto: ¿Qué operador usarías?</h4>
+          </div>
+          <p>Necesitas combinar datos de dos APIs diferentes para construir un único DTO. ¿Cuál usarías y cómo?</p>
+          <button class="reveal-btn" onclick="toggleAnswer('checkpoint2')">Ver respuesta</button>
+          <div class="checkpoint-answer">
+            <p><strong>Respuesta: <code>Mono.zip()</code></strong> — como una cremallera, junta elementos de ambos
+              flujos en una pareja.</p>
+            <pre
+              class="code">Mono.<span class="fn">zip</span>(
+    userRepo.<span class="fn">findById</span>(userId),
+    orderRepo.<span class="fn">findByUser</span>(userId).<span class="fn">collectList</span>()
+).<span class="fn">map</span>(tuple -> UserDto.<span class="fn">of</span>(tuple.<span class="fn">getT1</span>(), tuple.<span class="fn">getT2</span>()));</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════ CAPÍTULO 7: WORKSHOP ═════════════════ -->
+      <section id="cap7">
+        <div class="chapter-header">
+          <span class="ch-badge b3">CAP 7</span>
+          <h2>⚔️ Trinity Reactive Workshop</h2>
+        </div>
+
+        <div class="section-grid">
+          <div class="dashboard-card">
+            <h5 style="margin-bottom:8px;">1. El Escenario 🏗️</h5>
+            <p style="font-size:.83rem;color:var(--ink-dim);">Abre <code>WorkshopService.java</code>. Verás métodos con
+              <code>TODO</code>. Tu misión: transformarlos de imperativos a reactivos.
+            </p>
+          </div>
+          <div class="dashboard-card">
+            <h5 style="margin-bottom:8px;">2. El Pool Especial (I/O) 🧱</h5>
+            <p style="font-size:.83rem;color:var(--ink-dim);">Si tienes una base de datos vieja (JDBC) que bloquea, usa
+              esto:</p>
+            <pre class="code" style="font-size:.72rem;">Mono.<span class="fn">fromCallable</span>(() -> {
+  <span class="kw">return</span> jdbcRepo.<span class="fn">getData</span>();
+}).<span class="fn">subscribeOn</span>(Schedulers.<span class="fn">boundedElastic</span>())</pre>
+          </div>
+        </div>
+
+        <div class="dependency-card" style="margin-top:16px;">
+          <h5>Comando Mágico de Validación 🪄</h5>
+          <pre style="color:#58a6ff;font-family:monospace;font-size:.82rem;">./gradlew test  # Linux/Mac
+.\gradlew.bat test  # Windows</pre>
+        </div>
+      </section>
+
+      <!-- ═══════════════ METODOLOGÍA DE ESTUDIO ═══════════════ -->
+      <section id="metodologia">
+        <div class="chapter-header">
+          <span class="ch-badge" style="background:var(--warn);color:#001c18;">MÉTODO</span>
+          <h2>🧠 Metodología de Estudio Óptima</h2>
+        </div>
+
+        <div class="section-grid" style="gap:16px;">
+          <div class="pedagogical-box green">
+            <h4 style="color:var(--success);margin-bottom:12px;">⚡ Ciclo de Aprendizaje (por concepto)</h4>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span
+                  style="background:var(--success);color:#001c18;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.72rem;flex-shrink:0;">1</span>
+                <div><strong style="font-size:.85rem;">Analogía (5 min)</strong>
+                  <p style="font-size:.78rem;color:var(--ink-dim);margin-top:2px;">Lee el concepto con la metáfora
+                    visual. Dibuja el marble diagram en papel.</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span
+                  style="background:var(--success);color:#001c18;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.72rem;flex-shrink:0;">2</span>
+                <div><strong style="font-size:.85rem;">Consola Reactiva (20 min)</strong>
+                  <p style="font-size:.78rem;color:var(--ink-dim);margin-top:2px;">Experimenta en la consola de esta
+                    página. Rompe el código intencionalmente.</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span
+                  style="background:var(--success);color:#001c18;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.72rem;flex-shrink:0;">3</span>
+                <div><strong style="font-size:.85rem;">Reto guiado (30 min)</strong>
+                  <p style="font-size:.78rem;color:var(--ink-dim);margin-top:2px;">Resuelve 2 ejercicios de la lista sin
+                    ver la solución. Compara después.</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span
+                  style="background:var(--success);color:#001c18;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.72rem;flex-shrink:0;">4</span>
+                <div><strong style="font-size:.85rem;">Feynman (10 min)</strong>
+                  <p style="font-size:.78rem;color:var(--ink-dim);margin-top:2px;">Explica el concepto en voz alta como
+                    si se lo enseñaras a alguien. Si no puedes, vuelve al paso 1.</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span
+                  style="background:var(--success);color:#001c18;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.72rem;flex-shrink:0;">5</span>
+                <div><strong style="font-size:.85rem;">Repaso espaciado</strong>
+                  <p style="font-size:.78rem;color:var(--ink-dim);margin-top:2px;">Revisar tras 1 día → 3 días → 1
+                    semana. El olvido es parte del aprendizaje.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="pedagogical-box yellow" style="margin-bottom:14px;">
+              <h4 style="color:var(--warn);margin-bottom:10px;">⚠️ Errores frecuentes en entrevistas</h4>
+              <p style="font-size:.83rem;line-height:1.75;color:var(--ink-dim);">
+                • Confundir <code>subscribeOn</code> vs <code>publishOn</code><br>
+                • Usar <code>.block()</code> en producción<br>
+                • No manejar errores en el pipeline<br>
+                • Olvidar que sin <code>.subscribe()</code> no pasa nada<br>
+                • Mezclar código bloqueante en threads reactivos<br>
+                • No distinguir Cold vs Hot observables
+              </p>
+            </div>
+
+            <div class="study-timeline">
+              <div class="t-item done">
+                <div class="t-week">Semana 1 ✓</div>
+                <h5>Fundamentos Reactivos</h5>
+                <p>Mono, Flux, subscribe(). Analogía del mesero. 2h teoría + 2h práctica.</p>
+              </div>
+              <div class="t-item current">
+                <div class="t-week">Semana 2 → Actual</div>
+                <h5>Operadores Core</h5>
+                <p>map, flatMap, filter, zip, merge. Marble diagrams. Retos nivel fácil.</p>
+              </div>
+              <div class="t-item">
+                <div class="t-week">Semana 3</div>
+                <h5>Schedulers y Threading</h5>
+                <p>subscribeOn vs publishOn. boundedElastic para JDBC. Tests reactivos con StepVerifier.</p>
+              </div>
+              <div class="t-item">
+                <div class="t-week">Semana 4</div>
+                <h5>Resiliencia y Errores</h5>
+                <p>retry, retryWhen, circuit breaker reactivo. WebClient con timeout y fallback.</p>
+              </div>
+              <div class="t-item">
+                <div class="t-week">Semana 5</div>
+                <h5>Proyecto Integrador</h5>
+                <p>API E-commerce reactiva. R2DBC, WebSocket, security reactivo.</p>
+              </div>
+              <div class="t-item">
+                <div class="t-week">Semana 6</div>
+                <h5>Mock Entrevistas</h5>
+                <p>Live coding con operadores. Patrones de diseño reactivos. Preguntas difíciles.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════ CONSOLA REACTIVA ════════════════ -->
+      <section id="consola">
+        <div class="chapter-header">
+          <span class="ch-badge b2">PRÁCTICA</span>
+          <h2>💻 Consola Reactiva Interactiva</h2>
+          <span class="status-pill green">Simulada en JS</span>
+        </div>
+        <p style="font-size:.845rem;color:var(--ink-dim);margin-bottom:4px;">Edita el código y ejecuta para ver los
+          datos fluyendo por el pipeline. Los comportamientos replican la API de Reactor Project.</p>
+
+        <div class="console-wrap">
+          <div class="console-topbar">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+            <span>ReactiveConsole.java — Simulador WebFlux</span>
+          </div>
+          <div class="console-tabs" id="consoleTabs">
+            <div class="c-tab active" onclick="selectTab(0,this)">01 · map</div>
+            <div class="c-tab" onclick="selectTab(1,this)">02 · filter+map</div>
+            <div class="c-tab" onclick="selectTab(2,this)">03 · flatMap</div>
+            <div class="c-tab" onclick="selectTab(3,this)">04 · zip</div>
+            <div class="c-tab" onclick="selectTab(4,this)">05 · error</div>
+            <div class="c-tab" onclick="selectTab(5,this)">🆓 Libre</div>
+          </div>
+          <div id="c-editor-0" class="c-editor active">
+            <textarea id="code-0" spellcheck="false">// Ejercicio 1: Transformación con map()
+// Tienes nombres en minúscula. Conviértelos a MAYÚSCULAS
+// y agrega el prefijo "User: "
+
+const nombres = ["alice", "bob", "carlos", "diana"];
+
+Flux.from(nombres)
+    .map(name => name.toUpperCase())
+    .map(name => "User: " + name)
+    .subscribe(val => emit(val));</textarea>
+          </div>
+          <div id="c-editor-1" class="c-editor">
+            <textarea id="code-1" spellcheck="false">// Ejercicio 2: filter() + map()
+// Filtra números pares y multiplícalos por 3
+
+const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+Flux.from(numeros)
+    .filter(n => n % 2 === 0)
+    .map(n => n * 3)
+    .subscribe(val => emit(val));</textarea>
+          </div>
+          <div id="c-editor-2" class="c-editor">
+            <textarea id="code-2" spellcheck="false">// Ejercicio 3: flatMap() simulando llamada asíncrona
+// Dado un ID, busca el nombre en la "base de datos"
+
+const userDB = { 1: "Ana", 2: "Bruno", 3: "Carmen" };
+const ids = [1, 2, 3];
+
+Flux.from(ids)
+    .flatMap(id => Mono.just(userDB[id] || "Unknown"))
+    .map(name => `Encontrado: ${name}`)
+    .subscribe(val => emit(val));</textarea>
+          </div>
+          <div id="c-editor-3" class="c-editor">
+            <textarea id="code-3" spellcheck="false">// Ejercicio 4: zip() - combinar dos fuentes
+// Combina nombre y rol de dos listas diferentes
+
+const nombres = ["Ana", "Bruno", "Carmen"];
+const roles   = ["Admin", "User",  "Editor"];
+
+Flux.zip(
+    Flux.from(nombres),
+    Flux.from(roles),
+    (nombre, rol) => `${nombre} → Rol: ${rol}`
+).subscribe(val => emit(val));</textarea>
+          </div>
+          <div id="c-editor-4" class="c-editor">
+            <textarea id="code-4" spellcheck="false">// Ejercicio 5: Manejo de errores con onErrorReturn()
+// El flujo falla en "error". Recupérate con un fallback.
+
+const datos = ["ok1", "ok2", "error", "ok3"];
+
+Flux.from(datos)
+    .map(val => {
+        if (val === "error") throw new Error("¡Dato inválido!");
+        return val.toUpperCase();
+    })
+    .onErrorReturn("FALLBACK_VALUE")
+    .subscribe(val => emit(val));</textarea>
+          </div>
+          <div id="c-editor-5" class="c-editor">
+            <textarea id="code-5" spellcheck="false">// 🆓 Espacio libre - experimenta con los operadores
+// Disponibles: Flux.from(arr), Mono.just(val)
+// .map(), .filter(), .flatMap(), .take(n)
+// .zip(), .merge(), .distinct(), .onErrorReturn(v)
+
+const datos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+Flux.from(datos)
+    .filter(n => n > 5)
+    .map(n => `Valor: ${n}`)
+    .subscribe(val => emit(val));</textarea>
+          </div>
+          <div class="console-actions">
+            <button class="run-btn" onclick="runCode()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Ejecutar
+            </button>
+            <button class="reset-btn" onclick="resetCode()">↺ Reset</button>
+            <span class="console-hint">Tip: modifica el código y observa el flujo de datos</span>
+          </div>
+          <div id="console-output">
+            <span class="out-prompt">// Presiona "Ejecutar" para ver los datos fluyendo por el pipeline...</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════ RETOS POR NIVELES ════════════════ -->
+      <section id="retos">
+        <div class="chapter-header">
+          <span class="ch-badge b3">RETOS</span>
+          <h2>🎯 Retos por Niveles</h2>
+        </div>
+
+        <div class="level-tabs">
+          <button class="level-tab active" onclick="filterLevel('todos',this)">Todos</button>
+          <button class="level-tab" onclick="filterLevel('facil',this)">🟢 Fácil</button>
+          <button class="level-tab" onclick="filterLevel('medio',this)">🟡 Medio</button>
+          <button class="level-tab" onclick="filterLevel('dificil',this)">🔴 Difícil</button>
+        </div>
+
+        <div class="exercise-list" id="exercise-list">
+
+          <div class="exercise-item" data-level="facil" onclick="loadToConsole(this,0)">
+            <div class="ex-num">01</div>
+            <div class="ex-body">
+              <div class="ex-title">Pipeline básico de precios</div>
+              <div class="ex-desc">Dado un array de precios, filtra los mayores a $50 y aplica un descuento del 10% con
+                map().</div>
+              <div class="ex-tags"><span class="tag tag-easy">Fácil</span><span class="tag tag-op">map</span><span
+                  class="tag tag-op">filter</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="facil" onclick="loadToConsole(this,1)">
+            <div class="ex-num">02</div>
+            <div class="ex-body">
+              <div class="ex-title">Transformación de nombres de usuario</div>
+              <div class="ex-desc">Convierte <code>alice_smith</code> → <code>Alice Smith</code> usando map() y split().
+              </div>
+              <div class="ex-tags"><span class="tag tag-easy">Fácil</span><span class="tag tag-op">map</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="facil" onclick="loadToConsole(this,2)">
+            <div class="ex-num">03</div>
+            <div class="ex-body">
+              <div class="ex-title">Contar elementos con reduce()</div>
+              <div class="ex-desc">Usa Flux y cuenta cuántos elementos son mayores que 5. Sin usar filter().length.
+              </div>
+              <div class="ex-tags"><span class="tag tag-easy">Fácil</span><span class="tag tag-op">map</span><span
+                  class="tag tag-op">filter</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="medio" onclick="loadToConsole(this,3)">
+            <div class="ex-num">04</div>
+            <div class="ex-body">
+              <div class="ex-title">Enriquecimiento con flatMap</div>
+              <div class="ex-desc">Dado un Flux de IDs, enriquece cada uno consultando un servicio simulado con flatMap
+                y combina el resultado en un objeto.</div>
+              <div class="ex-tags"><span class="tag tag-medium">Medio</span><span class="tag tag-op">flatMap</span><span
+                  class="tag tag-op">Mono</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="medio" onclick="loadToConsole(this,4)">
+            <div class="ex-num">05</div>
+            <div class="ex-body">
+              <div class="ex-title">Combinar dos APIs con zip()</div>
+              <div class="ex-desc">Simula dos fuentes de datos independientes (usuarios y órdenes) y combínalas en un
+                DTO usando Mono.zip().</div>
+              <div class="ex-tags"><span class="tag tag-medium">Medio</span><span class="tag tag-op">zip</span><span
+                  class="tag tag-op">Mono</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="medio" onclick="loadToConsole(this,5)">
+            <div class="ex-num">06</div>
+            <div class="ex-body">
+              <div class="ex-title">Pipeline con múltiples operadores</div>
+              <div class="ex-desc">Construye un pipeline que: filtre nulls, transforme strings, tome los 5 primeros y
+                elimine duplicados.</div>
+              <div class="ex-tags"><span class="tag tag-medium">Medio</span><span class="tag tag-op">filter</span><span
+                  class="tag tag-op">map</span><span class="tag tag-op">take</span><span
+                  class="tag tag-op">distinct</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="dificil" onclick="loadToConsole(this,6)">
+            <div class="ex-num">07</div>
+            <div class="ex-body">
+              <div class="ex-title">Retry con lógica condicional</div>
+              <div class="ex-desc">Implementa un flujo que reintente solo en ciertos tipos de errores (red) y use
+                fallback en otros (datos inválidos).</div>
+              <div class="ex-tags"><span class="tag tag-hard">Difícil</span><span
+                  class="tag tag-op">onErrorResume</span><span class="tag tag-op">retry</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="dificil" onclick="loadToConsole(this,7)">
+            <div class="ex-num">08</div>
+            <div class="ex-body">
+              <div class="ex-title">Merge de streams con prioridad</div>
+              <div class="ex-desc">Combina un Flux de eventos urgentes y normales. Los urgentes siempre deben procesarse
+                primero.</div>
+              <div class="ex-tags"><span class="tag tag-hard">Difícil</span><span class="tag tag-op">merge</span><span
+                  class="tag tag-op">Flux</span></div>
+            </div>
+          </div>
+
+          <div class="exercise-item" data-level="dificil" onclick="loadToConsole(this,8)">
+            <div class="ex-num">09</div>
+            <div class="ex-body">
+              <div class="ex-title">Pipeline con cambio de contexto</div>
+              <div class="ex-desc">Simula un pipeline que lee datos en el hilo actual, procesa CPU-intensivo en
+                parallel() y guarda en I/O en boundedElastic().</div>
+              <div class="ex-tags"><span class="tag tag-hard">Difícil</span><span
+                  class="tag tag-op">publishOn</span><span class="tag tag-op">subscribeOn</span><span
+                  class="tag tag-op">Schedulers</span></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════════ PROYECTOS DE PRÁCTICA ══════════════ -->
+      <section id="proyectos">
+        <div class="chapter-header">
+          <span class="ch-badge" style="background:var(--brand2);">PROYECTOS</span>
+          <h2>🚀 Proyectos de Práctica por Niveles</h2>
+        </div>
+        <p style="font-size:.845rem;color:var(--ink-dim);margin-bottom:4px;">Cada proyecto consolida un aspecto
+          diferente. Hazlos en orden de nivel.</p>
+
+        <div style="margin-top:20px;">
+          <p
+            style="font-size:.76rem;font-weight:800;color:var(--success);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">
+            🟢 Nivel 1 — Principiante</p>
+          <div class="project-grid">
+            <div class="project-card b3">
+              <div class="project-emoji">📊</div>
+              <h4>Dashboard de Métricas SSE</h4>
+              <p>Servidor de métricas en tiempo real con Server-Sent Events. El cliente recibe datos continuos sin
+                polling. Perfecto primer proyecto.</p>
+              <div class="project-stack"><span class="stack-pill">Spring WebFlux</span><span
+                  class="stack-pill">SSE</span><span class="stack-pill">Flux</span></div>
+              <div class="diff-label diff-beg">🟢 Principiante · ~1 semana</div>
+            </div>
+            <div class="project-card b3">
+              <div class="project-emoji">🔢</div>
+              <h4>API de Transformación de Datos</h4>
+              <p>REST API que recibe arrays JSON y aplica transformaciones reactivas (filter, map, zip). Aprende a
+                exponer Flux como stream HTTP.</p>
+              <div class="project-stack"><span class="stack-pill">WebFlux</span><span
+                  class="stack-pill">Controller</span><span class="stack-pill">Mono/Flux</span></div>
+              <div class="diff-label diff-beg">🟢 Principiante · ~1 semana</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;">
+          <p
+            style="font-size:.76rem;font-weight:800;color:var(--warn);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">
+            🟡 Nivel 2 — Intermedio</p>
+          <div class="project-grid">
+            <div class="project-card">
+              <div class="project-emoji">💬</div>
+              <h4>Chat en Tiempo Real</h4>
+              <p>API reactiva con WebSockets. Múltiples salas, usuarios, mensajes con Flux SSE y Sinks.Many para
+                distribuir mensajes.</p>
+              <div class="project-stack"><span class="stack-pill">WebSocket</span><span
+                  class="stack-pill">Sinks</span><span class="stack-pill">R2DBC</span></div>
+              <div class="diff-label diff-mid">🟡 Intermedio · ~2 semanas</div>
+            </div>
+            <div class="project-card">
+              <div class="project-emoji">🛒</div>
+              <h4>API E-commerce Reactiva</h4>
+              <p>CRUD completo con R2DBC + PostgreSQL, manejo de inventario con transacciones reactivas y eventos de
+                stock.</p>
+              <div class="project-stack"><span class="stack-pill">R2DBC</span><span
+                  class="stack-pill">PostgreSQL</span><span class="stack-pill">Spring Security</span></div>
+              <div class="diff-label diff-mid">🟡 Intermedio · ~3 semanas</div>
+            </div>
+            <div class="project-card">
+              <div class="project-emoji">🔍</div>
+              <h4>Motor de Búsqueda con switchMap</h4>
+              <p>Autocompletado que cancela requests anteriores automáticamente con switchMap + debounce. Elimina race
+                conditions.</p>
+              <div class="project-stack"><span class="stack-pill">WebClient</span><span
+                  class="stack-pill">switchMap</span><span class="stack-pill">debounce</span></div>
+              <div class="diff-label diff-mid">🟡 Intermedio · ~2 semanas</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;">
+          <p
+            style="font-size:.76rem;font-weight:800;color:var(--danger);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">
+            🔴 Nivel 3 — Avanzado</p>
+          <div class="project-grid">
+            <div class="project-card b2">
+              <div class="project-emoji">🌐</div>
+              <h4>API Gateway Reactivo</h4>
+              <p>Gateway que agrega respuestas de 3 microservicios en paralelo con Mono.zip(), circuit breaker, timeout
+                y fallback reactivo.</p>
+              <div class="project-stack"><span class="stack-pill">WebClient</span><span
+                  class="stack-pill">Mono.zip</span><span class="stack-pill">Resilience4j</span><span
+                  class="stack-pill">timeout</span></div>
+              <div class="diff-label diff-adv">🔴 Avanzado · ~4 semanas</div>
+            </div>
+            <div class="project-card b2">
+              <div class="project-emoji">📧</div>
+              <h4>Sistema de Notificaciones con Kafka</h4>
+              <p>Procesador reactivo de eventos: emails, push, websockets. Usa Reactor Kafka, Flux.merge() y
+                backpressure real.</p>
+              <div class="project-stack"><span class="stack-pill">Reactor Kafka</span><span
+                  class="stack-pill">Flux.merge</span><span class="stack-pill">Backpressure</span></div>
+              <div class="diff-label diff-adv">🔴 Avanzado · ~3 semanas</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════ ENTREVISTA QA ══════════════════ -->
+      <section id="entrevista">
+        <div class="chapter-header">
+          <span class="ch-badge">ENTREVISTA</span>
+          <h2>🎤 Preguntas de Entrevista Real</h2>
+        </div>
+
+        <div id="qa-list">
+          <div class="qa-item">
+            <div class="qa-question" onclick="toggleQA(this)">
+              ¿Cuál es la diferencia entre map() y flatMap() en Reactor?
+              <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div class="qa-answer">
+              <strong>map()</strong> transforma síncronamente. Es 1:1 — un elemento entra, un elemento sale. Devuelve el
+              valor directamente.<br><br>
+              <strong>flatMap()</strong> transforma asíncronamente. Cada elemento genera un Publisher (Mono/Flux) y los
+              aplana. Ideal para llamadas a DB o HTTP anidadas. Sin orden garantizado.<br><br>
+              <strong>Regla práctica:</strong> Si tu función devuelve un Mono/Flux → <code>flatMap</code>. Si devuelve
+              un valor directo → <code>map</code>.
+            </div>
+          </div>
+
+          <div class="qa-item">
+            <div class="qa-question" onclick="toggleQA(this)">
+              ¿Por qué nunca deberías usar .block() en un controlador WebFlux?
+              <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div class="qa-answer">
+              WebFlux usa Netty con pocos hilos (CPU × 2). <code>.block()</code> duerme el hilo esperando. Si múltiples
+              requests hacen esto, se agotan todos los hilos y la aplicación deja de responder. Anula completamente el
+              beneficio del modelo reactivo.
+            </div>
+          </div>
+
+          <div class="qa-item">
+            <div class="qa-question" onclick="toggleQA(this)">
+              ¿Cuándo usarías subscribeOn() vs publishOn()?
+              <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div class="qa-answer">
+              <strong>subscribeOn(scheduler)</strong>: define en qué scheduler se inicia el flujo. Afecta todo hacia
+              arriba. Úsalo para código bloqueante en el origen (JDBC, leer archivos).<br><br>
+              <strong>publishOn(scheduler)</strong>: cambia el scheduler para los operadores hacia abajo. Permite
+              cambiar de contexto a mitad del pipeline para tareas CPU-intensivas.
+            </div>
+          </div>
+
+          <div class="qa-item">
+            <div class="qa-question" onclick="toggleQA(this)">
+              ¿Qué es el backpressure y cómo lo maneja Reactor?
+              <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div class="qa-answer">
+              Mecanismo por el cual el consumidor controla la velocidad del productor. Reactor implementa el protocolo
+              Reactive Streams: el suscriptor solicita explícitamente N elementos con
+              <code>subscription.request(n)</code>. Estrategias: <code>limitRate(n)</code>,
+              <code>onBackpressureBuffer()</code>, <code>onBackpressureDrop()</code>,
+              <code>onBackpressureLatest()</code>.
+            </div>
+          </div>
+
+          <div class="qa-item">
+            <div class="qa-question" onclick="toggleQA(this)">
+              ¿Cómo integrarías código bloqueante (JDBC) en una aplicación WebFlux?
+              <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div class="qa-answer">
+              Aislar el código bloqueante en <code>Schedulers.boundedElastic()</code>:<br><br>
+              <pre class="code" style="font-size:.76rem;">Mono.<span class="fn">fromCallable</span>(() -> jdbcRepo.<span class="fn">findById</span>(id))
+    .<span class="fn">subscribeOn</span>(Schedulers.<span class="fn">boundedElastic</span>())</pre>
+              La solución ideal es usar R2DBC (driver reactivo para SQL) para evitar el bloqueo por completo.
+            </div>
+          </div>
+
+          <div class="qa-item">
+            <div class="qa-question" onclick="toggleQA(this)">
+              ¿Cuál es la diferencia entre Cold y Hot Observable?
+              <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div class="qa-answer">
+              <strong>Cold (frío):</strong> Cada suscriptor recibe el flujo completo desde el inicio, como Netflix. Cada
+              suscripción inicia una nueva ejecución.<br><br>
+              <strong>Hot (caliente):</strong> Emite datos independientemente de suscriptores, como la radio. Si llegas
+              tarde, solo oyes lo que hay ahora. Se crea con <code>Sinks.many()</code> o <code>publish()</code>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /page-wrap -->
+
+    <footer
+      style="margin-top:40px;padding:20px 40px;text-align:center;color:var(--ink-faint);font-size:.8rem;border-top:1px solid var(--glass-border);">
+      Dashboard de Aprendizaje Java WebFlux v3.0 — 2026 · Construido para dominar la entrevista
+    </footer>
+
+  </main><!-- /main-content -->
+
+  <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+  <script>
+    /* ── Image Modal ──────────────────────────────── */
+    function openImgModal(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('imageModal').classList.add('open');
+    }
+    function closeImgModal() {
+      document.getElementById('imageModal').classList.remove('open');
+      document.getElementById('modalImg').src = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImgModal(); });
+
+    /* ── Checkpoints ──────────────────────────────── */
+    function toggleAnswer(id) {
+      const card = document.getElementById(id);
+      const ans = card.querySelector('.checkpoint-answer');
+      const btn = card.querySelector('.reveal-btn');
+      const shown = ans.classList.toggle('shown');
+      btn.textContent = shown ? 'Ocultar' : 'Ver respuesta';
+    }
+
+    /* ── Comparison Toggle ────────────────────────── */
+    function switchToggle(btn) {
+      const view = btn.dataset.view;
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.code-view').forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('view-' + view).classList.add('active');
+    }
+
+    /* ── Operator Tabs ────────────────────────────── */
+    function switchOpTab(tab, btn) {
+      document.querySelectorAll('.op-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.op-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('op-' + tab).classList.add('active');
+    }
+
+    /* ── Interview QA ─────────────────────────────── */
+    function toggleQA(el) {
+      const ans = el.nextElementSibling;
+      const chev = el.querySelector('.qa-chevron');
+      const shown = ans.classList.toggle('shown');
+      chev.classList.toggle('open', shown);
+    }
+
+    /* ── Level Filter ─────────────────────────────── */
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.level-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.exercise-item').forEach(item => {
+        item.style.display = (level === 'todos' || item.dataset.level === level) ? 'flex' : 'none';
+      });
+    }
+
+    /* ── Console ──────────────────────────────────── */
+    let currentTab = 0;
+    const originalCodes = [];
+    document.querySelectorAll('[id^="code-"]').forEach(ta => originalCodes.push(ta.value));
+
+    function selectTab(idx, el) {
+      document.querySelectorAll('.c-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.c-editor').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('c-editor-' + idx).classList.add('active');
+      currentTab = idx;
+      clearOut();
+    }
+
+    function clearOut() {
+      document.getElementById('console-output').innerHTML =
+        '<span class="out-prompt">// Presiona "Ejecutar" para ver los resultados del pipeline reactivo...</span>';
+    }
+
+    function emit(val) {
+      const out = document.getElementById('console-output');
+      out.innerHTML += `<div class="out-emit">emit → ${String(val)}</div>`;
+      out.scrollTop = out.scrollHeight;
+    }
+
+    function runCode() {
+      const code = document.getElementById('code-' + currentTab).value;
+      const out = document.getElementById('console-output');
+      out.innerHTML = `<span class="out-info">⚡ Ejecutando pipeline...\n</span>`;
+
+      /* — Reactor-like API simulada en JS — */
+      class FluxImpl {
+        constructor(arr) { this._arr = [...arr]; this._ops = []; }
+        map(fn) { this._ops.push({ t: 'map', fn }); return this; }
+        filter(fn) { this._ops.push({ t: 'filter', fn }); return this; }
+        flatMap(fn) { this._ops.push({ t: 'flatMap', fn }); return this; }
+        take(n) { this._ops.push({ t: 'take', n }); return this; }
+        distinct() { this._ops.push({ t: 'distinct' }); return this; }
+        onErrorReturn(v) { this._ops.push({ t: 'onErrorReturn', v }); return this; }
+        subscribe(fn) {
+          let arr = [...this._arr];
+          for (const op of this._ops) {
+            if (op.t === 'map') {
+              const next = [];
+              for (const x of arr) {
+                try { next.push(op.fn(x)); }
+                catch (e) {
+                  const erOp = this._ops.find(o => o.t === 'onErrorReturn');
+                  if (erOp) { fn(erOp.v); out.innerHTML += `<span class="out-complete">\n✅ onComplete (via onErrorReturn)</span>`; return; }
+                  out.innerHTML += `<span class="out-error">❌ onError → ${e.message}</span>`; return;
+                }
+              }
+              arr = next;
+            } else if (op.t === 'filter') {
+              arr = arr.filter(x => { try { return op.fn(x); } catch (e) { return false; } });
+            } else if (op.t === 'flatMap') {
+              const next = [];
+              for (const x of arr) {
+                const r = op.fn(x);
+                if (r && r._val !== undefined) next.push(r._val);
+                else if (Array.isArray(r)) next.push(...r);
+                else next.push(r);
+              }
+              arr = next;
+            } else if (op.t === 'take') {
+              arr = arr.slice(0, op.n);
+            } else if (op.t === 'distinct') {
+              arr = [...new Set(arr)];
+            }
+          }
+          arr.forEach(x => fn(x));
+          out.innerHTML += `<span class="out-complete">\n✅ onComplete — ${arr.length} elemento(s)</span>`;
+        }
+      }
+      class ZipImpl {
+        constructor(f1, f2, cb) { this._f1 = f1; this._f2 = f2; this._cb = cb; this._ops = []; }
+        subscribe(fn) {
+          const a1 = this._f1._arr, a2 = this._f2._arr;
+          const len = Math.min(a1.length, a2.length);
+          const res = [];
+          for (let i = 0; i < len; i++) res.push(this._cb(a1[i], a2[i]));
+          res.forEach(x => fn(x));
+          out.innerHTML += `<span class="out-complete">\n✅ onComplete — ${res.length} elemento(s)</span>`;
+        }
+      }
+
+      const Flux = {
+        from: (arr) => new FluxImpl(arr),
+        just: (...a) => new FluxImpl(a),
+        zip: (f1, f2, cb) => new ZipImpl(f1, f2, cb),
+        merge: (...fs) => new FluxImpl(fs.flatMap(f => f._arr))
+      };
+      const Mono = { just: (v) => ({ _val: v, subscribe: (fn) => { fn(v); out.innerHTML += `<span class="out-complete">✅ onComplete</span>`; } }) };
+
+      try {
+        new Function('Flux', 'Mono', 'emit', code)(Flux, Mono, emit);
+      } catch (e) {
+        out.innerHTML += `<span class="out-error">❌ Error: ${e.message}</span>`;
+      }
+    }
+
+    function resetCode() {
+      document.getElementById('code-' + currentTab).value = originalCodes[currentTab];
+      clearOut();
+    }
+
+    /* ── Load exercise into console ───────────────── */
+    const exerciseCodes = [
+      `// Reto 1: Pipeline de precios
+const precios = [30, 55, 120, 45, 89, 200, 15, 75];
+
+Flux.from(precios)
+    .filter(p => p > 50)
+    .map(p => p * 0.9)
+    .map(p => \`$\${p.toFixed(2)} (con descuento)\`)
+    .subscribe(val => emit(val));`,
+
+      `// Reto 2: Transformar nombres de usuario
+const usernames = ["alice_smith", "bob_jones", "carol_white", "dan_brown"];
+
+Flux.from(usernames)
+    .map(u => u.split("_"))
+    .map(parts => parts.map(p => p[0].toUpperCase() + p.slice(1)).join(" "))
+    .subscribe(val => emit(val));`,
+
+      `// Reto 3: Contar con filter y map
+const numeros = [1, 3, 8, 2, 11, 6, 4, 9, 7];
+let count = 0;
+
+Flux.from(numeros)
+    .filter(n => n > 5)
+    .map(n => { count++; return n; })
+    .subscribe(val => emit(\`Valor: \${val}\`));
+
+// Nota: En Reactor usarías .count() o reduce()`,
+
+      `// Reto 4: Enriquecimiento con flatMap
+const userDB  = { 1: "Ana García", 2: "Bruno Díaz", 3: "Carmen Ruiz" };
+const roleDB  = { 1: "Admin", 2: "Editor", 3: "Viewer" };
+const userIds = [1, 2, 3];
+
+Flux.from(userIds)
+    .flatMap(id => Mono.just({ id, name: userDB[id], role: roleDB[id] }))
+    .map(u => \`[\${u.role}] \${u.name} (id=\${u.id})\`)
+    .subscribe(val => emit(val));`,
+
+      `// Reto 5: Combinar dos APIs con zip
+const usuarios = ["Ana", "Bruno", "Carmen"];
+const ordenes  = [3, 1, 5];  // número de órdenes por usuario
+
+Flux.zip(
+    Flux.from(usuarios),
+    Flux.from(ordenes),
+    (user, numOrdenes) => \`\${user}: \${numOrdenes} orden(es)\`
+).subscribe(val => emit(val));`,
+
+      `// Reto 6: Pipeline multi-operador
+const datos = [null, "hola", "mundo", null, "hola", "java", "reactor", "spring", "flux", "mono"];
+
+Flux.from(datos)
+    .filter(x => x !== null)           // elimina nulls
+    .map(x => x.toUpperCase())         // transforma
+    .take(5)                           // toma los primeros 5
+    .distinct()                        // elimina duplicados
+    .subscribe(val => emit(val));`,
+
+      `// Reto 7: Retry con lógica condicional
+let intentos = 0;
+const ids = ["ok-1", "net-err", "ok-2"];
+
+Flux.from(ids)
+    .map(id => {
+        intentos++;
+        if (id === "net-err" && intentos < 3) {
+            throw new Error("Network error (transitorio)");
+        }
+        if (id === "invalid") {
+            throw new Error("Invalid data (permanente)");
+        }
+        return \`✅ Procesado: \${id} (intento \${intentos})\`;
+    })
+    .onErrorReturn("⚡ Usando valor de caché tras fallo")
+    .subscribe(val => emit(val));`,
+
+      `// Reto 8: Merge de streams con prioridad
+// Urgentes se procesan primero (llegan con prefijo U:)
+const urgentes = ["U:PAGO_FALLIDO", "U:SESION_EXPIRADA"];
+const normales = ["N:LOGIN", "N:VISTA_PRODUCTO", "N:CLICK"];
+
+// merge combina ambos flujos
+Flux.merge(Flux.from(urgentes), Flux.from(normales))
+    .map(ev => {
+        const prio = ev.startsWith("U:") ? "🔴 URGENTE" : "🔵 Normal";
+        return \`[\${prio}] \${ev.slice(2)}\`;
+    })
+    .subscribe(val => emit(val));`,
+
+      `// Reto 9: Cambio de contexto simulado
+// En Reactor real usarías publishOn(Schedulers.parallel())
+// Aquí simulamos los diferentes contextos de ejecución
+
+const datos = ["item1", "item2", "item3"];
+
+emit("[Thread: event-loop] → Inicio del pipeline");
+
+Flux.from(datos)
+    .map(item => {
+        emit(\`[Thread: boundedElastic] → Leyendo: \${item}\`);
+        return item;
+    })
+    .map(item => {
+        emit(\`[Thread: parallel] → Procesando: \${item.toUpperCase()}\`);
+        return item.toUpperCase();
+    })
+    .subscribe(val => emit(\`[Thread: event-loop] → Resultado: \${val}\`));`
+    ];
+
+    function loadToConsole(el, idx) {
+      document.querySelectorAll('.exercise-item').forEach(e => e.classList.remove('solved'));
+      el.classList.add('solved');
+
+      // poner el código en la pestaña libre
+      document.getElementById('code-5').value = exerciseCodes[idx];
+
+      // cambiar a pestaña libre
+      const tabs = document.querySelectorAll('.c-tab');
+      const editors = document.querySelectorAll('.c-editor');
+      tabs.forEach(t => t.classList.remove('active'));
+      editors.forEach(e => e.classList.remove('active'));
+      tabs[5].classList.add('active');
+      editors[5].classList.add('active');
+      currentTab = 5;
+      clearOut();
+
+      document.getElementById('consola').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  </script>
+
 </body>
 
 </html>

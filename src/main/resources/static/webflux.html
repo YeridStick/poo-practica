@@ -5,30 +5,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebFlux & Programación Reactiva</title>
-    <link rel="stylesheet" href="/index.css">
-    <!-- Monaco Editor -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <style>
-        /* Ajuste de la paleta para que WebFlux use el mismo esquema claro del dashboard */
+        /* ── Variables ───────────────────────────────── */
         :root {
             --bg: #f0f2f5;
             --surface: #ffffff;
             --surface2: #f6f7fb;
-            --border: rgba(0, 0, 0, 0.06);
+            --surface3: #eef0f6;
+            --border: rgba(0, 0, 0, .07);
+            --border-md: rgba(0, 0, 0, .11);
             --brand: #0d6a63;
+            --brand-lt: #e6f4f3;
             --brand2: #b5552f;
             --brand3: #a78bfa;
             --ink: #1e2227;
             --ink-dim: #6b7280;
+            --ink-faint: #9ca3af;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warn: #f59e0b;
             --radius: 18px;
-            --glow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --radius-sm: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, .06);
+            --shadow-lg: 0 12px 48px rgba(0, 0, 0, .14);
+            --sidebar-w: 64px;
+            --editor-h: 420px;
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -37,41 +48,113 @@
         html,
         body {
             height: 100%;
+            font-family: 'Outfit', system-ui, sans-serif;
         }
 
-        /* El fondo principal lo aporta el dashboard, aquí no añadimos mesh oscuro */
-        .app {
-            position: relative;
-            z-index: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 20px;
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            display: flex;
         }
 
-        /* ---- HEADER ---- */
-        .topbar {
+        /* ── Sidebar (replica del dashboard) ─────────── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 0;
             position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 200;
+            gap: 6px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, .04);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--brand), var(--brand3));
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 16px 24px;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: .04em;
+        }
+
+        .nav-item {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink-faint);
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--surface3);
+            color: var(--brand);
+        }
+
+        .nav-item.active {
+            background: var(--brand-lt);
+            color: var(--brand);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        /* ── Main wrapper ─────────────────────────────── */
+        .main-content {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Top header ───────────────────────────────── */
+        .top-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 28px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 0 var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .back-btn {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             color: var(--ink-dim);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 7px 14px;
-            border-radius: 10px;
+            font-size: .82rem;
+            font-weight: 700;
+            padding: 6px 13px;
+            border-radius: 9px;
             border: 1px solid var(--border);
-            transition: all 0.2s;
+            transition: all .2s;
             background: var(--surface);
         }
 
@@ -80,26 +163,26 @@
             color: var(--brand);
         }
 
-        .topbar-title {
+        .header-center {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex: 1;
         }
 
         .badge-reactive {
-            background: linear-gradient(135deg, #38bdf8, #a78bfa);
+            background: linear-gradient(135deg, #38bdf8, var(--brand3));
             color: #fff;
-            font-size: 0.7rem;
+            font-size: .68rem;
             font-weight: 800;
-            padding: 4px 10px;
+            padding: 3px 10px;
             border-radius: 99px;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
             text-transform: uppercase;
         }
 
-        .topbar h1 {
-            font-size: 1.1rem;
+        .header-title {
+            font-size: 1rem;
             font-weight: 800;
             background: linear-gradient(90deg, var(--brand), var(--brand3));
             -webkit-background-clip: text;
@@ -107,47 +190,89 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* ---- MAIN GRID ---- */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 380px minmax(0, 1.4fr);
-            gap: 28px;
-            align-items: flex-start;
-        }
-
-        /* ---- LEFT PANEL ---- */
-        .left-panel {
+        .status-bar {
+            margin-left: auto;
+            font-size: .75rem;
+            color: var(--ink-dim);
+            min-height: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            align-items: center;
+            gap: 6px;
         }
 
+        .status-bar .dot-live {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        /* ── Page layout ──────────────────────────────── */
+        .page-body {
+            flex: 1;
+            padding: 22px 24px;
+            display: grid;
+            grid-template-columns: 360px minmax(0, 1fr);
+            gap: 22px;
+            align-items: flex-start;
+            overflow: auto;
+        }
+
+        /* ── Panel cards ──────────────────────────────── */
         .panel-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
         .panel-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border);
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: .82rem;
+            gap: 10px;
+        }
+
+        .panel-header .ph-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .panel-body {
-            padding: 18px 20px;
+            padding: 14px 16px;
+        }
+
+        /* ── Left panel ───────────────────────────────── */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         /* Repo loader */
         .repo-row {
             display: flex;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .rx-input {
@@ -155,11 +280,12 @@
             background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 9px 13px;
+            padding: 8px 12px;
             color: var(--ink);
-            font-size: 0.82rem;
+            font-size: .8rem;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color .2s;
+            font-family: 'Outfit', sans-serif;
         }
 
         .rx-input:focus {
@@ -167,25 +293,34 @@
         }
 
         .rx-input::placeholder {
-            color: var(--ink-dim);
+            color: var(--ink-faint);
         }
 
+        /* Buttons */
         .btn {
-            background: linear-gradient(135deg, var(--brand), var(--brand3));
+            background: linear-gradient(135deg, var(--brand), #1a9990);
             color: #fff;
             border: none;
             border-radius: 10px;
-            padding: 9px 16px;
-            font-size: 0.82rem;
+            padding: 8px 16px;
+            font-size: .8rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all .18s;
             white-space: nowrap;
+            font-family: 'Outfit', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn:hover {
-            filter: brightness(1.15);
+            filter: brightness(1.1);
             transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn.ghost {
@@ -194,23 +329,52 @@
             color: var(--brand);
         }
 
+        .btn.ghost:hover {
+            background: var(--brand-lt);
+        }
+
+        .btn.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: .74rem;
+            border-radius: 8px;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--ink-dim);
+            border-radius: 9px;
+            padding: 7px 15px;
+            font-size: .8rem;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-cancel:hover {
+            border-color: var(--ink-dim);
+        }
+
         /* Repo tabs */
         .repo-tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 5px;
+            margin-bottom: 8px;
         }
 
         .repo-tab {
-            padding: 5px 13px;
+            padding: 4px 12px;
             border-radius: 99px;
-            font-size: 0.75rem;
+            font-size: .72rem;
             font-weight: 700;
             border: 1px solid var(--border);
             color: var(--ink-dim);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all .18s;
         }
 
         .repo-tab.active {
@@ -219,149 +383,140 @@
             border-color: var(--brand);
         }
 
-        /* Challenge cards */
+        /* Challenge list */
         .challenge-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            max-height: 68vh;
+            gap: 10px;
+            max-height: 62vh;
             overflow-y: auto;
-            padding-right: 6px;
+            padding-right: 4px;
         }
 
         .challenge-list::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .challenge-list::-webkit-scrollbar-track {
-            background: transparent;
+            width: 3px;
         }
 
         .challenge-list::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
+            background: var(--border-md);
+            border-radius: 3px;
         }
 
         .challenge-card {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px 20px;
-            transition: border-color 0.2s, transform 0.15s ease;
+            background: var(--surface2);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            transition: border-color .2s, transform .15s, box-shadow .2s;
             cursor: default;
-            min-height: 150px;
-            /* altura mínima para que todas se vean del mismo tamaño */
             display: flex;
             flex-direction: column;
+            gap: 6px;
         }
 
-        .challenge-card:hover {
+        .challenge-card:hover:not(.locked) {
             border-color: var(--brand);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 106, 99, .1);
         }
 
         .challenge-card.done {
-            border-color: #22c55e33;
-            background: rgba(34, 197, 94, 0.03);
+            border-color: rgba(34, 197, 94, .35);
+            background: rgba(34, 197, 94, .03);
         }
 
         .challenge-card.locked {
-            opacity: 0.45;
+            opacity: .4;
             pointer-events: none;
         }
 
+        .ch-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ch-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: var(--brand);
+            color: #fff;
+            font-size: .66rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .challenge-card.done .ch-num {
+            background: var(--success);
+        }
+
         .ch-title {
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: .84rem;
+            font-weight: 800;
             color: var(--brand);
-            margin-bottom: 6px;
         }
 
         .ch-desc {
-            font-size: 0.8rem;
+            font-size: .76rem;
             color: var(--ink-dim);
-            line-height: 1.6;
-            margin-bottom: 10px;
+            line-height: 1.55;
         }
 
         .ch-expected {
-            font-size: 0.7rem;
-            color: #a78bfa;
-            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             flex-wrap: wrap;
+            font-size: .68rem;
+            color: var(--brand3);
         }
 
         .expected-chip {
-            background: rgba(167, 139, 250, 0.12);
-            border: 1px solid rgba(167, 139, 250, 0.25);
-            border-radius: 6px;
-            padding: 1px 7px;
+            background: rgba(167, 139, 250, .1);
+            border: 1px solid rgba(167, 139, 250, .25);
+            border-radius: 5px;
+            padding: 1px 6px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
+            font-size: .66rem;
         }
 
         .ch-actions {
             display: flex;
             gap: 6px;
             align-items: center;
-            margin-top: auto;
-            /* empuja acciones al fondo de la card */
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: var(--ink-dim);
+            background: var(--ink-faint);
+            flex-shrink: 0;
         }
 
         .status-dot.done {
-            background: #22c55e;
+            background: var(--success);
         }
 
         .status-dot.pending {
-            background: #f59e0b;
+            background: var(--warn);
         }
 
-        .btn-sm {
-            padding: 5px 12px;
-            font-size: 0.72rem;
-            border-radius: 8px;
-        }
-
-        /* Save repo */
-        #btnSaveRxRepo {
-            display: none;
-            font-size: 0.75rem;
-            padding: 6px 12px;
-        }
-
-        /* Status msg */
-        .status-bar {
-            font-size: 0.75rem;
-            color: var(--ink-dim);
-            padding: 6px 0;
-            min-height: 22px;
-        }
-
-        /* ---- RIGHT PANEL ---- */
+        /* ── Right panel ──────────────────────────────── */
         .right-panel {
             display: flex;
             flex-direction: column;
             gap: 14px;
-            flex: 1;
-            width: 100%;
-            max-width: 900px;
-            /* ancho objetivo en desktop, sin forzar scroll horizontal */
         }
 
-        /* Concepts strip */
+        /* Concept chips */
         .concept-strip {
             display: flex;
-            gap: 8px;
+            gap: 7px;
             flex-wrap: wrap;
         }
 
@@ -369,42 +524,110 @@
             padding: 5px 13px;
             border-radius: 99px;
             border: 1px solid var(--border);
-            font-size: 0.72rem;
-            font-weight: 600;
+            font-size: .72rem;
+            font-weight: 700;
             color: var(--ink-dim);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all .18s;
             font-family: 'JetBrains Mono', monospace;
         }
 
         .concept-chip:hover {
             border-color: var(--brand);
             color: var(--brand);
+            background: var(--brand-lt);
         }
 
-        /* Editor shell */
-        .editor-shell {
-            background: #0a0d16;
+        .concept-chip.active {
+            background: var(--brand);
+            color: #fff;
+            border-color: var(--brand);
+        }
+
+        /* Concept panel */
+        .concept-panel {
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .concept-block {
+            display: none;
+        }
+
+        .concept-block.active {
+            display: block;
+        }
+
+        .concept-block h3 {
+            font-size: .88rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--brand), var(--brand3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .concept-block p {
+            font-size: .8rem;
+            color: var(--ink-dim);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .code-snippet {
+            background: #060810;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #38bdf8;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        /* ── Editor shell ─────────────────────────────── */
+        .editor-shell {
+            background: #0d1117;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: var(--glow);
+            box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
+            transition: all .3s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .editor-shell.expanded {
+            position: fixed;
+            inset: 0;
+            left: var(--sidebar-w);
+            z-index: 150;
+            border-radius: 0;
+            margin: 0;
+            /* flex column: topbar + editor-body (flex:1) + output-panel */
         }
 
         .editor-topbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 16px;
+            padding: 9px 14px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
         }
 
         .dot-group {
             display: flex;
             gap: 6px;
+            align-items: center;
         }
 
         .dot {
@@ -426,59 +649,118 @@
         }
 
         .editor-file-label {
-            font-size: 0.78rem;
+            font-size: .76rem;
             font-family: 'JetBrains Mono', monospace;
             color: var(--ink-dim);
         }
 
         .editor-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            align-items: center;
         }
 
-        .editor-body {
+        /* Expand / collapse button */
+        .expand-btn {
             display: flex;
-            flex: 1;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 4px 10px;
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--ink-dim);
+            cursor: pointer;
+            transition: all .18s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .expand-btn:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+        }
+
+        .expand-btn svg {
+            transition: transform .2s;
+        }
+
+        .editor-shell.expanded .expand-btn svg {
+            transform: rotate(180deg);
+        }
+
+        /* Editor body — altura explícita en px para que height:100% del hijo resuelva en carga inicial */
+        .editor-body {
             position: relative;
-        }
-
-        .line-numbers {
-            width: 46px;
-            padding: 14px 8px 14px 0;
-            text-align: right;
-            background: transparent;
-            color: #3d4a5c;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            line-height: 22px;
-            border-right: 1px solid var(--border);
-            user-select: none;
-            white-space: pre;
-        }
-
-        .rx-editor {
             flex: 1;
-            background: transparent;
-            color: #c9d1d9;
-            border: none;
-            padding: 14px 16px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            line-height: 22px;
-            resize: none;
-            outline: none;
-            white-space: pre;
-            overflow-y: auto;
-            min-height: 360px;
-            max-height: 480px;
+            height: 420px;
+            min-height: 260px;
+            background: #1e1e1e;
+            transition: height .3s cubic-bezier(.4, 0, .2, 1);
         }
 
-        /* Output */
+        /* En modo expandido el editor-body crece para llenar el espacio entre topbar y output */
+        .editor-shell.expanded .editor-body {
+            height: auto !important;
+            flex: 1;
+            min-height: 0;
+        }
+
+        #monacoEditor {
+            width: 100%;
+            height: 100%;
+            min-height: 420px;
+        }
+
+        /* En expanded, Monaco debe llenaar todo el editor-body */
+        .editor-shell.expanded #monacoEditor {
+            min-height: 0;
+            height: 100%;
+        }
+
+        /* Editor resize handle */
+        .resize-handle {
+            height: 6px;
+            background: transparent;
+            cursor: row-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            transition: background .18s;
+        }
+
+        .resize-handle:hover {
+            background: rgba(13, 106, 99, .08);
+        }
+
+        .resize-handle::before {
+            content: '';
+            width: 32px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--border-md);
+        }
+
+        .editor-shell.expanded .resize-handle {
+            display: none;
+        }
+
+        /* ── Output / Terminal ────────────────────────── */
         .output-panel {
             background: #060810;
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border-top: 1px solid rgba(255, 255, 255, .07);
             overflow: hidden;
+            flex-shrink: 0;
+            /* border-radius solo en modo normal (dentro del right-panel es un card suelto) */
+            border-radius: 0;
+        }
+
+        /* Cuando NO está dentro del editor expandido, el panel tiene su propio look de card */
+        .right-panel>.editor-shell .output-panel {
+            border-radius: 0;
         }
 
         .output-header {
@@ -488,81 +770,166 @@
             padding: 8px 14px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
-            font-size: 0.78rem;
+            font-size: .76rem;
             font-weight: 700;
             color: var(--ink-dim);
         }
 
-        .output-dot {
-            width: 8px;
-            height: 8px;
+        .output-live-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: #22c55e;
+            background: var(--success);
         }
 
         .output-body {
             padding: 12px 16px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 12.5px;
-            line-height: 1.6;
-            color: #a0b4c8;
+            line-height: 1.7;
+            color: #a8c5da;
             white-space: pre-wrap;
-            min-height: 100px;
-            max-height: 200px;
+            min-height: 90px;
+            max-height: 220px;
             overflow-y: auto;
+            transition: max-height .3s cubic-bezier(.4, 0, .2, 1);
         }
 
-        /* Concept panel */
-        .concept-panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 18px;
+        /* En modo expandido el output muestra más líneas */
+        .editor-shell.expanded .output-body {
+            max-height: 38vh;
+            min-height: 120px;
         }
 
-        .concept-block {
+        .output-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .output-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .1);
+            border-radius: 4px;
+        }
+
+        /* Terminal color classes */
+        .out-ok {
+            color: #4ec9b0;
+        }
+
+        .out-err {
+            color: #f48771;
+        }
+
+        .out-warn {
+            color: #dcdcaa;
+        }
+
+        .out-info {
+            color: #569cd6;
+        }
+
+        .out-dim {
+            color: #6a9955;
+        }
+
+        .out-emit {
+            color: #ce9178;
+        }
+
+        /* Output resize (expanded state replaces with taller output) */
+        .output-expand-btn {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            font-size: .7rem;
+            font-weight: 700;
+            color: var(--ink-faint);
+            cursor: pointer;
+            transition: color .18s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .output-expand-btn:hover {
+            color: var(--brand);
+        }
+
+        /* Validate badge */
+        #rxValidateResult {
+            font-size: .72rem;
+            font-weight: 700;
+        }
+
+        /* ── Fullscreen overlay backdrop ─────────────── */
+        .expanded-backdrop {
             display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 149;
+            backdrop-filter: blur(2px);
         }
 
-        .concept-block.active {
+        .expanded-backdrop.active {
             display: block;
         }
 
-        .concept-block h3 {
-            font-size: 0.9rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, var(--brand), var(--brand3));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* ── Keyboard shortcut hints ──────────────────── */
+        .kbd-hint {
+            font-size: .68rem;
+            color: var(--ink-faint);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .concept-block p {
-            font-size: 0.82rem;
-            color: var(--ink-dim);
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .code-snippet {
-            background: #060810;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 14px;
+        .kbd {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface3);
+            border: 1px solid var(--border-md);
+            border-radius: 4px;
+            padding: 1px 5px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: #38bdf8;
-            white-space: pre;
-            overflow-x: auto;
-            line-height: 1.6;
+            font-size: .64rem;
+            color: var(--ink-dim);
         }
 
-        /* ---- MODALS (minimal) ---- */
+        /* ── Saved repos ──────────────────────────────── */
+        #rxSavedRepos {
+            margin-bottom: 8px;
+        }
+
+        .saved-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(56, 189, 248, .07);
+            border: 1px solid rgba(56, 189, 248, .2);
+            border-radius: 99px;
+            padding: 3px 10px;
+            font-size: .7rem;
+            margin: 2px;
+            cursor: pointer;
+            transition: all .18s;
+        }
+
+        .saved-chip:hover {
+            background: rgba(56, 189, 248, .14);
+        }
+
+        .saved-chip-del {
+            color: var(--danger);
+            font-weight: 800;
+        }
+
+        /* ── Modals ───────────────────────────────────── */
         .rx-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, .55);
             backdrop-filter: blur(6px);
             display: none;
             align-items: center;
@@ -577,49 +944,95 @@
         .rx-modal-box {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 18px;
             width: min(420px, 95%);
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
         }
 
-        .rx-modal-box .modal-top {
+        .modal-top {
             padding: 14px 20px;
             border-bottom: 1px solid var(--border);
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 800;
+            font-size: .88rem;
         }
 
-        .rx-modal-box .modal-body {
-            padding: 20px;
+        .modal-body {
+            padding: 18px 20px;
         }
 
-        .rx-modal-box .modal-body p {
-            font-size: 0.85rem;
+        .modal-body p {
+            font-size: .83rem;
             color: var(--ink-dim);
-            margin-bottom: 16px;
-            line-height: 1.5;
+            margin-bottom: 14px;
+            line-height: 1.55;
         }
 
-        .rx-modal-box .modal-actions {
+        .modal-actions {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
         }
 
-        .btn-cancel {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--ink-dim);
-            border-radius: 10px;
-            padding: 8px 16px;
-            font-size: 0.82rem;
-            cursor: pointer;
+        /* ── Progress badge ───────────────────────────── */
+        .progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        @media (max-width: 1200px) {
-            .main-grid {
-                grid-template-columns: minmax(0, 1fr);
+        .progress-track {
+            width: 80px;
+            height: 5px;
+            background: var(--border-md);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand), var(--brand3));
+            border-radius: 3px;
+            transition: width .4s;
+        }
+
+        .progress-label {
+            font-size: .72rem;
+            color: var(--ink-dim);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* ── Separator ────────────────────────────────── */
+        .section-label {
+            font-size: .64rem;
+            font-weight: 800;
+            color: var(--ink-faint);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 0 4px;
+            margin-bottom: 2px;
+        }
+
+        /* Scrollbar global */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-md);
+            border-radius: 4px;
+        }
+
+        /* ── Responsive ───────────────────────────────── */
+        @media (max-width: 1100px) {
+            .page-body {
+                grid-template-columns: 1fr;
             }
 
             .left-panel {
@@ -628,286 +1041,373 @@
 
             .right-panel {
                 order: 1;
-                width: 100%;
-                max-width: 100%;
-                /* ocupa todo el ancho disponible en pantallas medianas/pequeñas */
             }
         }
 
-        @media (max-width: 900px) {
-            .app {
-                margin-top: 2.5rem;
-                /* separa el contenido del topbar en vista móvil */
+        @media (max-width: 700px) {
+            .page-body {
+                padding: 14px;
+                gap: 14px;
             }
 
-            .panel-card,
-            .editor-shell,
-            .output-panel {
-                border-radius: 16px;
+            .editor-shell.expanded {
+                left: 0;
+            }
+        }
+
+        /* ── Animations ───────────────────────────────── */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
             }
 
-            .challenge-list {
-                max-height: none;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-card {
+            animation: fadeIn .3s ease both;
+        }
+
+        .right-panel {
+            animation: slideUp .35s ease both;
+        }
+
+        /* Run button pulse while loading */
+        .btn.running {
+            animation: runpulse .8s infinite;
+        }
+
+        @keyframes runpulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .6
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo-icon">JP</div>
-            <a href="/" class="nav-item" title="Inicio">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
-            </a>
-            <a href="/entrevista" class="nav-item" title="Ruta">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                </svg>
-            </a>
-            <a href="/entrevista/docs" class="nav-item" title="Documentación">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                </svg>
-            </a>
-            <a href="/entrevista/ia" class="nav-item" title="IA">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="19" cy="12" r="1" />
-                    <circle cx="5" cy="12" r="1" />
-                </svg>
-            </a>
-            <a href="/entrevista/mock" class="nav-item" title="Mock">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-                    <path d="M12 6v6l4 2" />
-                </svg>
-            </a>
-            <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
-                </svg>
-            </a>
-            <a href="/entrevista/webflux" class="nav-item active" title="WebFlux">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="16 18 22 12 16 6" />
-                    <polyline points="8 6 2 12 8 18" />
-                </svg>
-            </a>
 
-            <div class="sidebar-footer">
-                <div class="nav-item" id="btnConfig" title="Configuracion">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3" />
-                        <path
-                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                </div>
+    <!-- ═══════════ SIDEBAR ═══════════ -->
+    <aside class="sidebar">
+        <div class="logo-icon">JP</div>
+        <a href="/" class="nav-item" title="Inicio">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+        </a>
+        <a href="/entrevista" class="nav-item" title="Ruta">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
+        </a>
+        <a href="/entrevista/docs" class="nav-item" title="Documentación">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+            </svg>
+        </a>
+        <a href="/entrevista/ia" class="nav-item" title="IA">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="19" cy="12" r="1" />
+                <circle cx="5" cy="12" r="1" />
+            </svg>
+        </a>
+        <a href="/entrevista/webflux" class="nav-item active" title="WebFlux">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+            </svg>
+        </a>
+        <div class="sidebar-footer">
+            <div class="nav-item" id="btnConfig" title="Configuración">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
             </div>
-        </aside>
+        </div>
+    </aside>
 
-        <main class="main-content" style="padding: 0; overflow: auto;">
-            <!-- TOPBAR -->
-            <header class="topbar">
-                <a href="/" class="back-btn">← Volver</a>
-                <div id="rxStatusMsg" class="status-bar" style="text-align:right;"></div>
-            </header>
+    <!-- ═══════════ MAIN ═══════════ -->
+    <div class="main-content">
 
-            <div class="app">
-                <!-- MAIN -->
-                <div class="main-grid">
+        <!-- Top header -->
+        <header class="top-header">
+            <a href="/" class="back-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Volver
+            </a>
+            <div class="header-center">
+                <span class="badge-reactive">Reactive</span>
+                <span class="header-title">WebFlux & Programación Reactiva</span>
+            </div>
+            <div class="status-bar">
+                <div class="dot-live"></div>
+                <span id="rxStatusMsg">Listo</span>
+            </div>
+        </header>
 
-                    <!-- LEFT: Challenges + Repo loader -->
-                    <aside class="left-panel">
+        <!-- Page body -->
+        <div class="page-body">
 
-                        <!-- Repo Loader -->
-                        <div class="panel-card">
-                            <div class="panel-header">
-                                <span>📦 Cargar Retos desde GitHub</span>
-                                <button id="btnSaveRxRepo" class="btn" onclick="guardarRxRepo()">Guardar</button>
-                            </div>
-                            <div class="panel-body">
-                                <div class="repo-row">
-                                    <input type="text" id="rxRepoUrl" class="rx-input"
-                                        placeholder="https://github.com/user/repo">
-                                    <button class="btn" onclick="cargarRxRepo()">Cargar</button>
-                                </div>
-                                <div id="rxSavedRepos" style="margin-bottom:10px;"></div>
-                                <div class="repo-tabs" id="rxRepoTabs">
-                                    <div class="repo-tab active" id="tab-standard" onclick="switchRxRepo('standard')">
-                                        Standard
-                                    </div>
-                                </div>
+            <!-- ═══ LEFT PANEL ═══ -->
+            <aside class="left-panel">
+
+                <!-- Repo Loader -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div class="ph-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                            </svg>
+                            Cargar desde GitHub
+                        </div>
+                        <button id="btnSaveRxRepo" class="btn btn-sm" style="display:none;" onclick="guardarRxRepo()">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                <polyline points="17 21 17 13 7 13 7 21" />
+                                <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                            Guardar
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <div class="repo-row">
+                            <input type="text" id="rxRepoUrl" class="rx-input"
+                                placeholder="https://github.com/user/repo">
+                            <button class="btn" onclick="cargarRxRepo()">Cargar</button>
+                        </div>
+                        <div id="rxSavedRepos"></div>
+                        <div class="repo-tabs" id="rxRepoTabs">
+                            <div class="repo-tab active" id="tab-standard" onclick="switchRxRepo('standard')">Standard
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Challenge list -->
-                        <div class="panel-card" style="flex:1;">
-                            <div class="panel-header">
-                                <span>🎯 Retos</span>
-                                <span id="rxProgressLabel"
-                                    style="font-size:0.72rem;color:var(--ink-dim);font-weight:600;">0
-                                    completados</span>
-                            </div>
-                            <div class="panel-body" style="padding:10px 14px;">
-                                <div class="challenge-list" id="rxChallengeList">
-                                    <!-- Injected by JS -->
-                                </div>
-                            </div>
+                <!-- Challenges -->
+                <div class="panel-card" style="flex:1;">
+                    <div class="panel-header">
+                        <div class="ph-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            Retos
                         </div>
-
-                    </aside>
-
-                    <!-- RIGHT: Editor + Output + Concepts -->
-                    <div class="right-panel">
-
-                        <!-- Concept chips -->
-                        <div class="concept-strip">
-                            <div class="concept-chip" onclick="showConcept('mono')">Mono&lt;T&gt;</div>
-                            <div class="concept-chip" onclick="showConcept('flux')">Flux&lt;T&gt;</div>
-                            <div class="concept-chip" onclick="showConcept('flatmap')">flatMap</div>
-                            <div class="concept-chip" onclick="showConcept('operators')">Operadores</div>
-                            <div class="concept-chip" onclick="showConcept('error')">Error Handling</div>
-                            <div class="concept-chip" onclick="showConcept('scheduler')">Schedulers</div>
+                        <div class="progress-wrap">
+                            <div class="progress-track">
+                                <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                            </div>
+                            <span class="progress-label" id="rxProgressLabel">0 / 0</span>
                         </div>
+                    </div>
+                    <div class="panel-body" style="padding:10px 12px;">
+                        <div class="challenge-list" id="rxChallengeList"></div>
+                    </div>
+                </div>
 
-                        <!-- Concept info panel -->
-                        <div class="concept-panel" id="conceptPanel" style="display:none;">
-                            <div class="concept-block" id="concept-mono">
-                                <h3>Mono&lt;T&gt; — 0 o 1 item</h3>
-                                <p><strong>Mono</strong> es un Publisher que emite como máximo <em>un</em> elemento y
-                                    luego
-                                    completa (o emite error). Equivale a un <code>Optional</code> reactivo.</p>
-                                <div class="code-snippet">Mono.just("Hola WebFlux")
-                                    .map(String::toUpperCase)
-                                    .subscribe(System.out::println);
+            </aside>
 
-                                    // Con creacion diferida
-                                    Mono.fromSupplier(() -> calcularPrecio())
-                                    .doOnSuccess(p -> log("precio: " + p))
-                                    .subscribe();</div>
-                            </div>
-                            <div class="concept-block" id="concept-flux">
-                                <h3>Flux&lt;T&gt; — 0..N items</h3>
-                                <p><strong>Flux</strong> es un Publisher que emite <em>múltiples</em> elementos. Es el
-                                    equivalente reactivo de una lista o stream.</p>
-                                <div class="code-snippet">Flux.just(1, 2, 3, 4, 5)
-                                    .filter(n -> n % 2 == 0)
-                                    .map(n -> n * 10)
-                                    .subscribe(System.out::println);
+            <!-- ═══ RIGHT PANEL ═══ -->
+            <div class="right-panel">
 
-                                    Flux.range(1, 100)
-                                    .take(5)
-                                    .collectList()
-                                    .subscribe(System.out::println);</div>
-                            </div>
-                            <div class="concept-block" id="concept-flatmap">
-                                <h3>flatMap vs concatMap vs switchMap</h3>
-                                <p><strong>flatMap</strong> → concurrente, no garantiza orden.
-                                    <strong>concatMap</strong> →
-                                    secuencial, mantiene orden. <strong>switchMap</strong> → cancela la anterior al
-                                    llegar nueva
-                                    señal.
-                                </p>
-                                <div class="code-snippet">// flatMap: concurrente
-                                    Flux.just("a","b","c")
-                                    .flatMap(s -> llamadaAsync(s))
-                                    .subscribe();
+                <!-- Concept chips -->
+                <div class="concept-strip">
+                    <div class="concept-chip" onclick="showConcept('mono')">Mono&lt;T&gt;</div>
+                    <div class="concept-chip" onclick="showConcept('flux')">Flux&lt;T&gt;</div>
+                    <div class="concept-chip" onclick="showConcept('flatmap')">flatMap</div>
+                    <div class="concept-chip" onclick="showConcept('operators')">Operadores</div>
+                    <div class="concept-chip" onclick="showConcept('error')">Error Handling</div>
+                    <div class="concept-chip" onclick="showConcept('scheduler')">Schedulers</div>
+                </div>
 
-                                    // concatMap: orden garantizado
-                                    Flux.just("a","b","c")
-                                    .concatMap(s -> llamadaAsync(s))
-                                    .subscribe();</div>
-                            </div>
-                            <div class="concept-block" id="concept-operators">
-                                <h3>Operadores clave</h3>
-                                <p>Los operadores transforman el stream sin suscribirse. Son lazy: nada ocurre hasta que
-                                    alguien
-                                    se suscribe.</p>
-                                <div class="code-snippet">flux.map() // transforma 1:1
-                                    flux.flatMap() // transforma 1:N asincrono
-                                    flux.filter() // filtra segun predicado
-                                    flux.reduce() // acumula en un Mono
-                                    flux.collectList()// Flux -> Mono&lt;List&gt;
-                                    flux.zip() // combina dos Flux
-                                    flux.merge() // une Flux concurrentes
-                                    flux.take(n) // tomar N elementos
-                                    flux.timeout() // falla si tarda mucho
-                                    flux.retry(n) // reintentar N veces</div>
-                            </div>
-                            <div class="concept-block" id="concept-error">
-                                <h3>Manejo de Errores</h3>
-                                <p>A diferencia del try-catch imperativo, los errores son señales en el stream y se
-                                    manejan con
-                                    operadores.</p>
-                                <div class="code-snippet">Mono.just(0)
-                                    .map(n -> 10 / n) // ArithmeticException
-                                    .onErrorReturn(-1) // valor por defecto
+                <!-- Concept info panel -->
+                <div class="concept-panel" id="conceptPanel">
+                    <div class="concept-block" id="concept-mono">
+                        <h3>Mono&lt;T&gt; — 0 o 1 item</h3>
+                        <p><strong>Mono</strong> es un Publisher que emite como máximo <em>un</em> elemento y luego
+                            completa (o emite error). Equivale a un <code>Optional</code> reactivo.</p>
+                        <div class="code-snippet">Mono.just("Hola WebFlux")
+                            .map(String::toUpperCase)
+                            .subscribe(System.out::println);
 
-                                    Flux.error(new RuntimeException("fallo"))
-                                    .onErrorResume(e -> Flux.just("fallback"))
+                            // Con creación diferida
+                            Mono.fromSupplier(() -> calcularPrecio())
+                            .doOnSuccess(p -> log("precio: " + p))
+                            .subscribe();</div>
+                    </div>
+                    <div class="concept-block" id="concept-flux">
+                        <h3>Flux&lt;T&gt; — 0..N items</h3>
+                        <p><strong>Flux</strong> es un Publisher que emite <em>múltiples</em> elementos. Es el
+                            equivalente reactivo de una lista o stream.</p>
+                        <div class="code-snippet">Flux.just(1, 2, 3, 4, 5)
+                            .filter(n -> n % 2 == 0)
+                            .map(n -> n * 10)
+                            .subscribe(System.out::println);
 
-                                    flux.doOnError(e -> log.error("Error:", e))
-                                    .retry(3) // reintentar 3x
-                                    .timeout(Duration.ofSeconds(5))</div>
-                            </div>
-                            <div class="concept-block" id="concept-scheduler">
-                                <h3>Schedulers &amp; Hilos</h3>
-                                <p>Reactive es <em>single-thread by default</em>. Los <strong>Schedulers</strong>
-                                    controlan en
-                                    qué hilo se ejecuta cada parte del pipeline.</p>
-                                <div class="code-snippet">Flux.just(1,2,3)
-                                    .subscribeOn(Schedulers.boundedElastic()) // hilo de suscripcion
-                                    .publishOn(Schedulers.parallel()) // hilo de publicacion
-                                    .subscribe();
+                            Flux.range(1, 100)
+                            .take(5)
+                            .collectList()
+                            .subscribe(System.out::println);</div>
+                    </div>
+                    <div class="concept-block" id="concept-flatmap">
+                        <h3>flatMap vs concatMap vs switchMap</h3>
+                        <p><strong>flatMap</strong> → concurrente, no garantiza orden. <strong>concatMap</strong> →
+                            secuencial, mantiene orden. <strong>switchMap</strong> → cancela la anterior al llegar nueva
+                            señal.</p>
+                        <div class="code-snippet">// flatMap: concurrente
+                            Flux.just("a","b","c")
+                            .flatMap(s -> llamadaAsync(s))
+                            .subscribe();
 
-                                    // Para I/O bloqueante (JPA, calls HTTP sincronas):
-                                    Mono.fromCallable(() -> repoBlocking.save(entity))
-                                    .subscribeOn(Schedulers.boundedElastic())</div>
-                            </div>
+                            // concatMap: orden garantizado
+                            Flux.just("a","b","c")
+                            .concatMap(s -> llamadaAsync(s))
+                            .subscribe();</div>
+                    </div>
+                    <div class="concept-block" id="concept-operators">
+                        <h3>Operadores clave</h3>
+                        <p>Los operadores transforman el stream sin suscribirse. Son lazy: nada ocurre hasta que alguien
+                            se suscribe.</p>
+                        <div class="code-snippet">flux.map() // transforma 1:1
+                            flux.flatMap() // transforma 1:N asíncrono
+                            flux.filter() // filtra según predicado
+                            flux.reduce() // acumula en un Mono
+                            flux.collectList() // Flux -> Mono&lt;List&gt;
+                            flux.zip() // combina dos Flux
+                            flux.merge() // une Flux concurrentes
+                            flux.take(n) // tomar N elementos
+                            flux.timeout() // falla si tarda mucho
+                            flux.retry(n) // reintentar N veces</div>
+                    </div>
+                    <div class="concept-block" id="concept-error">
+                        <h3>Manejo de Errores</h3>
+                        <p>A diferencia del try-catch imperativo, los errores son señales en el stream y se manejan con
+                            operadores.</p>
+                        <div class="code-snippet">Mono.just(0)
+                            .map(n -> 10 / n) // ArithmeticException
+                            .onErrorReturn(-1) // valor por defecto
+
+                            Flux.error(new RuntimeException("fallo"))
+                            .onErrorResume(e -> Flux.just("fallback"))
+
+                            flux.doOnError(e -> log.error("Error:", e))
+                            .retry(3)
+                            .timeout(Duration.ofSeconds(5))</div>
+                    </div>
+                    <div class="concept-block" id="concept-scheduler">
+                        <h3>Schedulers &amp; Hilos</h3>
+                        <p>Reactive es <em>single-thread by default</em>. Los <strong>Schedulers</strong> controlan en
+                            qué hilo se ejecuta cada parte del pipeline.</p>
+                        <div class="code-snippet">Flux.just(1,2,3)
+                            .subscribeOn(Schedulers.boundedElastic()) // hilo suscripción
+                            .publishOn(Schedulers.parallel()) // hilo publicación
+                            .subscribe();
+
+                            // Para I/O bloqueante (JPA, calls HTTP síncronas):
+                            Mono.fromCallable(() -> repoBlocking.save(entity))
+                            .subscribeOn(Schedulers.boundedElastic())</div>
+                    </div>
+                </div>
+
+                <!-- ═══ EDITOR SHELL ═══ -->
+                <div class="editor-shell" id="editorShell">
+                    <div class="editor-topbar">
+                        <div class="dot-group">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
                         </div>
-
-                        <!-- Editor Shell -->
-                        <div class="editor-shell">
-                            <div class="editor-topbar">
-                                <div class="dot-group">
-                                    <div class="dot red"></div>
-                                    <div class="dot yellow"></div>
-                                    <div class="dot green"></div>
-                                </div>
-                                <span class="editor-file-label" id="rxEditorLabel">Main.java — WebFlux Playground</span>
-                                <div class="editor-actions">
-                                    <button id="btnVscode" class="btn ghost btn-sm"
-                                        style="background: #24292e; color: white; border: 1px solid #444d56; display: inline-flex; align-items: center; gap: 6px;"
-                                        onclick="window.open('https://vscode.dev/github/YeridStick/poo-practica', '_blank')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M23.15 2.58L19.8 1.45c-.32-.11-.66.03-.82.33L12 15.67 5.02 1.78c-.16-.3-.5-.44-.82-.33L.85 2.58c-.36.12-.5.54-.26.82l6.21 7.08L.59 17.56c-.24.28-.1.7.26.82l3.35 1.13c.32.11.66-.03.82-.33L12 5.31l6.98 13.88c.16.3.5.44.82.33l3.35-1.13c.36-.12.5-.54.26-.82l-6.21-7.08 6.21-7.08c.24-.28.1-.7-.26-.82z" />
-                                        </svg>
-                                        VS Code
-                                    </button>
-                                    <button class="btn ghost btn-sm" onclick="limpiarRxEditor()">Limpiar</button>
-                                    <button class="btn btn-sm" onclick="ejecutarRxJava()">▶ Ejecutar</button>
-                                </div>
+                        <span class="editor-file-label" id="rxEditorLabel">Main.java — WebFlux Playground</span>
+                        <div class="editor-actions">
+                            <!-- Keyboard hints -->
+                            <div class="kbd-hint" style="margin-right:6px;">
+                                <span class="kbd">Ctrl</span><span style="font-size:.6rem">+</span><span
+                                    class="kbd">↵</span>
+                                <span style="font-size:.66rem;color:var(--ink-faint);">Ejecutar</span>
                             </div>
-                            <div class="editor-body" style="height: 480px; position: relative; background: #1e1e1e;">
-                                <div id="monacoEditor" style="width: 100%;"></div>
-                                <!-- Viejo editor oculto para compatibilidad -->
-                                <textarea id="rxEditor" class="rx-editor" spellcheck="false" style="display:none;">
-import reactor.core.publisher.Flux;
+                            <button class="btn ghost btn-sm" style="background:#24292e;color:#fff;border-color:#444d56;"
+                                onclick="window.open('https://vscode.dev/github/YeridStick/poo-practica','_blank')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M23.15 2.58L19.8 1.45c-.32-.11-.66.03-.82.33L12 15.67 5.02 1.78c-.16-.3-.5-.44-.82-.33L.85 2.58c-.36.12-.5.54-.26.82l6.21 7.08L.59 17.56c-.24.28-.1.7.26.82l3.35 1.13c.32.11.66-.03.82-.33L12 5.31l6.98 13.88c.16.3.5.44.82.33l3.35-1.13c.36-.12.5-.54.26-.82l-6.21-7.08 6.21-7.08c.24-.28.1-.7-.26-.82z" />
+                                </svg>
+                                VS Code
+                            </button>
+                            <button class="btn ghost btn-sm" onclick="limpiarRxEditor()">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6" />
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                                </svg>
+                                Limpiar
+                            </button>
+                            <button class="btn btn-sm" id="runBtn" onclick="ejecutarRxJava()">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                Ejecutar
+                            </button>
+                            <!-- EXPAND BUTTON -->
+                            <button class="expand-btn" id="expandBtn" onclick="toggleExpand()"
+                                title="Ampliar editor (F11)">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="expandIcon">
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <polyline points="9 21 3 21 3 15" />
+                                    <line x1="21" y1="3" x2="14" y2="10" />
+                                    <line x1="3" y1="21" x2="10" y2="14" />
+                                </svg>
+                                Ampliar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Monaco -->
+                    <div class="editor-body" id="editorBody">
+                        <div id="monacoEditor" style="width:100%;height:100%;"></div>
+                        <textarea id="rxEditor" style="display:none;" spellcheck="false">import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class Main {
@@ -918,448 +1418,598 @@ public class Main {
             .map(n -> "Par: " + n)
             .subscribe(System.out::println);
     }
-}
-                                </textarea>
+}</textarea>
+                    </div>
+
+                    <!-- Resize handle (only visible when not expanded) -->
+                    <div class="resize-handle" id="resizeHandle" title="Arrastrar para redimensionar"></div>
+
+                    <!-- ═══ OUTPUT / TERMINAL — dentro del shell para viajar al expandir ═══ -->
+                    <div class="output-panel" id="outputPanel">
+                        <div class="output-header">
+                            <div class="output-live-dot" id="outputDot"></div>
+                            <span>Terminal de salida</span>
+                            <div style="margin-left:8px;display:flex;gap:6px;align-items:center;">
+                                <span id="rxExecTime" style="font-size:.68rem;color:var(--ink-faint);"></span>
+                                <span id="rxValidateResult"></span>
                             </div>
+                            <button class="output-expand-btn" onclick="toggleOutputExpand()" id="outputExpandBtn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    id="outputExpandIcon">
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <polyline points="9 21 3 21 3 15" />
+                                    <line x1="21" y1="3" x2="14" y2="10" />
+                                    <line x1="3" y1="21" x2="10" y2="14" />
+                                </svg>
+                                Expandir salida
+                            </button>
                         </div>
-
-                        <!-- Output -->
-                        <div class="output-panel">
-                            <div class="output-header">
-                                <div class="output-dot"></div>
-                                <span>Salida del programa</span>
-                                <span id="rxValidateResult" style="margin-left:auto;font-size:0.72rem;"></span>
-                            </div>
-                            <pre class="output-body" id="rxOutput">La salida aparecerá aquí...</pre>
-                        </div>
-
-                    </div><!-- /right-panel -->
-                </div><!-- /main-grid -->
-            </div><!-- /app -->
-
-            <!-- Alert Modal -->
-            <div class="rx-modal" id="rxAlertModal">
-                <div class="rx-modal-box">
-                    <div class="modal-top" id="rxAlertTitle">Mensaje</div>
-                    <div class="modal-body">
-                        <p id="rxAlertMsg"></p>
-                        <div class="modal-actions">
-                            <button class="btn-cancel" id="rxAlertCancelBtn" style="display:none;"
-                                onclick="closeRxModal('rxAlertModal')">Cancelar</button>
-                            <button class="btn btn-sm" id="rxAlertConfirmBtn"
-                                onclick="closeRxModal('rxAlertModal')">Aceptar</button>
-                        </div>
+                        <pre class="output-body" id="rxOutput"><span class="out-dim">// La salida del programa aparecerá aquí...
+// Ctrl+Enter para ejecutar rápidamente.</span></pre>
                     </div>
                 </div>
-            </div>
 
-            <!-- Input Modal -->
-            <div class="rx-modal" id="rxInputModal">
-                <div class="rx-modal-box">
-                    <div class="modal-top" id="rxInputTitle">Nombre del repositorio</div>
-                    <div class="modal-body">
-                        <input type="text" id="rxInputField" class="rx-input" style="width:100%;margin-bottom:14px;"
-                            placeholder="">
-                        <div class="modal-actions">
-                            <button class="btn-cancel" onclick="closeRxModal('rxInputModal')">Cancelar</button>
-                            <button class="btn btn-sm" id="rxInputConfirmBtn">Aceptar</button>
-                        </div>
-                    </div>
+            </div><!-- /right-panel -->
+        </div><!-- /page-body -->
+
+        <!-- backdrop for expanded editor -->
+        <div class="expanded-backdrop" id="expandedBackdrop" onclick="collapseEditor()"></div>
+
+        <footer
+            style="padding:16px 28px;text-align:center;color:var(--ink-faint);font-size:.76rem;border-top:1px solid var(--border);">
+            Dashboard de Aprendizaje Java v2.0 — 2026
+        </footer>
+    </div><!-- /main-content -->
+
+    <!-- ══ Alert Modal ══ -->
+    <div class="rx-modal" id="rxAlertModal">
+        <div class="rx-modal-box">
+            <div class="modal-top" id="rxAlertTitle">Mensaje</div>
+            <div class="modal-body">
+                <p id="rxAlertMsg"></p>
+                <div class="modal-actions">
+                    <button class="btn-cancel" id="rxAlertCancelBtn" style="display:none;"
+                        onclick="closeRxModal('rxAlertModal')">Cancelar</button>
+                    <button class="btn btn-sm" id="rxAlertConfirmBtn"
+                        onclick="closeRxModal('rxAlertModal')">Aceptar</button>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <script>
-                // ============================================================
-                // STATE
-                // ============================================================
-                const STANDARD_CHALLENGES = [
-                    {
-                        id: 'rx1', order: 1,
-                        titulo: 'Tu primer Flux',
-                        descripcion: 'Crea un Flux de números del 1 al 5, filtra los pares y multiplícalos por 10. Imprime cada resultado.',
-                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            // filtra pares, multiplica x10\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['20', '40']
-                    },
-                    {
-                        id: 'rx2', order: 2,
-                        titulo: 'Mono y transformación',
-                        descripcion: 'Crea un Mono con tu nombre, transforma a mayúsculas e imprime "Hola: NOMBRE".',
-                        template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.just("nombre")\n            // .map() para transformar\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['Hola:']
-                    },
-                    {
-                        id: 'rx3', order: 3,
-                        titulo: 'flatMap: de IDs a Objetos',
-                        descripcion: 'Dado un Flux de IDs (1,2,3), usa flatMap para obtener "Producto-N" por cada ID.',
-                        template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just(1, 2, 3)\n            .flatMap(id -> Mono.just("Producto-" + id))\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['Producto-1', 'Producto-2', 'Producto-3']
-                    },
-                    {
-                        id: 'rx4', order: 4,
-                        titulo: 'collectList y reduce',
-                        descripcion: 'Usa Flux.range(1,5) con reduce para sumar todos. Imprime "Suma: 15".',
-                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            .reduce(0, Integer::sum)\n            .subscribe(s -> System.out.println("Suma: " + s));\n    }\n}`,
-                        expected: ['Suma: 15']
-                    },
-                    {
-                        id: 'rx5', order: 5,
-                        titulo: 'onErrorReturn — Resilencia',
-                        descripcion: 'Crea un Mono que lanza RuntimeException. Usa onErrorReturn para devolver "fallback" e imprimirlo.',
-                        template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.error(new RuntimeException("fallo"))\n            // maneja el error\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['fallback']
-                    },
-                    {
-                        id: 'rx6', order: 6,
-                        titulo: 'zip — Combinar Flujos',
-                        descripcion: 'Combina Flux.just("A","B","C") con Flux.just(1,2,3) usando zip. Imprime "A-1", "B-2", "C-3".',
-                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux<String> letras = Flux.just("A","B","C");\n        Flux<Integer> nums = Flux.just(1,2,3);\n        Flux.zip(letras, nums, (l,n) -> l + "-" + n)\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['A-1', 'B-2', 'C-3']
-                    },
-                    {
-                        id: 'rx7', order: 7,
-                        titulo: 'concatMap — Orden Garantizado',
-                        descripcion: 'Con concatMap, convierte Flux de ["uno","dos","tres"] a sus longitudes. Imprime 3, 3, 4.',
-                        template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just("uno","dos","tres")\n            .concatMap(s -> Mono.just(s.length()))\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['3', '3', '4']
-                    },
-                    {
-                        id: 'rx8', order: 8,
-                        titulo: 'groupBy — Clasificación',
-                        descripcion: 'Clasifica Flux.just(1..6) en pares e impares. Imprime "PARES:" seguido de todos los pares.',
-                        template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1,6)\n            .groupBy(n -> n % 2 == 0 ? "PARES" : "IMPARES")\n            .flatMap(g -> g.collectList().map(l -> g.key() + ": " + l))\n            .subscribe(System.out::println);\n    }\n}`,
-                        expected: ['PARES:']
-                    }
-                ];
+    <!-- ══ Input Modal ══ -->
+    <div class="rx-modal" id="rxInputModal">
+        <div class="rx-modal-box">
+            <div class="modal-top" id="rxInputTitle">Nombre del repositorio</div>
+            <div class="modal-body">
+                <input type="text" id="rxInputField" class="rx-input" style="width:100%;margin-bottom:14px;"
+                    placeholder="">
+                <div class="modal-actions">
+                    <button class="btn-cancel" onclick="closeRxModal('rxInputModal')">Cancelar</button>
+                    <button class="btn btn-sm" id="rxInputConfirmBtn">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                let rxCollections = {
-                    standard: { nombre: 'Standard', retos: STANDARD_CHALLENGES }
-                };
-                let rxCurrentRepo = 'standard';
-                let rxTempRepo = null;
+    <!-- ══════════════════════════ SCRIPTS ══════════════════════════ -->
+    <script>
+        /* ── Challenges data ───────────────────────────── */
+        const STANDARD_CHALLENGES = [
+            {
+                id: 'rx1', order: 1,
+                titulo: 'Tu primer Flux',
+                descripcion: 'Crea un Flux de números del 1 al 5, filtra los pares y multiplícalos por 10. Imprime cada resultado.',
+                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            // TODO: filtra pares, multiplica x10\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['20', '40']
+            },
+            {
+                id: 'rx2', order: 2,
+                titulo: 'Mono y transformación',
+                descripcion: 'Crea un Mono con tu nombre, transforma a mayúsculas e imprime "Hola: NOMBRE".',
+                template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.just("nombre")\n            // TODO: .map() para transformar\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['Hola:']
+            },
+            {
+                id: 'rx3', order: 3,
+                titulo: 'flatMap: de IDs a Objetos',
+                descripcion: 'Dado un Flux de IDs (1,2,3), usa flatMap para obtener "Producto-N" por cada ID.',
+                template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just(1, 2, 3)\n            .flatMap(id -> Mono.just("Producto-" + id))\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['Producto-1', 'Producto-2', 'Producto-3']
+            },
+            {
+                id: 'rx4', order: 4,
+                titulo: 'collectList y reduce',
+                descripcion: 'Usa Flux.range(1,5) con reduce para sumar todos. Imprime "Suma: 15".',
+                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1, 5)\n            .reduce(0, Integer::sum)\n            .subscribe(s -> System.out.println("Suma: " + s));\n    }\n}`,
+                expected: ['Suma: 15']
+            },
+            {
+                id: 'rx5', order: 5,
+                titulo: 'onErrorReturn — Resiliencia',
+                descripcion: 'Crea un Mono que lanza RuntimeException. Usa onErrorReturn para devolver "fallback" e imprimirlo.',
+                template: `import reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Mono.error(new RuntimeException("fallo"))\n            // TODO: maneja el error\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['fallback']
+            },
+            {
+                id: 'rx6', order: 6,
+                titulo: 'zip — Combinar Flujos',
+                descripcion: 'Combina Flux.just("A","B","C") con Flux.just(1,2,3) usando zip. Imprime "A-1", "B-2", "C-3".',
+                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux<String> letras = Flux.just("A","B","C");\n        Flux<Integer> nums = Flux.just(1,2,3);\n        Flux.zip(letras, nums, (l,n) -> l + "-" + n)\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['A-1', 'B-2', 'C-3']
+            },
+            {
+                id: 'rx7', order: 7,
+                titulo: 'concatMap — Orden Garantizado',
+                descripcion: 'Con concatMap, convierte Flux de ["uno","dos","tres"] a sus longitudes. Imprime 3, 3, 4.',
+                template: `import reactor.core.publisher.Flux;\nimport reactor.core.publisher.Mono;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.just("uno","dos","tres")\n            .concatMap(s -> Mono.just(s.length()))\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['3', '3', '4']
+            },
+            {
+                id: 'rx8', order: 8,
+                titulo: 'groupBy — Clasificación',
+                descripcion: 'Clasifica Flux.just(1..6) en pares e impares. Imprime "PARES:" seguido de los valores.',
+                template: `import reactor.core.publisher.Flux;\n\npublic class Main {\n    public static void main(String[] args) {\n        Flux.range(1,6)\n            .groupBy(n -> n % 2 == 0 ? "PARES" : "IMPARES")\n            .flatMap(g -> g.collectList().map(l -> g.key() + ": " + l))\n            .subscribe(System.out::println);\n    }\n}`,
+                expected: ['PARES:']
+            }
+        ];
 
-                // ============================================================
-                // EDITOR
-                // ============================================================
-                const rxEditorContainer = document.getElementById('monacoEditor');
-                const rxOldTextarea = document.getElementById('rxEditor');
-                let monacoEditor;
+        let rxCollections = { standard: { nombre: 'Standard', retos: STANDARD_CHALLENGES } };
+        let rxCurrentRepo = 'standard';
+        let rxTempRepo = null;
 
-                require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
-                require(['vs/editor/editor.main'], function () {
-                    monacoEditor = monaco.editor.create(rxEditorContainer, {
-                        value: rxOldTextarea.value || "// Escribe tu código reactivo aquí...",
-                        language: 'java',
-                        theme: 'vs-dark',
-                        automaticLayout: true,
-                        fontSize: 14,
-                        minimap: { enabled: false },
-                        scrollBeyondLastLine: false,
-                        roundedSelection: true,
-                        scrollbar: {
-                            vertical: 'auto',
-                            horizontal: 'auto'
-                        },
-                        fixedOverflowWidgets: true
-                    });
+        /* ── Monaco Editor ─────────────────────────────── */
+        let monacoEditor;
 
-                    // Forzar layout y foco con reintentos para evitar el problema de "angosta"
-                    let layoutAttempts = 0;
-                    const forceInit = setInterval(() => {
-                        if (monacoEditor) {
-                            monacoEditor.layout();
-                            monacoEditor.focus();
-                        }
-                        layoutAttempts++;
-                        if (layoutAttempts > 10) clearInterval(forceInit);
-                    }, 300);
+        // El contenedor #monacoEditor necesita dimensiones reales ANTES de crear el editor.
+        // Forzamos la altura del body del editor explícitamente para que height:100% resuelva bien.
+        function ensureEditorBodyHeight() {
+            const body = document.getElementById('editorBody');
+            if (body && !body.style.height) {
+                body.style.height = '420px';
+            }
+        }
+        ensureEditorBodyHeight();
 
-                    monacoEditor.onKeyDown((e) => {
-                        if (e.ctrlKey && e.keyCode === monaco.KeyCode.Enter) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            ejecutarRxJava();
-                        }
-                        if (e.ctrlKey && e.keyCode === monaco.KeyCode.KeyL) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            limpiarRxEditor();
-                        }
-                    });
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            const container = document.getElementById('monacoEditor');
+
+            // Garantizar que el contenedor tenga altura antes de crear
+            container.style.height = '100%';
+            container.style.minHeight = '420px';
+
+            monacoEditor = monaco.editor.create(container, {
+                value: document.getElementById('rxEditor').value,
+                language: 'java',
+                theme: 'vs-dark',
+                automaticLayout: false,   // lo manejamos manualmente para control total
+                fontSize: 14,
+                lineHeight: 22,
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                roundedSelection: true,
+                padding: { top: 12, bottom: 12 },
+                scrollbar: { vertical: 'auto', horizontal: 'auto', verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+                renderLineHighlight: 'line',
+                cursorBlinking: 'smooth',
+                bracketPairColorization: { enabled: true },
+                fixedOverflowWidgets: true
+            });
+
+            // Ctrl+Enter → run, Ctrl+L → clear
+            monacoEditor.onKeyDown(e => {
+                if (e.ctrlKey && e.keyCode === monaco.KeyCode.Enter) { e.preventDefault(); e.stopPropagation(); ejecutarRxJava(); }
+                if (e.ctrlKey && e.keyCode === monaco.KeyCode.KeyL) { e.preventDefault(); e.stopPropagation(); limpiarRxEditor(); }
+            });
+
+            // ── Layout robusto en carga inicial ──────────────
+            // Dispara layout múltiples veces para cubrir: renderizado CSS, fuentes web, reflow del grid.
+            function forceLayout() {
+                if (!monacoEditor) return;
+                const w = container.offsetWidth;
+                const h = container.offsetHeight || 420;
+                monacoEditor.layout({ width: w, height: h });
+            }
+
+            // Intentos escalonados: 0ms, 50ms, 150ms, 300ms, 600ms, 1200ms
+            [0, 50, 150, 300, 600, 1200].forEach(ms => setTimeout(forceLayout, ms));
+
+            // ResizeObserver: cada vez que el contenedor cambia de tamaño (incluye la primera vez que el grid termina de pintar)
+            if (window.ResizeObserver) {
+                const ro = new ResizeObserver(() => forceLayout());
+                ro.observe(container);
+                ro.observe(document.getElementById('editorBody'));
+            }
+
+            // Fallback: re-layout cuando la ventana cambia (responsive)
+            window.addEventListener('resize', forceLayout);
+        });
+
+        function getRxEditorValue() { return monacoEditor ? monacoEditor.getValue() : document.getElementById('rxEditor').value; }
+        function setRxEditorValue(v) {
+            if (monacoEditor) { monacoEditor.setValue(v); monacoEditor.focus(); }
+            else { document.getElementById('rxEditor').value = v; }
+        }
+
+        function limpiarRxEditor() {
+            setRxEditorValue('');
+            document.getElementById('rxOutput').innerHTML = '<span class="out-dim">// Editor limpiado. Escribe tu código...</span>';
+            document.getElementById('rxValidateResult').textContent = '';
+            document.getElementById('rxExecTime').textContent = '';
+        }
+
+        async function ejecutarRxJava() {
+            const out = document.getElementById('rxOutput');
+            const runBtn = document.getElementById('runBtn');
+            const dot = document.getElementById('outputDot');
+            const t0 = Date.now();
+
+            out.innerHTML = '<span class="out-dim">⏳ Ejecutando...</span>';
+            document.getElementById('rxValidateResult').textContent = '';
+            document.getElementById('rxExecTime').textContent = '';
+            runBtn.classList.add('running');
+            runBtn.textContent = '…';
+            dot.style.background = 'var(--warn)';
+
+            try {
+                const res = await fetch('/run-java-reactivo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
+                    body: getRxEditorValue()
                 });
+                const text = await res.text();
+                const elapsed = ((Date.now() - t0) / 1000).toFixed(2);
+                document.getElementById('rxExecTime').textContent = `${elapsed}s`;
+                renderOutput(text);
+                dot.style.background = 'var(--success)';
+            } catch (err) {
+                out.innerHTML = `<span class="out-err">❌ Error de red: ${err.message}</span>`;
+                dot.style.background = 'var(--danger)';
+            } finally {
+                runBtn.classList.remove('running');
+                runBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Ejecutar`;
+            }
+        }
 
-                function getRxEditorValue() {
-                    return monacoEditor ? monacoEditor.getValue() : rxOldTextarea.value;
-                }
+        function renderOutput(text) {
+            const out = document.getElementById('rxOutput');
+            const lines = text.split('\n');
+            out.innerHTML = lines.map(line => {
+                if (!line.trim()) return '<span> </span>';
+                if (line.match(/error|exception|fail/i)) return `<span class="out-err">${escHtml(line)}</span>`;
+                if (line.match(/^(20|40|Suma:|Producto-|A-|B-|C-|PARES:|fallback|Hola:)/)) return `<span class="out-ok">${escHtml(line)}</span>`;
+                if (line.match(/warning|warn/i)) return `<span class="out-warn">${escHtml(line)}</span>`;
+                if (line.match(/^\/\//)) return `<span class="out-dim">${escHtml(line)}</span>`;
+                return `<span>${escHtml(line)}</span>`;
+            }).join('\n');
+        }
 
-                function setRxEditorValue(val) {
-                    if (monacoEditor) {
-                        monacoEditor.setValue(val);
-                        monacoEditor.focus();
-                    } else {
-                        rxOldTextarea.value = val;
-                    }
-                }
+        function escHtml(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
 
-                function limpiarRxEditor() {
-                    setRxEditorValue('');
-                    document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
-                    document.getElementById('rxValidateResult').textContent = '';
-                }
+        /* ── Concept panel ─────────────────────────────── */
+        let activeConcept = null;
+        function showConcept(id) {
+            const panel = document.getElementById('conceptPanel');
+            document.querySelectorAll('.concept-chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.concept-block').forEach(b => b.classList.remove('active'));
+            if (activeConcept === id) {
+                panel.style.display = 'none'; activeConcept = null; return;
+            }
+            panel.style.display = 'block';
+            const block = document.getElementById('concept-' + id);
+            if (block) block.classList.add('active');
+            const chip = document.querySelector(`.concept-chip[onclick="showConcept('${id}')"]`);
+            if (chip) chip.classList.add('active');
+            activeConcept = id;
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
-                async function ejecutarRxJava() {
-                    const out = document.getElementById('rxOutput');
-                    out.textContent = '⏳ Ejecutando...';
-                    document.getElementById('rxValidateResult').textContent = '';
-                    try {
-                        const res = await fetch('/run-java-reactivo', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
-                            body: getRxEditorValue()
-                        });
-                        out.textContent = await res.text();
-                    } catch (err) {
-                        out.textContent = '❌ Error de red: ' + err;
-                    }
-                }
+        /* ── Editor expand / collapse ──────────────────── */
+        let isExpanded = false;
+        let isOutputExp = false;
 
-                // ============================================================
-                // CONCEPTS PANEL
-                // ============================================================
-                function showConcept(id) {
-                    const panel = document.getElementById('conceptPanel');
-                    panel.style.display = 'block';
-                    document.querySelectorAll('.concept-block').forEach(b => b.classList.remove('active'));
-                    const block = document.getElementById('concept-' + id);
-                    if (block) block.classList.add('active');
-                }
+        function toggleExpand() {
+            isExpanded ? collapseEditor() : expandEditor();
+        }
 
-                // ============================================================
-                // CHALLENGE RENDERING
-                // ============================================================
-                function renderRxChallenges() {
-                    const container = document.getElementById('rxChallengeList');
-                    container.innerHTML = '';
-                    const repoData = rxCollections[rxCurrentRepo];
-                    if (!repoData) return;
+        function expandEditor() {
+            isExpanded = true;
+            const shell = document.getElementById('editorShell');
+            const backdrop = document.getElementById('expandedBackdrop');
+            const btn = document.getElementById('expandBtn');
+            shell.classList.add('expanded');
+            backdrop.classList.add('active');
+            btn.innerHTML = `
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/>
+          <line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>
+        </svg> Contraer`;
+            // Re-layout Monaco con dimensiones reales tras la transición CSS
+            [50, 150, 350].forEach(ms => setTimeout(() => {
+                if (!monacoEditor) return;
+                const body = document.getElementById('editorBody');
+                const c = document.getElementById('monacoEditor');
+                monacoEditor.layout({ width: c.offsetWidth, height: body.offsetHeight });
+            }, ms));
+            document.addEventListener('keydown', onEscExpand);
+        }
 
-                    const retos = repoData.retos;
-                    let done = 0;
+        function collapseEditor() {
+            isExpanded = false;
+            const shell = document.getElementById('editorShell');
+            const backdrop = document.getElementById('expandedBackdrop');
+            const btn = document.getElementById('expandBtn');
+            shell.classList.remove('expanded');
+            backdrop.classList.remove('active');
+            btn.innerHTML = `
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+          <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg> Ampliar`;
+            // Re-layout tras la transición de vuelta
+            [50, 150, 350].forEach(ms => setTimeout(() => {
+                if (!monacoEditor) return;
+                const body = document.getElementById('editorBody');
+                const c = document.getElementById('monacoEditor');
+                monacoEditor.layout({ width: c.offsetWidth, height: body.offsetHeight });
+            }, ms));
+            document.removeEventListener('keydown', onEscExpand);
+        }
 
-                    retos.forEach((reto, idx) => {
-                        const isDone = localStorage.getItem(`rx_${rxCurrentRepo}_${reto.id || idx}`) === '1';
-                        if (isDone) done++;
-                        const locked = idx > 0 && localStorage.getItem(`rx_${rxCurrentRepo}_${retos[idx - 1].id || (idx - 1)}`) !== '1';
+        function onEscExpand(e) { if (e.key === 'Escape') collapseEditor(); }
+        document.addEventListener('keydown', e => { if (e.key === 'F11') { e.preventDefault(); toggleExpand(); } });
 
-                        const card = document.createElement('div');
-                        card.className = `challenge-card ${isDone ? 'done' : ''} ${locked ? 'locked' : ''}`;
+        /* ── Output expand ────────────────────────────── */
+        function toggleOutputExpand() {
+            isOutputExp = !isOutputExp;
+            const body = document.getElementById('rxOutput');
+            const btn = document.getElementById('outputExpandBtn');
+            const contractSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>`;
+            const expandSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
+            if (isOutputExp) {
+                // En expanded el output puede llegar a 55vh, en normal 60vh
+                body.style.maxHeight = isExpanded ? '55vh' : '60vh';
+                btn.innerHTML = contractSvg + ' Contraer';
+                // Re-layout Monaco porque el output tomó más espacio
+                setTimeout(() => {
+                    if (!monacoEditor) return;
+                    const editorBody = document.getElementById('editorBody');
+                    monacoEditor.layout({ width: document.getElementById('monacoEditor').offsetWidth, height: editorBody.offsetHeight });
+                }, 320);
+            } else {
+                body.style.maxHeight = '';
+                btn.innerHTML = expandSvg + ' Expandir salida';
+                setTimeout(() => {
+                    if (!monacoEditor) return;
+                    const editorBody = document.getElementById('editorBody');
+                    monacoEditor.layout({ width: document.getElementById('monacoEditor').offsetWidth, height: editorBody.offsetHeight });
+                }, 320);
+            }
+        }
 
-                        const expectedHtml = reto.expected
-                            ? `<div class="ch-expected">✦ ${reto.expected.map(t => `<span class="expected-chip">${t}</span>`).join('')}</div>`
-                            : '';
+        /* ── Drag resize ───────────────────────────────── */
+        (() => {
+            const handle = document.getElementById('resizeHandle');
+            const body = document.getElementById('editorBody');
+            const cont = document.getElementById('monacoEditor');
+            let dragging = false, startY = 0, startH = 0;
 
-                        card.innerHTML = `
-          <div class="ch-title">${reto.titulo || 'Reto ' + (idx + 1)}</div>
+            handle.addEventListener('mousedown', e => {
+                if (isExpanded) return;
+                dragging = true; startY = e.clientY; startH = body.offsetHeight;
+                document.body.style.userSelect = 'none';
+                document.body.style.cursor = 'row-resize';
+            });
+            window.addEventListener('mousemove', e => {
+                if (!dragging) return;
+                const newH = Math.max(200, Math.min(window.innerHeight * .85, startH + (e.clientY - startY)));
+                body.style.height = newH + 'px';
+                if (monacoEditor) monacoEditor.layout({ width: cont.offsetWidth, height: newH });
+            });
+            window.addEventListener('mouseup', () => {
+                if (!dragging) return;
+                dragging = false;
+                document.body.style.userSelect = '';
+                document.body.style.cursor = '';
+            });
+        })();
+
+        /* ── Challenge rendering ────────────────────────── */
+        function renderRxChallenges() {
+            const container = document.getElementById('rxChallengeList');
+            container.innerHTML = '';
+            const repoData = rxCollections[rxCurrentRepo];
+            if (!repoData) return;
+            const retos = repoData.retos;
+            let done = 0;
+
+            retos.forEach((reto, idx) => {
+                const key = `rx_${rxCurrentRepo}_${reto.id || idx}`;
+                const isDone = localStorage.getItem(key) === '1';
+                if (isDone) done++;
+                const prevKey = idx > 0 ? `rx_${rxCurrentRepo}_${retos[idx - 1].id || (idx - 1)}` : null;
+                const locked = prevKey && localStorage.getItem(prevKey) !== '1';
+
+                const card = document.createElement('div');
+                card.className = `challenge-card ${isDone ? 'done' : ''} ${locked ? 'locked' : ''}`;
+
+                const expectedHtml = reto.expected
+                    ? `<div class="ch-expected">✦ ${reto.expected.map(t => `<span class="expected-chip">${t}</span>`).join('')}</div>`
+                    : '';
+
+                card.innerHTML = `
+          <div class="ch-header">
+            <div class="ch-num">${idx + 1}</div>
+            <div class="ch-title">${reto.titulo || 'Reto ' + (idx + 1)}</div>
+          </div>
           <div class="ch-desc">${reto.descripcion || ''}</div>
           ${expectedHtml}
           <div class="ch-actions">
             <div class="status-dot ${isDone ? 'done' : 'pending'}"></div>
-            <button class="btn ghost btn-sm" onclick="validarRxReto('${rxCurrentRepo}', ${idx})">✔ Validar</button>
-            <button class="btn btn-sm" onclick="cargarRxReto('${rxCurrentRepo}', ${idx})">Cargar</button>
-          </div>
-        `;
-                        container.appendChild(card);
-                    });
+            <button class="btn ghost btn-sm" onclick="validarRxReto('${rxCurrentRepo}',${idx})">✔ Validar</button>
+            <button class="btn btn-sm" onclick="cargarRxReto('${rxCurrentRepo}',${idx})">Cargar</button>
+          </div>`;
+                container.appendChild(card);
+            });
 
-                    document.getElementById('rxProgressLabel').textContent =
-                        `${done} / ${retos.length} completados`;
-                }
+            // Progress bar
+            const pct = retos.length > 0 ? Math.round((done / retos.length) * 100) : 0;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('rxProgressLabel').textContent = `${done} / ${retos.length}`;
+        }
 
-                function cargarRxReto(repoId, idx) {
-                    const reto = rxCollections[repoId].retos[idx];
-                    if (!reto) return;
-                    setRxEditorValue(reto.template || '');
-                    document.getElementById('rxOutput').textContent = 'La salida aparecerá aquí...';
-                    document.getElementById('rxValidateResult').textContent = '';
-                    document.getElementById('rxEditorLabel').textContent = `${reto.titulo} — WebFlux Playground`;
-                }
+        function cargarRxReto(repoId, idx) {
+            const reto = rxCollections[repoId].retos[idx];
+            if (!reto) return;
+            setRxEditorValue(reto.template || '');
+            document.getElementById('rxOutput').innerHTML = '<span class="out-dim">// Reto cargado. Presiona Ctrl+Enter para ejecutar.</span>';
+            document.getElementById('rxValidateResult').textContent = '';
+            document.getElementById('rxExecTime').textContent = '';
+            document.getElementById('rxEditorLabel').textContent = `${reto.titulo} — WebFlux Playground`;
+        }
 
-                function validarRxReto(repoId, idx) {
-                    const reto = rxCollections[repoId].retos[idx];
-                    if (!reto) return;
-                    const salida = document.getElementById('rxOutput').textContent || '';
+        function validarRxReto(repoId, idx) {
+            const reto = rxCollections[repoId].retos[idx];
+            if (!reto) return;
+            const salida = document.getElementById('rxOutput').textContent || '';
 
-                    let ok = false;
-                    if (reto.expected && reto.expected.length > 0) {
-                        ok = reto.expected.every(token => salida.includes(token));
-                    } else {
-                        ok = salida.trim().length > 0;
-                    }
+            let ok = reto.expected && reto.expected.length > 0
+                ? reto.expected.every(token => salida.includes(token))
+                : salida.trim().length > 0;
 
-                    const resultEl = document.getElementById('rxValidateResult');
-                    const retoKey = `rx_${repoId}_${reto.id || idx}`;
+            const resultEl = document.getElementById('rxValidateResult');
+            const retoKey = `rx_${repoId}_${reto.id || idx}`;
 
-                    if (ok) {
-                        localStorage.setItem(retoKey, '1');
-                        // Racha diaria
-                        const today = new Date().toISOString().slice(0, 10);
-                        const dayKey = `poo_done_day_${today}`;
-                        localStorage.setItem(dayKey, parseInt(localStorage.getItem(dayKey) || '0') + 1);
-                        if (typeof updateDailyProgress === 'function') updateDailyProgress();
-                        resultEl.textContent = '✅ ¡Correcto!';
-                        resultEl.style.color = '#22c55e';
-                        showRxAlert('¡Reto completado!', '¡Excelente! Dominas este concepto. Avanza al siguiente reto.');
-                    } else {
-                        resultEl.textContent = '❌ No coincide, sigue intentando';
-                        resultEl.style.color = '#ef4444';
-                    }
-                    renderRxChallenges();
-                }
+            if (ok) {
+                localStorage.setItem(retoKey, '1');
+                const today = new Date().toISOString().slice(0, 10);
+                const dayKey = `poo_done_day_${today}`;
+                localStorage.setItem(dayKey, parseInt(localStorage.getItem(dayKey) || '0') + 1);
+                if (typeof updateDailyProgress === 'function') updateDailyProgress();
+                resultEl.textContent = '✅ ¡Correcto!';
+                resultEl.style.color = 'var(--success)';
+                showRxAlert('¡Reto completado! 🎉', '¡Excelente! Dominas este concepto. Avanza al siguiente reto.');
+            } else {
+                resultEl.textContent = '❌ No coincide';
+                resultEl.style.color = 'var(--danger)';
+            }
+            renderRxChallenges();
+        }
 
-                // ============================================================
-                // REPO TABS
-                // ============================================================
-                function switchRxRepo(repoId) {
-                    rxCurrentRepo = repoId;
-                    document.querySelectorAll('.repo-tab').forEach(t => t.classList.remove('active'));
-                    const tab = document.getElementById('tab-' + repoId);
-                    if (tab) tab.classList.add('active');
-                    renderRxChallenges();
-                }
+        /* ── Repo tabs ─────────────────────────────────── */
+        function switchRxRepo(repoId) {
+            rxCurrentRepo = repoId;
+            document.querySelectorAll('.repo-tab').forEach(t => t.classList.remove('active'));
+            const tab = document.getElementById('tab-' + repoId);
+            if (tab) tab.classList.add('active');
+            renderRxChallenges();
+        }
 
-                function addRxTab(id, nombre) {
-                    const tabs = document.getElementById('rxRepoTabs');
-                    if (document.getElementById('tab-' + id)) return;
-                    const tab = document.createElement('div');
-                    tab.className = 'repo-tab';
-                    tab.id = 'tab-' + id;
-                    tab.textContent = nombre;
-                    tab.onclick = () => switchRxRepo(id);
-                    tabs.appendChild(tab);
-                }
+        function addRxTab(id, nombre) {
+            if (document.getElementById('tab-' + id)) return;
+            const tab = document.createElement('div');
+            tab.className = 'repo-tab'; tab.id = 'tab-' + id; tab.textContent = nombre;
+            tab.onclick = () => switchRxRepo(id);
+            document.getElementById('rxRepoTabs').appendChild(tab);
+        }
 
-                // ============================================================
-                // GITHUB REPO LOADER
-                // ============================================================
-                async function cargarRxRepo() {
-                    const url = document.getElementById('rxRepoUrl').value.trim();
-                    const statusEl = document.getElementById('rxStatusMsg');
-                    if (!url) { showRxAlert('Atención', 'Introduce una URL de repositorio de GitHub.'); return; }
+        /* ── GitHub repo loader ────────────────────────── */
+        async function cargarRxRepo() {
+            const url = document.getElementById('rxRepoUrl').value.trim();
+            const statusEl = document.getElementById('rxStatusMsg');
+            if (!url) { showRxAlert('Atención', 'Introduce una URL de repositorio de GitHub.'); return; }
+            statusEl.textContent = '⏳ Cargando repositorio...';
+            try {
+                const res = await fetch('/repo/load', {
+                    method: 'POST', headers: { 'Content-Type': 'text/plain; charset=UTF-8' }, body: url
+                });
+                if (!res.ok) { statusEl.textContent = '❌ Error: ' + await res.text(); return; }
+                const data = await res.json();
+                const repoNombre = url.split('/').pop().replace('.git', '');
+                const repoId = 'rxrepo_' + Date.now();
+                rxCollections[repoId] = {
+                    nombre: repoNombre,
+                    retos: data.ejercicios.map((ej, idx) => ({
+                        id: ej.id || ('ej' + idx), order: idx + 1,
+                        titulo: ej.titulo, descripcion: ej.descripcion,
+                        template: ej.template, expected: ej.output_esperado || ej.expected || null
+                    }))
+                };
+                rxTempRepo = { id: repoId, nombre: repoNombre, data: rxCollections[repoId] };
+                document.getElementById('btnSaveRxRepo').style.display = 'inline-flex';
+                addRxTab(repoId, repoNombre);
+                switchRxRepo(repoId);
+                statusEl.textContent = `✅ ${data.ejercicios.length} retos cargados de "${repoNombre}"`;
+            } catch (err) {
+                statusEl.textContent = '❌ Error de red: ' + err;
+            }
+        }
 
-                    statusEl.textContent = '⏳ Clonando repositorio...';
-                    try {
-                        const res = await fetch('/repo/load', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
-                            body: url
-                        });
+        function guardarRxRepo() {
+            if (!rxTempRepo) return;
+            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+            saved[rxTempRepo.id] = { id: rxTempRepo.id, nombre: rxTempRepo.nombre, retos: rxTempRepo.data.retos };
+            localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
+            document.getElementById('btnSaveRxRepo').style.display = 'none';
+            renderRxSavedRepos();
+            document.getElementById('rxStatusMsg').textContent = '💾 Repositorio guardado.';
+        }
 
-                        if (!res.ok) {
-                            statusEl.textContent = '❌ Error: ' + await res.text();
-                            return;
-                        }
+        function renderRxSavedRepos() {
+            const container = document.getElementById('rxSavedRepos');
+            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+            const ids = Object.keys(saved);
+            if (ids.length === 0) { container.innerHTML = ''; return; }
+            container.innerHTML = '<div class="section-label" style="margin-bottom:5px;">Guardados</div>';
+            ids.forEach(id => {
+                const repo = saved[id];
+                const chip = document.createElement('div');
+                chip.className = 'saved-chip';
+                chip.innerHTML = `<span onclick="cargarRxSaved('${id}')">${repo.nombre}</span><span class="saved-chip-del" onclick="eliminarRxRepo('${id}')">×</span>`;
+                container.appendChild(chip);
+            });
+        }
 
-                        const data = await res.json();
-                        const repoNombre = url.split('/').pop().replace('.git', '');
-                        const repoId = 'rxrepo_' + Date.now();
+        function cargarRxSaved(id) {
+            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+            if (!saved[id]) return;
+            rxCollections[id] = { nombre: saved[id].nombre, retos: saved[id].retos };
+            addRxTab(id, saved[id].nombre);
+            switchRxRepo(id);
+        }
 
-                        rxCollections[repoId] = {
-                            nombre: repoNombre,
-                            retos: data.ejercicios.map((ej, idx) => ({
-                                id: ej.id || ('ej' + idx),
-                                order: idx + 1,
-                                titulo: ej.titulo,
-                                descripcion: ej.descripcion,
-                                template: ej.template,
-                                expected: ej.output_esperado || ej.expected || null
-                            }))
-                        };
+        function eliminarRxRepo(id) {
+            const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
+            delete saved[id]; delete rxCollections[id];
+            localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
+            const tab = document.getElementById('tab-' + id);
+            if (tab) tab.remove();
+            if (rxCurrentRepo === id) switchRxRepo('standard');
+            renderRxSavedRepos();
+        }
 
-                        rxTempRepo = { id: repoId, nombre: repoNombre, data: rxCollections[repoId] };
-                        document.getElementById('btnSaveRxRepo').style.display = 'inline-flex';
-                        addRxTab(repoId, repoNombre);
-                        switchRxRepo(repoId);
-                        statusEl.textContent = `✅ ${data.ejercicios.length} retos cargados de "${repoNombre}"`;
-                    } catch (err) {
-                        statusEl.textContent = '❌ Error de red: ' + err;
-                    }
-                }
+        /* ── Modals ────────────────────────────────────── */
+        function showRxAlert(title, msg, onConfirm, showCancel) {
+            document.getElementById('rxAlertTitle').textContent = title;
+            document.getElementById('rxAlertMsg').textContent = msg;
+            document.getElementById('rxAlertCancelBtn').style.display = showCancel ? 'block' : 'none';
+            document.getElementById('rxAlertConfirmBtn').onclick = () => {
+                closeRxModal('rxAlertModal');
+                if (onConfirm) onConfirm();
+            };
+            document.getElementById('rxAlertModal').classList.add('active');
+        }
+        function closeRxModal(id) { document.getElementById(id).classList.remove('active'); }
 
-                function guardarRxRepo() {
-                    if (!rxTempRepo) return;
-                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-                    saved[rxTempRepo.id] = { id: rxTempRepo.id, nombre: rxTempRepo.nombre, retos: rxTempRepo.data.retos };
-                    localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
-                    document.getElementById('btnSaveRxRepo').style.display = 'none';
-                    renderRxSavedRepos();
-                    document.getElementById('rxStatusMsg').textContent = '💾 Repositorio guardado.';
-                }
-
-                function renderRxSavedRepos() {
-                    const container = document.getElementById('rxSavedRepos');
-                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-                    const ids = Object.keys(saved);
-                    if (ids.length === 0) { container.innerHTML = ''; return; }
-
-                    container.innerHTML = '<div style="font-size:0.72rem;color:var(--ink-dim);margin-bottom:6px;">Guardados:</div>';
-                    ids.forEach(id => {
-                        const repo = saved[id];
-                        const chip = document.createElement('div');
-                        chip.style.cssText = 'display:inline-flex;align-items:center;gap:6px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:99px;padding:3px 10px;font-size:0.72rem;margin:2px;cursor:pointer;';
-                        chip.innerHTML = `<span onclick="cargarRxSaved('${id}')">${repo.nombre}</span><span onclick="eliminarRxRepo('${id}')" style="color:#ef4444;cursor:pointer;font-weight:bold;">×</span>`;
-                        container.appendChild(chip);
-                    });
-                }
-
-                function cargarRxSaved(id) {
-                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-                    if (!saved[id]) return;
-                    rxCollections[id] = { nombre: saved[id].nombre, retos: saved[id].retos };
-                    addRxTab(id, saved[id].nombre);
-                    switchRxRepo(id);
-                }
-
-                function eliminarRxRepo(id) {
-                    const saved = JSON.parse(localStorage.getItem('rx_saved_repos') || '{}');
-                    delete saved[id];
-                    delete rxCollections[id];
-                    localStorage.setItem('rx_saved_repos', JSON.stringify(saved));
-                    const tab = document.getElementById('tab-' + id);
-                    if (tab) tab.remove();
-                    if (rxCurrentRepo === id) switchRxRepo('standard');
-                    renderRxSavedRepos();
-                }
-
-                // ============================================================
-                // MODALS
-                // ============================================================
-                function showRxAlert(title, msg, onConfirm, showCancel) {
-                    document.getElementById('rxAlertTitle').textContent = title;
-                    document.getElementById('rxAlertMsg').textContent = msg;
-                    document.getElementById('rxAlertCancelBtn').style.display = showCancel ? 'block' : 'none';
-                    document.getElementById('rxAlertConfirmBtn').onclick = () => {
-                        closeRxModal('rxAlertModal');
-                        if (onConfirm) onConfirm();
-                    };
-                    document.getElementById('rxAlertModal').classList.add('active');
-                }
-
-                function closeRxModal(id) {
-                    document.getElementById(id).classList.remove('active');
-                }
-
-                // ============================================================
-                // INIT
-                // ============================================================
-                renderRxSavedRepos();
-                renderRxChallenges();
-            </script>
-
-            <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
-                <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
-            </footer>
-    </div>
-    </main>
-    </div>
+        /* ── Init ──────────────────────────────────────── */
+        renderRxSavedRepos();
+        renderRxChallenges();
+    </script>
 </body>
 
 </html>

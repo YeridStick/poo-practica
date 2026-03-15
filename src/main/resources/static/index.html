@@ -4,152 +4,1821 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guia Interactiva POO + HTTP</title>
-  <link rel="stylesheet" href="/index.css">
+  <title>Guía Interactiva POO + Java</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+   DESIGN TOKENS  (idénticos a webflux.html)
+═══════════════════════════════════════════ */
+    :root {
+      --bg: #f0f2f5;
+      --surface: #fff;
+      --surface2: #f6f7fb;
+      --surface3: #eef0f6;
+      --border: rgba(0, 0, 0, .07);
+      --border-md: rgba(0, 0, 0, .11);
+      --brand: #0d6a63;
+      --brand-lt: #e6f4f3;
+      --brand2: #b5552f;
+      --brand3: #a78bfa;
+      --ink: #1e2227;
+      --ink-dim: #6b7280;
+      --ink-faint: #9ca3af;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --radius: 18px;
+      --radius-sm: 12px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, .06);
+      --shadow-lg: 0 12px 48px rgba(0, 0, 0, .14);
+      --sidebar-w: 64px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: 'Outfit', system-ui, sans-serif
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      display: flex
+    }
+
+    /* ── Sidebar ─────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 200;
+      gap: 6px;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, .04)
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--brand), var(--brand3));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12px;
+      color: #fff;
+      margin-bottom: 12px
+    }
+
+    .nav-item {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-faint);
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none
+    }
+
+    .nav-item:hover {
+      background: var(--surface3);
+      color: var(--brand)
+    }
+
+    .nav-item.active {
+      background: var(--brand-lt);
+      color: var(--brand)
+    }
+
+    .sidebar-footer {
+      margin-top: auto
+    }
+
+    /* ── Main wrapper ──────────────────────────── */
+    .main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    /* ── Top header ────────────────────────────── */
+    .top-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 28px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 0 var(--border);
+      flex-wrap: wrap
+    }
+
+    .header-left h2 {
+      font-size: 1rem;
+      font-weight: 800
+    }
+
+    .header-left p {
+      font-size: .76rem;
+      color: var(--ink-dim)
+    }
+
+    .header-badge {
+      background: linear-gradient(135deg, var(--brand), var(--brand3));
+      color: #fff;
+      font-size: .66rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      white-space: nowrap
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 12px;
+      margin-left: auto
+    }
+
+    .search-bar input {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: .8rem;
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      width: 160px
+    }
+
+    .search-bar input::placeholder {
+      color: var(--ink-faint)
+    }
+
+    /* ── Page body ─────────────────────────────── */
+    .page-body {
+      flex: 1;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow: auto
+    }
+
+    /* ── Hero row ──────────────────────────────── */
+    .hero-row {
+      display: grid;
+      grid-template-columns: 1fr 290px 280px;
+      gap: 16px;
+      align-items: stretch
+    }
+
+    @media(max-width:1100px) {
+      .hero-row {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:700px) {
+      .hero-row {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* ── Cards ─────────────────────────────────── */
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow)
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: .82rem;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .panel-header .ph-left {
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .panel-body {
+      padding: 14px 16px
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, var(--brand-lt) 0%, #fff 60%);
+      border: 1px solid rgba(13, 106, 99, .15);
+      border-radius: var(--radius);
+      padding: 24px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow)
+    }
+
+    .hero-card h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--brand), var(--brand3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .hero-card p {
+      font-size: .875rem;
+      color: var(--ink-dim);
+      line-height: 1.65
+    }
+
+    .progress-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow)
+    }
+
+    .pc-badge {
+      font-size: .68rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: var(--brand-lt);
+      color: var(--brand);
+      width: fit-content
+    }
+
+    .pc-numbers {
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .pc-done {
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--brand)
+    }
+
+    .pc-goal {
+      font-size: .8rem;
+      color: var(--ink-faint)
+    }
+
+    .progress-track {
+      height: 7px;
+      background: rgba(0, 0, 0, .07);
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--brand), var(--brand3));
+      transition: width .6s ease
+    }
+
+    .pc-motivation {
+      font-size: .74rem;
+      color: var(--brand);
+      font-weight: 700;
+      text-align: center;
+      min-height: 16px
+    }
+
+    .webflux-card {
+      background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%);
+      border: 1px solid rgba(167, 139, 250, .2);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-lg)
+    }
+
+    .webflux-badge {
+      font-size: .66rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: rgba(167, 139, 250, .2);
+      color: var(--brand3);
+      width: fit-content
+    }
+
+    .webflux-card h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 8px
+    }
+
+    .webflux-card p {
+      font-size: .78rem;
+      color: rgba(255, 255, 255, .5);
+      line-height: 1.6
+    }
+
+    .btn-webflux {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(135deg, var(--brand3), #7c3aed);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-size: .8rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all .18s;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .btn-webflux:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px)
+    }
+
+    /* ── Main 3-col grid ────────────────────────── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr 1fr;
+      gap: 16px;
+      align-items: flex-start
+    }
+
+    @media(max-width:1200px) {
+      .main-grid {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:800px) {
+      .main-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* ── Buttons ────────────────────────────────── */
+    .btn {
+      background: linear-gradient(135deg, var(--brand), #1a9990);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .18s;
+      white-space: nowrap;
+      font-family: 'Outfit', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    .btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px)
+    }
+
+    .btn:active {
+      transform: translateY(0)
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand)
+    }
+
+    .btn.ghost:hover {
+      background: var(--brand-lt)
+    }
+
+    .btn.dark {
+      background: #24292e;
+      color: #fff;
+      border: 1px solid #444d56
+    }
+
+    .btn.neutral {
+      background: var(--surface2);
+      color: var(--ink);
+      border: 1px solid var(--border)
+    }
+
+    .btn.sm {
+      padding: 5px 12px;
+      font-size: .74rem;
+      border-radius: 8px
+    }
+
+    .btn.danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--ink-dim);
+      border-radius: 9px;
+      padding: 7px 15px;
+      font-size: .8rem;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--ink-dim)
+    }
+
+    /* ── Status pills & badges ──────────────────── */
+    .status-pill {
+      font-size: .68rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: var(--brand-lt);
+      color: var(--brand)
+    }
+
+    .status-pill.orange {
+      background: rgba(181, 85, 47, .1);
+      color: var(--brand2)
+    }
+
+    /* ── Tabs ───────────────────────────────────── */
+    .tab-strip {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .tab-btn {
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-size: .73rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      color: var(--ink-dim);
+      cursor: pointer;
+      transition: all .18s;
+      background: transparent;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .tab-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand)
+    }
+
+    .tab-btn.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand)
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 14px 16px
+    }
+
+    .tab-panel.active {
+      display: block
+    }
+
+    /* ── Doc article ────────────────────────────── */
+    .doc-article {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px
+    }
+
+    .doc-article h4 {
+      font-size: .9rem;
+      font-weight: 800;
+      margin-bottom: 6px
+    }
+
+    .doc-article p {
+      font-size: .8rem;
+      color: var(--ink-dim);
+      line-height: 1.6;
+      margin-bottom: 8px
+    }
+
+    .code-wrap {
+      background: #060810;
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 10px;
+      padding: 11px 13px;
+      margin-bottom: 8px;
+      overflow-x: auto
+    }
+
+    .code-wrap pre,
+    .code-wrap code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #38bdf8;
+      line-height: 1.6;
+      white-space: pre
+    }
+
+    .expand-toggle {
+      background: none;
+      border: none;
+      color: var(--brand2);
+      font-weight: 700;
+      font-size: .76rem;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0
+    }
+
+    .expand-toggle:hover {
+      color: var(--brand)
+    }
+
+    .full-code {
+      display: none;
+      margin-top: 8px;
+      background: #060810;
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 10px;
+      padding: 11px 13px;
+      overflow-x: auto
+    }
+
+    .full-code.open {
+      display: block
+    }
+
+    .full-code pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #a8c5da;
+      line-height: 1.65;
+      white-space: pre
+    }
+
+    /* ── Repo section ───────────────────────────── */
+    .repo-row {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 10px;
+      flex-wrap: wrap
+    }
+
+    .repo-input {
+      flex: 1;
+      min-width: 120px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--ink);
+      font-size: .8rem;
+      outline: none;
+      transition: border-color .2s;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .repo-input:focus {
+      border-color: var(--brand)
+    }
+
+    .repo-input::placeholder {
+      color: var(--ink-faint)
+    }
+
+    .repo-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px
+    }
+
+    .repo-tab {
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: .72rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      color: var(--ink-dim);
+      cursor: pointer;
+      transition: all .18s
+    }
+
+    .repo-tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand)
+    }
+
+    /* ── Reto cards ─────────────────────────────── */
+    .level-scroll {
+      max-height: 55vh;
+      overflow-y: auto;
+      padding-right: 3px
+    }
+
+    .level-scroll::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .level-scroll::-webkit-scrollbar-thumb {
+      background: var(--border-md);
+      border-radius: 3px
+    }
+
+    .level-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 9px
+    }
+
+    .reto-card {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      padding: 13px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      transition: border-color .2s, transform .15s, box-shadow .2s
+    }
+
+    .reto-card:hover:not(.locked) {
+      border-color: var(--brand);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 16px rgba(13, 106, 99, .1)
+    }
+
+    .reto-card.done {
+      border-color: rgba(34, 197, 94, .35);
+      background: rgba(34, 197, 94, .03)
+    }
+
+    .reto-card.locked {
+      opacity: .4;
+      pointer-events: none
+    }
+
+    .reto-header {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .reto-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--brand);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .reto-card.done .reto-num {
+      background: var(--success)
+    }
+
+    .reto-title {
+      font-size: .83rem;
+      font-weight: 800;
+      color: var(--brand)
+    }
+
+    .reto-desc {
+      font-size: .76rem;
+      color: var(--ink-dim);
+      line-height: 1.5
+    }
+
+    .reto-chips {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      font-size: .67rem;
+      color: var(--brand3)
+    }
+
+    .chip {
+      background: rgba(167, 139, 250, .1);
+      border: 1px solid rgba(167, 139, 250, .25);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem
+    }
+
+    .reto-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+      flex-shrink: 0
+    }
+
+    .status-dot.done {
+      background: var(--success)
+    }
+
+    .status-dot.pending {
+      background: var(--warn)
+    }
+
+    /* ── Progress mini ──────────────────────────── */
+    .progress-mini {
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .progress-mini-track {
+      width: 68px;
+      height: 5px;
+      background: var(--border-md);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .progress-mini-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand), var(--brand3));
+      border-radius: 3px;
+      transition: width .4s
+    }
+
+    .progress-mini-label {
+      font-size: .72rem;
+      color: var(--ink-dim);
+      font-weight: 700;
+      white-space: nowrap
+    }
+
+    /* ── Reference grid ─────────────────────────── */
+    .reference-search {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 5px 10px
+    }
+
+    .reference-search input {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: .76rem;
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      width: 130px
+    }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 9px;
+      margin-top: 10px
+    }
+
+    .ref-card {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 13px;
+      transition: border-color .2s, transform .15s, box-shadow .2s;
+      cursor: pointer;
+      position: relative
+    }
+
+    .ref-card:hover {
+      border-color: var(--brand);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(13, 106, 99, .09)
+    }
+
+    .ref-card.active-concept {
+      border-color: var(--brand);
+      background: var(--brand-lt);
+      box-shadow: 0 0 0 3px rgba(13, 106, 99, .12)
+    }
+
+    .ref-card h5 {
+      font-size: .8rem;
+      font-weight: 800;
+      color: var(--brand);
+      margin-bottom: 4px
+    }
+
+    .ref-card p {
+      font-size: .73rem;
+      color: var(--ink-dim);
+      line-height: 1.5
+    }
+
+    .ref-arrow {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--brand);
+      opacity: 0;
+      transition: opacity .18s
+    }
+
+    .ref-card:hover .ref-arrow,
+    .ref-card.active-concept .ref-arrow {
+      opacity: 1
+    }
+
+    /* ── Doc Slider ─────────────────────────────── */
+    #docSliderPanel {
+      animation: slideDown .3s ease
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .doc-slide {
+      min-width: 100%;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .67rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: .04em;
+      width: fit-content
+    }
+
+    .slide-badge.concept {
+      background: var(--brand-lt);
+      color: var(--brand)
+    }
+
+    .slide-badge.example {
+      background: rgba(167, 139, 250, .12);
+      color: var(--brand3)
+    }
+
+    .slide-badge.pitfall {
+      background: rgba(239, 68, 68, .1);
+      color: var(--danger)
+    }
+
+    .slide-badge.practice {
+      background: rgba(247, 183, 49, .12);
+      color: var(--warn)
+    }
+
+    .slide-title {
+      font-size: .93rem;
+      font-weight: 800;
+      color: var(--ink)
+    }
+
+    .slide-body {
+      font-size: .82rem;
+      color: var(--ink-dim);
+      line-height: 1.7
+    }
+
+    .slide-body p {
+      margin: 0 0 6px
+    }
+
+    .slide-code {
+      background: #060810;
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 12px;
+      overflow: hidden
+    }
+
+    .slide-code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 13px;
+      background: #0d1117;
+      border-bottom: 1px solid rgba(255, 255, 255, .06)
+    }
+
+    .slide-code-lang {
+      font-size: .67rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255, 255, 255, .3)
+    }
+
+    .slide-copy-btn {
+      font-size: .67rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .4);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 5px;
+      transition: all .15s
+    }
+
+    .slide-copy-btn:hover {
+      background: rgba(255, 255, 255, .09);
+      color: rgba(255, 255, 255, .85)
+    }
+
+    .slide-code pre {
+      padding: 12px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #abb2bf;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 0
+    }
+
+    /* syntax colors inside slide pre */
+    .slide-code pre .kw {
+      color: #c678dd
+    }
+
+    .slide-code pre .fn {
+      color: #61afef
+    }
+
+    .slide-code pre .str {
+      color: #98c379
+    }
+
+    .slide-code pre .cm {
+      color: #5c6370
+    }
+
+    .slide-code pre .tp {
+      color: #e5c07b
+    }
+
+    .slide-code pre .num {
+      color: #d19a66
+    }
+
+    .slide-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border-md);
+      cursor: pointer;
+      transition: all .2s;
+      flex-shrink: 0
+    }
+
+    .slide-dot.active {
+      background: var(--brand);
+      width: 18px;
+      border-radius: 4px
+    }
+
+    .slide-dot:hover {
+      background: var(--brand);
+      opacity: .6
+    }
+
+    /* Loading skeleton */
+    .sk-line {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0
+      }
+
+      100% {
+        background-position: -200% 0
+      }
+    }
+
+    /* ── Playground ─────────────────────────────── */
+    .playground-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .editor-shell {
+      background: #0d1117;
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      transition: all .3s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .editor-shell.expanded {
+      position: fixed;
+      inset: 0;
+      left: var(--sidebar-w);
+      z-index: 150;
+      border-radius: 0;
+      margin: 0
+    }
+
+    .editor-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 13px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .dot-group {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%
+    }
+
+    .dot.red {
+      background: #ef4444
+    }
+
+    .dot.yellow {
+      background: #f59e0b
+    }
+
+    .dot.green {
+      background: #22c55e
+    }
+
+    .editor-file-label {
+      font-size: .74rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--ink-dim)
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .editor-tab-strip {
+      display: flex;
+      gap: 0;
+      background: #161b22;
+      border-bottom: 1px solid rgba(255, 255, 255, .07);
+      overflow-x: auto;
+      flex-shrink: 0
+    }
+
+    .editor-tab {
+      padding: 7px 15px;
+      font-size: .74rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255, 255, 255, .4);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all .18s;
+      display: flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    .editor-tab:hover {
+      color: rgba(255, 255, 255, .7)
+    }
+
+    .editor-tab.active {
+      color: #fff;
+      border-bottom-color: var(--brand);
+      background: rgba(13, 106, 99, .1)
+    }
+
+    .editor-tab .tab-close {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      color: rgba(255, 255, 255, .3);
+      transition: all .15s
+    }
+
+    .editor-tab .tab-close:hover {
+      background: rgba(255, 255, 255, .15);
+      color: #fff
+    }
+
+    .add-tab-btn {
+      padding: 6px 13px;
+      font-size: .86rem;
+      color: rgba(255, 255, 255, .3);
+      cursor: pointer;
+      border-left: 1px solid rgba(255, 255, 255, .07);
+      transition: all .18s;
+      background: none;
+      border-top: none;
+      border-right: none;
+      border-bottom: none;
+      font-family: 'Outfit', sans-serif;
+      flex-shrink: 0
+    }
+
+    .add-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .06)
+    }
+
+    .expand-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 10px;
+      font-size: .71rem;
+      font-weight: 700;
+      color: var(--ink-dim);
+      cursor: pointer;
+      transition: all .18s;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .expand-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand)
+    }
+
+    .kbd-hint {
+      font-size: .67rem;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      gap: 3px
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface3);
+      border: 1px solid var(--border-md);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .63rem;
+      color: var(--ink-dim)
+    }
+
+    .editor-body {
+      position: relative;
+      flex: 1;
+      height: 400px;
+      min-height: 240px;
+      background: #1e1e1e;
+      transition: height .3s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .editor-shell.expanded .editor-body {
+      height: auto !important;
+      flex: 1;
+      min-height: 0
+    }
+
+    #monacoEditor {
+      width: 100%;
+      height: 100%;
+      min-height: 400px
+    }
+
+    .editor-shell.expanded #monacoEditor {
+      min-height: 0;
+      height: 100%
+    }
+
+    .resize-handle {
+      height: 5px;
+      background: transparent;
+      cursor: row-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      transition: background .18s
+    }
+
+    .resize-handle:hover {
+      background: rgba(13, 106, 99, .08)
+    }
+
+    .resize-handle::before {
+      content: '';
+      width: 28px;
+      height: 3px;
+      border-radius: 3px;
+      background: var(--border-md)
+    }
+
+    .editor-shell.expanded .resize-handle {
+      display: none
+    }
+
+    .output-panel {
+      background: #060810;
+      border-top: 1px solid rgba(255, 255, 255, .07);
+      overflow: hidden;
+      flex-shrink: 0
+    }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      font-size: .74rem;
+      font-weight: 700;
+      color: var(--ink-dim)
+    }
+
+    .output-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success)
+    }
+
+    .output-body {
+      padding: 11px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #a8c5da;
+      white-space: pre-wrap;
+      min-height: 80px;
+      max-height: 200px;
+      overflow-y: auto;
+      transition: max-height .3s
+    }
+
+    .editor-shell.expanded .output-body {
+      max-height: 36vh;
+      min-height: 110px
+    }
+
+    .output-body::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .output-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .1);
+      border-radius: 4px
+    }
+
+    .out-ok {
+      color: #4ec9b0
+    }
+
+    .out-err {
+      color: #f48771
+    }
+
+    .out-warn {
+      color: #dcdcaa
+    }
+
+    .out-info {
+      color: #569cd6
+    }
+
+    .out-dim {
+      color: #6a9955
+    }
+
+    .output-expand-btn {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      font-size: .69rem;
+      font-weight: 700;
+      color: var(--ink-faint);
+      cursor: pointer;
+      transition: color .18s;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .output-expand-btn:hover {
+      color: var(--brand)
+    }
+
+    /* ── Expanded backdrop ──────────────────────── */
+    .expanded-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 149;
+      backdrop-filter: blur(2px)
+    }
+
+    .expanded-backdrop.active {
+      display: block
+    }
+
+    /* ── Context menu ───────────────────────────── */
+    .ctx-menu {
+      position: fixed;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 5px;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      display: none;
+      min-width: 190px
+    }
+
+    .ctx-menu.active {
+      display: block
+    }
+
+    .ctx-section {
+      font-size: .64rem;
+      font-weight: 800;
+      color: var(--ink-faint);
+      padding: 4px 10px 2px;
+      text-transform: uppercase;
+      letter-spacing: .08em
+    }
+
+    .ctx-item {
+      font-size: .79rem;
+      padding: 7px 11px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--ink);
+      transition: background .15s
+    }
+
+    .ctx-item:hover {
+      background: var(--surface2);
+      color: var(--brand)
+    }
+
+    /* ── Modals ─────────────────────────────────── */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .55);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999
+    }
+
+    .modal.active {
+      display: flex
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      width: min(520px, 95%);
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 800;
+      font-size: .88rem;
+      flex-shrink: 0
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      font-size: .83rem;
+      color: var(--ink-dim);
+      line-height: 1.6
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      padding-top: 12px
+    }
+
+    .close-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px 11px;
+      font-size: .76rem;
+      cursor: pointer;
+      color: var(--ink-dim);
+      font-family: 'Outfit', sans-serif;
+      transition: all .18s
+    }
+
+    .close-btn:hover {
+      border-color: var(--danger);
+      color: var(--danger)
+    }
+
+    /* ── Theme grid ─────────────────────────────── */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 16px 18px
+    }
+
+    .theme-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 11px;
+      cursor: pointer;
+      transition: all .18s;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      align-items: center
+    }
+
+    .theme-card:hover {
+      border-color: var(--brand)
+    }
+
+    .theme-card.active {
+      border-color: var(--brand);
+      background: var(--brand-lt)
+    }
+
+    .theme-preview {
+      display: flex;
+      gap: 4px
+    }
+
+    .theme-preview div {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px
+    }
+
+    .theme-card span {
+      font-size: .76rem;
+      font-weight: 700;
+      color: var(--ink-dim)
+    }
+
+    /* ── Saved repos ────────────────────────────── */
+    .saved-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(56, 189, 248, .07);
+      border: 1px solid rgba(56, 189, 248, .2);
+      border-radius: 99px;
+      padding: 3px 10px;
+      font-size: .7rem;
+      margin: 2px;
+      cursor: pointer;
+      transition: all .18s
+    }
+
+    .saved-chip:hover {
+      background: rgba(56, 189, 248, .14)
+    }
+
+    .saved-chip-del {
+      color: var(--danger);
+      font-weight: 800;
+      cursor: pointer
+    }
+
+    /* ── Suggestion box ─────────────────────────── */
+    #suggestionBox {
+      position: fixed;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      display: none;
+      min-width: 190px;
+      overflow: hidden
+    }
+
+    /* ── Footer ─────────────────────────────────── */
+    footer {
+      padding: 14px 28px;
+      text-align: center;
+      color: var(--ink-faint);
+      font-size: .75rem;
+      border-top: 1px solid var(--border)
+    }
+
+    /* ── Animations ─────────────────────────────── */
+    .btn.running {
+      animation: runpulse .8s infinite
+    }
+
+    @keyframes runpulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .6
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .4
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-md);
+      border-radius: 4px
+    }
+  </style>
 </head>
 
 <body>
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="logo-icon">JP</div>
-      <a href="/" class="nav-item active" title="Inicio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </a>
-      <a href="/entrevista" class="nav-item" title="Ruta">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-      </a>
-      <a href="/entrevista/docs" class="nav-item" title="Documentación">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-        </svg>
-      </a>
-      <a href="/entrevista/ia" class="nav-item" title="IA">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="19" cy="12" r="1" />
-          <circle cx="5" cy="12" r="1" />
-        </svg>
-      </a>
-      <a href="/entrevista/mock" class="nav-item" title="Mock">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-          <path d="M12 6v6l4 2" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux2" class="nav-item" title="Laboratorio">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3h6v2H9V3zm3 4v8m-2-8h4m-4 8H7a2 2 0 00-2 2v2h14v-2a2 2 0 00-2-2h-4z" />
-        </svg>
-      </a>
-      <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6" />
-          <polyline points="8 6 2 12 8 18" />
-        </svg>
-      </a>
 
-      <div class="sidebar-footer">
-        <div class="nav-item" id="btnConfig" title="Configuracion">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-        </div>
-        <!--<div class="nav-item" title="Cerrar sesion">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-        </div>-->
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <aside class="sidebar">
+    <div class="logo-icon">JP</div>
+    <a href="/" class="nav-item active" title="Inicio">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    </a>
+    <a href="/entrevista" class="nav-item" title="Ruta">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      </svg>
+    </a>
+    <a href="/entrevista/docs" class="nav-item" title="Documentación">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+      </svg>
+    </a>
+    <a href="/entrevista/ia" class="nav-item" title="IA">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="19" cy="12" r="1" />
+        <circle cx="5" cy="12" r="1" />
+      </svg>
+    </a>
+    <a href="/entrevista/webflux" class="nav-item" title="WebFlux">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </svg>
+    </a>
+    <div class="sidebar-footer">
+      <div class="nav-item" title="Configuración"
+        onclick="document.getElementById('themeModal').classList.add('active')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
       </div>
-    </aside>
+    </div>
+  </aside>
 
-    <main class="main-content">
-      <header class="top-header">
-        <div class="user-info">
-          <h2>Hola, Desarrollador Trinity</h2>
-          <p>Continua tu ruta de aprendizaje Java hoy.</p>
-        </div>
-        <!-- <div class="header-actions">
-          <div class="search-bar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="text" placeholder="Buscar ejercicios...">
-          </div>
-          <div class="icon-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-          </div>
-          <div class="icon-btn" style="background: var(--brand); color: #fff; border: none;">D</div>
-        </div> -->
-      </header>
+  <!-- ══════════════ MAIN ══════════════ -->
+  <main class="main-content">
 
-      <div class="featured-row">
-        <div class="hero-dashboard">
-          <h1 style="color: var(--brand); margin: 0;">Guia interactiva: POO</h1>
+    <!-- Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <h2>Hola, Desarrollador Trinity</h2>
+        <p>Continúa tu ruta de aprendizaje Java hoy.</p>
+      </div>
+      <span class="header-badge">POO · Java</span>
+      <div class="search-bar">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Buscar ejercicios..." id="globalSearch" oninput="globalFilter(this.value)">
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- ── HERO ROW ───────────────────────────── -->
+      <div class="hero-row">
+        <div class="hero-card">
+          <h1>Guía Interactiva: POO</h1>
           <p>Potencia tus habilidades de desarrollo Java con ejercicios reales y playground local.</p>
-          <div style="margin-top: 20px;">
-            <button class="action"
-              onclick="document.querySelector('#target-rutas').scrollIntoView({behavior: 'smooth'})">Empezar
-              ahora</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn" onclick="document.getElementById('sec-rutas').scrollIntoView({behavior:'smooth'})">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Empezar ahora
+            </button>
+            <button class="btn ghost"
+              onclick="document.getElementById('sec-playground').scrollIntoView({behavior:'smooth'})">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+              Playground
+            </button>
           </div>
         </div>
 
-        <div class="card-dashboard"
-          style="display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
+        <div class="progress-card">
+          <div class="pc-badge">Progreso diario</div>
           <div>
-            <span class="status-pill" style="color: var(--brand); background: rgba(13,106,99,0.1);">Progreso
-              diario</span>
-            <h3 style="margin: 12px 0 4px;" id="dailyGoalTitle">Tu meta hoy</h3>
-            <p style="font-size: 0.85rem; color: #888; margin: 0;" id="dailyGoalDesc">Cargando progreso...</p>
+            <h3 id="dailyGoalTitle" style="font-size:.93rem;font-weight:800;">Tu meta hoy</h3>
+            <p id="dailyGoalDesc" style="font-size:.78rem;color:var(--ink-dim);">Cargando progreso...</p>
           </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
-            <span id="dailyDone" style="font-weight: 800; font-size: 1.3rem; color: var(--brand);">0</span>
-            <span style="opacity: 0.5;">/ <span id="dailyGoal">2</span> retos hoy</span>
-            <span id="dailyStreak" style="font-size: 1.2rem;" title="Racha">🔥 <span id="streakCount">0</span></span>
+          <div class="pc-numbers">
+            <span class="pc-done" id="dailyDone">0</span>
+            <span class="pc-goal">/ <span id="dailyGoal">2</span> retos hoy</span>
+            <span style="font-size:1.1rem;">🔥 <span id="streakCount">0</span></span>
           </div>
-          <div style="height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
-            <div id="dailyProgressBar"
-              style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--brand), var(--brand2)); border-radius: 4px; transition: width 0.6s ease;">
-            </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="dailyProgressBar" style="width:0%"></div>
           </div>
-          <p id="dailyMotivation"
-            style="font-size: 0.75rem; color: var(--brand); margin: 0; font-weight: 600; text-align: center;"></p>
+          <p class="pc-motivation" id="dailyMotivation"></p>
         </div>
 
-        <div class="card-dashboard card-webflux" style="justify-content: space-between;">
+        <div class="webflux-card">
           <div>
-            <span class="card-webflux-badge">WebFlux · Reactor</span>
+            <span class="webflux-badge">WebFlux · Reactor</span>
             <h3>⚡ Programación Reactiva</h3>
-            <p>Clases con Spring WebFlux y Project Reactor: Mono, Flux, operadores y backpressure.</p>
+            <p>Spring WebFlux y Project Reactor: Mono, Flux, operadores y backpressure.</p>
           </div>
           <a href="/entrevista/webflux" class="btn-webflux">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
@@ -159,247 +1828,475 @@
         </div>
       </div>
 
-      <div class="section-grid">
-        <section id="target-rutas" class="dashboard-card">
-          <div class="card-title">
-            <span>Ruta por clases</span>
-            <span class="status-pill">Documentacion</span>
+      <!-- ── MAIN GRID ─────────────────────────── -->
+      <div class="main-grid" id="sec-rutas">
+
+        <!-- COL 1 · Documentación -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="ph-left">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+              Ruta por clases
+            </div>
+            <span class="status-pill">Documentación</span>
           </div>
-          <div class="tabs">
+          <div class="tab-strip">
             <button class="tab-btn active" data-tab="tab-scope">Scope</button>
             <button class="tab-btn" data-tab="tab-poo-base">Bases</button>
             <button class="tab-btn" data-tab="tab-poo-dia">Tienda</button>
-            <button class="tab-btn" data-tab="tab-abs">Abstraccion</button>
+            <button class="tab-btn" data-tab="tab-abs">Abstracción</button>
             <button class="tab-btn" data-tab="tab-fundamentos">Fundamentos</button>
           </div>
 
+          <!-- Tab Scope -->
           <div id="tab-scope" class="tab-panel active">
-            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+            <div class="doc-article">
               <h4>ScopeInstanciasPractica.java</h4>
               <p>El scope define la visibilidad de las variables.</p>
               <div class="code-wrap">
-                <pre class="code"><code>System.out.println(ScopeInstanciasPractica.getTotalInstancias());</code></pre>
+                <pre><code>System.out.println(
+  ScopeInstanciasPractica.getTotalInstancias()
+);</code></pre>
               </div>
-              <button class="expand-btn" data-target="full-scope"
-                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
-                completo</button>
-              <pre id="full-scope" style="display:none;">
-public class ScopeInstanciasPractica {
+              <button class="expand-toggle" onclick="toggleCode('full-scope',this)">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+                Ver completo
+              </button>
+              <div id="full-scope" class="full-code">
+                <pre>public class ScopeInstanciasPractica {
     private static int totalInstancias = 0;
-    public ScopeInstanciasPractica() { totalInstancias++; }
-    public static int getTotalInstancias() { return totalInstancias; }
-}
-              </pre>
-            </article>
+
+    public ScopeInstanciasPractica() {
+        totalInstancias++;
+    }
+
+    public static int getTotalInstancias() {
+        return totalInstancias;
+    }
+}</pre>
+              </div>
+            </div>
           </div>
 
+          <!-- Tab Bases -->
           <div id="tab-poo-base" class="tab-panel">
-            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+            <div class="doc-article">
               <h4>Persona.java (Bases)</h4>
-              <p>Clases y objetos: la base de Java. Aprende a definir atributos privados y constructores.</p>
+              <p>Clases y objetos: la base de Java. Atributos privados y constructores.</p>
               <div class="code-wrap">
-                <pre class="code"><code>Persona p = new Persona("Ana");
+                <pre><code>Persona p = new Persona("Ana");
 System.out.println(p.saludar());</code></pre>
               </div>
-              <button class="expand-btn" data-target="full-persona"
-                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
-                completo</button>
-              <pre id="full-persona" style="display:none;">
-public class Persona {
+              <button class="expand-toggle" onclick="toggleCode('full-persona',this)">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+                Ver completo
+              </button>
+              <div id="full-persona" class="full-code">
+                <pre>public class Persona {
     private String nombre;
-    public Persona(String nombre) {
+    private int edad;
+
+    public Persona(String nombre, int edad) {
         this.nombre = nombre;
+        this.edad   = edad;
     }
+
     public String saludar() {
-        return "Hola, soy " + nombre;
+        return "Hola, soy " + nombre +
+               " y tengo " + edad + " años.";
     }
-}
-              </pre>
-            </article>
+
+    // Getters
+    public String getNombre() { return nombre; }
+    public int    getEdad()   { return edad; }
+}</pre>
+              </div>
+            </div>
           </div>
 
+          <!-- Tab Tienda -->
           <div id="tab-poo-dia" class="tab-panel">
-            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
+            <div class="doc-article">
               <h4>Relaciones de Clases</h4>
-              <p>Agregacion: cuando un objeto contiene a otro. El carrito "tiene" productos.</p>
+              <p>Agregación: cuando un objeto contiene a otro. El carrito "tiene" productos.</p>
               <div class="code-wrap">
-                <pre class="code"><code>Tienda t = new Tienda();
-t.agregarProducto(new Producto("Cafe", 2.5));</code></pre>
+                <pre><code>Tienda t = new Tienda();
+t.agregarProducto(new Producto("Café", 2.5));
+System.out.println(t.getTotal());</code></pre>
               </div>
-              <button class="expand-btn" data-target="full-tienda"
-                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
-                completo</button>
-              <pre id="full-tienda" style="display:none;">
-public class Tienda {
+              <button class="expand-toggle" onclick="toggleCode('full-tienda',this)">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+                Ver completo
+              </button>
+              <div id="full-tienda" class="full-code">
+                <pre>public class Tienda {
     private List&lt;Producto&gt; productos = new ArrayList&lt;&gt;();
+
     public void agregarProducto(Producto p) {
         productos.add(p);
     }
+
+    public double getTotal() {
+        return productos.stream()
+            .mapToDouble(Producto::getPrecio)
+            .sum();
+    }
 }
-              </pre>
-            </article>
+
+public class Producto {
+    private String nombre;
+    private double precio;
+
+    public Producto(String nombre, double precio) {
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+    public double getPrecio() { return precio; }
+}</pre>
+              </div>
+            </div>
           </div>
 
+          <!-- Tab Abstracción -->
           <div id="tab-abs" class="tab-panel">
-            <article class="item" style="border: none; background: rgba(0,0,0,0.02); border-radius: 20px;">
-              <h4>Abstraccion</h4>
-              <p>Uso de clases abstractas para contratos base. Define el "qué" sin el "cómo".</p>
+            <div class="doc-article">
+              <h4>Abstracción</h4>
+              <p>Clases abstractas para contratos base. Define el "qué" sin el "cómo".</p>
               <div class="code-wrap">
-                <pre class="code"><code>abstract class Animal {
-    abstract void hablar();
-}</code></pre>
-              </div>
-              <button class="expand-btn" data-target="full-abs"
-                style="border:none; background:none; color:var(--brand2); font-weight:700; cursor:pointer;">Ver
-                completo</button>
-              <pre id="full-abs" style="display:none;">
-abstract class Animal {
-    private String nombre;
+                <pre><code>abstract class Animal {
     abstract void hablar();
     public void dormir() {
         System.out.println("Zzz...");
     }
+}</code></pre>
+              </div>
+              <button class="expand-toggle" onclick="toggleCode('full-abs',this)">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+                Ver completo
+              </button>
+              <div id="full-abs" class="full-code">
+                <pre>abstract class Animal {
+    protected String nombre;
+
+    public Animal(String nombre) {
+        this.nombre = nombre;
+    }
+
+    abstract void hablar();
+
+    public void dormir() {
+        System.out.println(nombre + " duerme... Zzz");
+    }
 }
 
 class Perro extends Animal {
-    void hablar() { System.out.println("Guau!"); }
+    public Perro(String nombre) { super(nombre); }
+
+    @Override
+    void hablar() {
+        System.out.println(nombre + ": ¡Guau!");
+    }
 }
-              </pre>
-            </article>
+
+class Gato extends Animal {
+    public Gato(String nombre) { super(nombre); }
+
+    @Override
+    void hablar() {
+        System.out.println(nombre + ": ¡Miau!");
+    }
+}</pre>
+              </div>
+            </div>
           </div>
 
+          <!-- Tab Fundamentos -->
           <div id="tab-fundamentos" class="tab-panel">
-            <div class="card-title">
-              <span>Fundamentos Java (Wiki)</span>
-              <div class="search-bar reference-search">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:7px;">
+              <span style="font-size:.82rem;font-weight:800;">Fundamentos Java — haz click para ver documentación
+                IA</span>
+              <div class="reference-search">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-                <input type="text" id="refSearch" placeholder="Filtrar conceptos..." oninput="filtrarReferencia()">
+                <input type="text" id="refSearch" placeholder="Filtrar..." oninput="filtrarReferencia()">
               </div>
             </div>
-            <p style="margin-bottom: 20px; font-size: 0.9rem;">Conceptos básicos de <a
-                href="https://www.abrirllave.com/java/" target="_blank"
-                style="color: var(--brand2); font-weight: 600;">Abrirllave.com</a>.</p>
-            <div id="referenciaGrid" class="level-grid">
-              <!-- Referencia cards will be injected here -->
-            </div>
+            <p style="font-size:.76rem;color:var(--ink-dim);margin-bottom:10px;">
+              Conceptos de <a href="https://www.abrirllave.com/java/" target="_blank"
+                style="color:var(--brand2);font-weight:700;">Abrirllave.com</a>.
+              Haz clic en cualquier concepto para ver la guía generada por IA.
+            </p>
+            <div id="referenciaGrid" class="ref-grid"></div>
           </div>
 
-          <div style="margin-top: auto; padding-top: 20px; display: flex; gap: 10px;">
-            <a class="action-link" style="font-size: 0.8rem;" href="/entrevista">Plan Entrevista</a>
+          <div style="padding:10px 14px;border-top:1px solid var(--border);">
+            <a class="btn ghost sm" href="/entrevista">Plan Entrevista →</a>
           </div>
-        </section>
+        </div>
 
-        <section id="target-repo" class="dashboard-card">
-          <div class="card-title">
-            <span id="repo-section-title">Gestión de Repositorios (GitHub)</span>
-            <span class="status-pill" style="color: var(--brand2); background: rgba(181,85,47,0.1);">Repositorio</span>
-          </div>
-          <p>Gestiona y descarga colecciones de ejercicios externos para tu ruta personalizada.</p>
-          <div class="repo-loader">
-            <input type="text" id="repoUrl" placeholder="URL de GitHub..." class="repo-input">
-            <button class="action" onclick="cargarDesdeRepo()" style="padding: 10px 20px;">Cargar</button>
-            <button class="action" id="btnSaveRepo" onclick="guardarRepositorioActual()"
-              style="padding: 10px 20px; background: var(--brand2); color: white; display: none;">Guardar</button>
-            <button class="action" onclick="document.getElementById('helpModal').classList.add('active')"
-              style="background:transparent; border:1px solid var(--brand2); color:var(--brand2); padding:10px;">?</button>
-          </div>
+        <!-- COL 2 · Doc Slider + Repos -->
+        <div style="display:flex;flex-direction:column;gap:14px;">
 
-          <div id="saved-repos-container" style="margin-top: 15px; display: none;">
-            <p style="font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; color: #666;">Repositorios Guardados:</p>
-            <div id="saved-repos-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
-          </div>
-
-          <div id="backendStatus" style="font-size: 0.8rem; color: #666; margin-top: 5px;"></div>
-
-          <div id="repo-slider"
-            style="display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; scrollbar-width: none; border-bottom: 1px solid rgba(0,0,0,0.05);">
-            <button class="repo-tab active" onclick="switchRepo('standard')"
-              style="padding: 8px 15px; border-radius: 20px; border: 1px solid var(--brand); background: var(--brand); color: white; cursor: pointer; white-space: nowrap; font-size: 0.85rem;">Standard</button>
-          </div>
-
-          <div class="level-scroll">
-            <div id="retos-container" class="level-grid">
-              <!-- Los retos se cargaran dinamicamente aqui -->
-            </div>
-          </div>
-        </section>
-
-        <section id="target-playground" class="dashboard-card playground-section">
-          <div class="card-title">
-            <span id="playground-title">Playground Java</span>
-            <div style="display:flex; gap:10px;">
-              <button id="btnVscode" class="action"
-                style="background: #24292e; color: white; border: 1px solid #444d56; font-size: 0.8rem; padding: 8px 15px; display: flex; align-items: center; gap: 6px;"
-                onclick="window.open('https://vscode.dev/github/YeridStick/poo-practica', '_blank')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path
-                    d="M23.15 2.58L19.8 1.45c-.32-.11-.66.03-.82.33L12 15.67 5.02 1.78c-.16-.3-.5-.44-.82-.33L.85 2.58c-.36.12-.5.54-.26.82l6.21 7.08L.59 17.56c-.24.28-.1.7.26.82l3.35 1.13c.32.11.66-.03.82-.33L12 5.31l6.98 13.88c.16.3.5.44.82.33l3.35-1.13c.36-.12.5-.54.26-.82l-6.21-7.08 6.21-7.08c.24-.28.1-.7-.26-.82z" />
+          <!-- Doc Slider panel (hidden until ref-card clicked) -->
+          <div class="panel-card" id="docSliderPanel" style="display:none;">
+            <div class="panel-header">
+              <div class="ph-left" id="docSliderTitleEl">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
-                VS Code Web
+                <span id="docSliderTitleText">Documentación</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <button id="docPrev" onclick="docNav(-1)"
+                  style="width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .18s;"
+                  onmouseover="this.style.borderColor='var(--brand)'"
+                  onmouseout="this.style.borderColor='var(--border)'">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <span id="docCounter"
+                  style="font-size:.72rem;color:var(--ink-faint);font-weight:700;min-width:34px;text-align:center;">···</span>
+                <button id="docNext" onclick="docNav(+1)"
+                  style="width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .18s;"
+                  onmouseover="this.style.borderColor='var(--brand)'"
+                  onmouseout="this.style.borderColor='var(--border)'">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+                <button onclick="closeDocSlider()"
+                  style="width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--ink-faint);transition:all .18s;"
+                  onmouseover="this.style.borderColor='var(--danger)';this.style.color='var(--danger)'"
+                  onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink-faint)'">✕</button>
+              </div>
+            </div>
+            <!-- Dot navigation -->
+            <div id="docDots" style="display:flex;gap:5px;padding:8px 16px 0;flex-wrap:wrap;"></div>
+            <!-- Slides viewport -->
+            <div style="overflow:hidden;position:relative;">
+              <div id="docTrack"
+                style="display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform;"></div>
+            </div>
+            <!-- Footer actions -->
+            <div
+              style="padding:9px 16px;border-top:1px solid var(--border);display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
+              <button class="btn sm" onclick="loadSlideInEditor()">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+                Cargar en editor
               </button>
-              <button id="btnExpandEditor" class="action"
-                style="background: rgba(0,0,0,0.05); color: var(--ink); font-size: 0.8rem; padding: 8px 15px;"
-                onclick="toggleEditorFullscreen()">Ampliar</button>
-              <button class="action" style="background: #1e2227; font-size: 0.8rem; padding: 8px 15px;"
-                onclick="ejecutarJava()">Ejecutar</button>
+              <button class="btn ghost sm" onclick="askMoreExamples()">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                Más ejemplos
+              </button>
+              <span id="docStatus" style="font-size:.71rem;color:var(--ink-faint);margin-left:auto;"></span>
             </div>
           </div>
 
-          <div id="editorShell" class="editor-shell">
-            <div class="editor-top">
-              <div id="tabContainer" class="tab-container">
-                <!-- Pestañas se inyectaran aqui -->
+          <!-- Repos + Retos -->
+          <div class="panel-card" id="sec-repos">
+            <div class="panel-header">
+              <div class="ph-left">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg>
+                <span id="repo-section-title">Gestión de Repositorios</span>
               </div>
+              <div class="progress-mini">
+                <div class="progress-mini-track">
+                  <div class="progress-mini-fill" id="progressFill" style="width:0%"></div>
+                </div>
+                <span class="progress-mini-label" id="progressLabel">0 / 0</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <p style="font-size:.77rem;color:var(--ink-dim);margin-bottom:10px;">Carga colecciones de ejercicios desde
+                GitHub para tu ruta personalizada.</p>
+              <div class="repo-row">
+                <input type="text" id="repoUrl" class="repo-input" placeholder="URL de GitHub...">
+                <button class="btn" onclick="cargarDesdeRepo()">Cargar</button>
+                <button class="btn" id="btnSaveRepo" onclick="guardarRepositorioActual()"
+                  style="background:linear-gradient(135deg,var(--brand2),#d4642d);display:none;">Guardar</button>
+                <button class="btn ghost sm"
+                  onclick="document.getElementById('helpModal').classList.add('active')">?</button>
+              </div>
+              <div id="saved-repos-container" style="margin-bottom:8px;display:none;">
+                <p
+                  style="font-size:.68rem;font-weight:700;color:var(--ink-faint);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;">
+                  Guardados</p>
+                <div id="saved-repos-list" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+              </div>
+              <div id="backendStatus" style="font-size:.74rem;color:var(--ink-dim);min-height:16px;margin-bottom:6px;">
+              </div>
+              <div class="repo-tabs" id="repo-slider">
+                <button class="repo-tab active" onclick="switchRepo('standard')">Standard</button>
+              </div>
+            </div>
+            <div style="padding:0 14px 14px;">
+              <div class="level-scroll">
+                <div id="retos-container" class="level-grid"></div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /col2 -->
+
+        <!-- COL 3 · Playground -->
+        <div class="playground-col" id="sec-playground">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="ph-left">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+                <span id="playground-title">Playground Java</span>
+              </div>
+              <div class="editor-actions">
+                <div class="kbd-hint"><span class="kbd">Ctrl</span><span style="font-size:.58rem">+</span><span
+                    class="kbd">↵</span><span style="font-size:.64rem;color:var(--ink-faint);">Ejecutar</span></div>
+                <button class="btn dark sm"
+                  onclick="window.open('https://vscode.dev/github/YeridStick/poo-practica','_blank')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M23.15 2.58L19.8 1.45c-.32-.11-.66.03-.82.33L12 15.67 5.02 1.78c-.16-.3-.5-.44-.82-.33L.85 2.58c-.36.12-.5.54-.26.82l6.21 7.08L.59 17.56c-.24.28-.1.7.26.82l3.35 1.13c.32.11.66-.03.82-.33L12 5.31l6.98 13.88c.16.3.5.44.82.33l3.35-1.13c.36-.12.5-.54.26-.82l-6.21-7.08 6.21-7.08c.24-.28.1-.7-.26-.82z" />
+                  </svg>
+                  VS Code
+                </button>
+                <button class="btn sm" id="runBtn" onclick="ejecutarJava()">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                  Ejecutar
+                </button>
+                <button class="expand-btn" id="expandBtn" onclick="toggleEditorFullscreen()" title="F11">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9" />
+                    <polyline points="9 21 3 21 3 15" />
+                    <line x1="21" y1="3" x2="14" y2="10" />
+                    <line x1="3" y1="21" x2="10" y2="14" />
+                  </svg>
+                  Ampliar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Editor shell -->
+          <div class="editor-shell" id="editorShell">
+            <div
+              style="display:flex;align-items:center;background:#161b22;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;">
+              <div class="editor-tab-strip" id="tabContainer"></div>
               <button class="add-tab-btn" onclick="createNewFile()" title="Nuevo archivo">+</button>
-              <div style="display: flex; gap: 15px; margin-left: auto;">
-                <span id="editorHint" style="opacity: 0.7; font-size: 0.8rem;">Escribe codigo Java aqui</span>
-                <button id="btnExpandEditorTop" onclick="toggleEditorFullscreen()"
-                  style="border:none;background:none;color:inherit;cursor:pointer;font-size:0.75rem;">Full
-                  Screen</button>
-              </div>
             </div>
-            <div class="editor-body" style="height: 400px; position: relative;">
-              <div id="monacoEditor" style="width: 100%; height: 100%;"></div>
-              <!-- Viejo editor oculto para compatibilidad inicial -->
-              <textarea id="javaEditor" class="editor" spellcheck="false" style="display:none;"></textarea>
-              <div id="snippetPanel" class="snippet-panel"></div>
+            <div class="editor-body" id="editorBody">
+              <div id="monacoEditor" style="width:100%;height:100%;"></div>
+              <textarea id="javaEditor" style="display:none;" spellcheck="false"></textarea>
+              <div id="snippetPanel"></div>
+            </div>
+            <div class="resize-handle" id="resizeHandle"></div>
+            <div class="output-panel" id="outputPanel">
+              <div class="output-header">
+                <div class="output-live-dot" id="outputDot"></div>
+                <span>Terminal de salida</span>
+                <span id="execTime" style="margin-left:7px;font-size:.67rem;color:var(--ink-faint);"></span>
+                <span id="runValidate" style="margin-left:5px;font-size:.71rem;font-weight:700;"></span>
+                <button class="output-expand-btn" onclick="toggleOutputExpand()" id="outputExpandBtn">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9" />
+                    <polyline points="9 21 3 21 3 15" />
+                    <line x1="21" y1="3" x2="14" y2="10" />
+                    <line x1="3" y1="21" x2="10" y2="14" />
+                  </svg>
+                  Expandir salida
+                </button>
+              </div>
+              <pre class="output-body" id="runOutput"><span class="out-dim">// Salida aparecerá aquí...
+// Ctrl+Enter para ejecutar rápidamente.</span></pre>
             </div>
           </div>
-          <pre id="runOutput" class="run-output">Salida aparecerá aqui...</pre>
-        </section>
-      </div>
+        </div><!-- /col3 -->
 
-      <footer style="margin-top: auto; padding-top: 40px; text-align: center; color: #999; font-size: 0.85rem;">
-        <p>Dashboard de Aprendizaje Java v2.0 - 2026</p>
-      </footer>
-    </main>
+      </div><!-- /main-grid -->
+
+      <footer>Dashboard de Aprendizaje Java v2.0 — 2026</footer>
+    </div><!-- /page-body -->
+
+    <div class="expanded-backdrop" id="expandedBackdrop" onclick="collapseEditor()"></div>
+  </main><!-- /main-content -->
+
+  <!-- Context menu -->
+  <div id="editorContextMenu" class="ctx-menu">
+    <div class="ctx-section">Generar Métodos</div>
+    <div class="ctx-item" onclick="insertGettersSetters()">Getters y Setters</div>
+    <div class="ctx-item" onclick="insertConstructor()">Constructor</div>
+    <div class="ctx-section">Estructura Base</div>
+    <div class="ctx-item" onclick="insertBoilerplate('controller')">Spring Controller</div>
+    <div class="ctx-item" onclick="insertBoilerplate('rest-controller')">Rest Controller</div>
+    <div class="ctx-item" onclick="insertBoilerplate('entity')">JPA Entity</div>
+    <div class="ctx-section">Utilidades</div>
+    <div class="ctx-item" onclick="navigator.clipboard.writeText(getEditorValue())">Copiar todo</div>
   </div>
+  <div id="suggestionBox"></div>
 
+  <!-- Modals -->
   <div id="codeModal" class="modal">
     <div class="modal-box">
-      <div class="modal-top">
-        <strong>Vista ampliada de codigo</strong>
-        <button id="closeModal" class="close-btn">Cerrar</button>
+      <div class="modal-top"><strong>Vista ampliada de código</strong><button class="close-btn"
+          onclick="document.getElementById('codeModal').classList.remove('active')">Cerrar</button></div>
+      <div class="modal-body">
+        <div class="code-wrap">
+          <pre><code id="modalCode"></code></pre>
+        </div>
       </div>
-      <pre class="code"><code id="modalCode"></code></pre>
     </div>
   </div>
 
   <div id="helpModal" class="modal">
-    <div class="modal-box" style="max-width: 600px;">
-      <div class="modal-top">
-        <strong>Configuracion del Repositorio</strong>
-        <button class="close-btn"
-          onclick="document.getElementById('helpModal').classList.remove('active')">Cerrar</button>
-      </div>
-      <div style="padding: 25px; overflow-y: auto; max-height: 70vh;">
-        <p>Para cargar tus propios ejercicios, tu repositorio de GitHub debe contener un archivo <code>retos.json</code>
-          en la raiz con esta estructura:</p>
-        <div class="code-wrap">
-          <pre class="code"><code>{
+    <div class="modal-box" style="max-width:580px;">
+      <div class="modal-top"><strong>Configuración del Repositorio</strong><button class="close-btn"
+          onclick="document.getElementById('helpModal').classList.remove('active')">Cerrar</button></div>
+      <div class="modal-body">
+        <p>Tu repositorio debe tener un archivo <code
+            style="background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.8em;">retos.json</code>
+          en la raíz:</p>
+        <div class="code-wrap" style="margin:10px 0;">
+          <pre><code>{
   "retos": [
     {
       "id": "nivel1",
@@ -411,11 +2308,10 @@ class Perro extends Animal {
   ]
 }</code></pre>
         </div>
-        <ul style="font-size: 0.9rem; line-height: 1.6;">
-          <li><strong>id</strong>: Debe coincidir con el nivel (nivel1, nivel2, etc).</li>
-          <li><strong>template</strong>: Es el codigo inicial que aparecera en el editor.</li>
-          <li><strong>output_esperado</strong>: Lista de fragmentos que la salida del programa debe contener para
-            validar.</li>
+        <ul style="font-size:.82rem;line-height:1.7;padding-left:16px;">
+          <li><strong>id</strong>: Identificador único (nivel1, nivel2…)</li>
+          <li><strong>template</strong>: Código inicial en el editor.</li>
+          <li><strong>output_esperado</strong>: Fragmentos que la salida debe contener.</li>
         </ul>
       </div>
     </div>
@@ -423,100 +2319,897 @@ class Perro extends Animal {
 
   <div id="themeModal" class="modal">
     <div class="modal-box">
-      <div class="modal-top">
-        <h3 style="margin:0;">Seleccionar Tema</h3>
-        <button id="closeThemeModal" class="close-btn">X</button>
-      </div>
+      <div class="modal-top"><strong>Seleccionar Tema</strong><button class="close-btn"
+          onclick="document.getElementById('themeModal').classList.remove('active')">✕</button></div>
       <div class="theme-grid">
         <div class="theme-card active" data-theme="emerald">
           <div class="theme-preview">
-            <div style="background: #f0f2f5;"></div>
-            <div style="background: #0d6a63;"></div>
-            <div style="background: #ffffff;"></div>
-          </div>
-          <span>Esmeralda</span>
+            <div style="background:#f0f2f5;"></div>
+            <div style="background:#0d6a63;"></div>
+            <div style="background:#fff;"></div>
+          </div><span>Esmeralda</span>
         </div>
         <div class="theme-card" data-theme="dark">
           <div class="theme-preview">
-            <div style="background: #0d1117;"></div>
-            <div style="background: #238636;"></div>
-            <div style="background: #161b22;"></div>
-          </div>
-          <span>Noche Profunda</span>
+            <div style="background:#0d1117;"></div>
+            <div style="background:#238636;"></div>
+            <div style="background:#161b22;"></div>
+          </div><span>Noche Profunda</span>
         </div>
         <div class="theme-card" data-theme="midnight">
           <div class="theme-preview">
-            <div style="background: #0a192f;"></div>
-            <div style="background: #64ffda;"></div>
-            <div style="background: #112240;"></div>
-          </div>
-          <span>Azul Medianoche</span>
+            <div style="background:#0a192f;"></div>
+            <div style="background:#64ffda;"></div>
+            <div style="background:#112240;"></div>
+          </div><span>Azul Medianoche</span>
         </div>
         <div class="theme-card" data-theme="earth">
           <div class="theme-preview">
-            <div style="background: #fdf6e3;"></div>
-            <div style="background: #859900;"></div>
-            <div style="background: #eee8d5;"></div>
-          </div>
-          <span>Tierra (Java Earth)</span>
+            <div style="background:#fdf6e3;"></div>
+            <div style="background:#859900;"></div>
+            <div style="background:#eee8d5;"></div>
+          </div><span>Tierra</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="editorContextMenu" class="ctx-menu">
-    <div class="ctx-section">Generar Métodos</div>
-    <div class="ctx-item" onclick="insertGettersSetters()">Getters y Setters</div>
-    <div class="ctx-item" onclick="insertConstructor()">Constructor</div>
-    <div class="ctx-section">Estructura Base</div>
-    <div class="ctx-item" onclick="insertBoilerplate('controller')">Spring Controller</div>
-    <div class="ctx-item" onclick="insertBoilerplate('rest-controller')">Rest Controller</div>
-    <div class="ctx-item" onclick="insertBoilerplate('entity')">JPA Entity</div>
-    <div class="ctx-section">Utilidades</div>
-    <div class="ctx-item" onclick="document.execCommand('copy')">Copiar</div>
-    <div class="ctx-item" onclick="document.execCommand('paste')">Pegar</div>
-  </div>
-
-  <div id="suggestionBox" class="suggestion-box">
-    <!-- Sugerencias se inyectaran aqui -->
-  </div>
-
-  <!-- Custom Input Modal -->
   <div id="inputModal" class="modal">
-    <div class="modal-box" style="max-width: 400px;">
-      <div class="modal-top">
-        <strong id="inputModalTitle">Nombre del archivo</strong>
-      </div>
-      <div style="padding: 20px;">
-        <input type="text" id="customInput" class="repo-input" style="width: 100%; margin-bottom: 20px;" placeholder="">
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-          <button class="action" style="background: transparent; border: 1px solid var(--line); color: inherit;"
-            onclick="closeInputModal()">Cancelar</button>
-          <button class="action" id="inputModalConfirm">Aceptar</button>
-        </div>
+    <div class="modal-box" style="max-width:380px;">
+      <div class="modal-top"><strong id="inputModalTitle">Nombre del archivo</strong></div>
+      <div class="modal-body">
+        <input type="text" id="customInput" class="repo-input" style="width:100%;margin-bottom:14px;" placeholder="">
+        <div class="modal-actions"><button class="btn-cancel" onclick="closeInputModal()">Cancelar</button><button
+            class="btn" id="inputModalConfirm">Aceptar</button></div>
       </div>
     </div>
   </div>
 
-  <!-- Custom Alert/Confirm Modal -->
   <div id="alertModal" class="modal">
-    <div class="modal-box" style="max-width: 400px;">
-      <div class="modal-top">
-        <strong id="alertModalTitle">Mensaje</strong>
-      </div>
-      <div style="padding: 20px;">
-        <p id="alertModalMessage" style="margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;"></p>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-          <button class="action" id="alertModalCancel"
-            style="background: transparent; border: 1px solid var(--line); color: inherit; display: none;"
-            onclick="closeAlertModal()">Cancelar</button>
-          <button class="action" id="alertModalConfirm">Aceptar</button>
+    <div class="modal-box" style="max-width:380px;">
+      <div class="modal-top"><strong id="alertModalTitle">Mensaje</strong></div>
+      <div class="modal-body">
+        <p id="alertModalMessage" style="margin-bottom:14px;font-size:.86rem;line-height:1.5;"></p>
+        <div class="modal-actions"><button class="btn-cancel" id="alertModalCancel" style="display:none;"
+            onclick="closeAlertModal()">Cancelar</button><button class="btn" id="alertModalConfirm">Aceptar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="/index.js" defer></script>
+  <!-- ════════════════════════════════════════════════
+     JAVASCRIPT — COMPLETO E INLINE
+════════════════════════════════════════════════ -->
+  <script>
+    /* ══════════ 1. TABS ══════════ */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const t = btn.dataset.tab;
+        const parent = btn.closest('.panel-card');
+        parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        parent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(t)?.classList.add('active');
+      });
+    });
+
+    /* ══════════ 2. EXPAND CODE ══════════ */
+    function toggleCode(id, btn) {
+      const el = document.getElementById(id);
+      el.classList.toggle('open');
+      const open = el.classList.contains('open');
+      btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="${open ? '18 15 12 9 6 15' : '6 9 12 15 18 9'}"/></svg>${open ? ' Ocultar' : ' Ver completo'}`;
+    }
+
+    /* ══════════ 3. REFERENCE GRID ══════════ */
+    const REFERENCIAS = [
+      { title: 'Variables', desc: 'Tipos primitivos: int, double, boolean, char. Declaración, asignación y alcance.' },
+      { title: 'Clases', desc: 'Plantillas para crear objetos con atributos y métodos. Pilar de la POO.' },
+      { title: 'Herencia', desc: 'extends permite reutilizar código. Una clase hija hereda atributos y métodos de la padre.' },
+      { title: 'Polimorfismo', desc: 'Un método puede comportarse diferente según el objeto que lo implemente.' },
+      { title: 'Interfaces', desc: 'Contratos sin implementación que las clases deben cumplir con implements.' },
+      { title: 'Encapsulamiento', desc: 'private + getters/setters para proteger el estado interno de los objetos.' },
+      { title: 'Constructores', desc: 'Método especial con el nombre de la clase. Se ejecuta al instanciar con new.' },
+      { title: 'Static', desc: 'Miembros que pertenecen a la clase, no a las instancias. Se acceden con ClassName.miembro.' },
+      { title: 'Collections', desc: 'ArrayList, HashMap, HashSet para manejar grupos de objetos de forma dinámica.' },
+      { title: 'Excepciones', desc: 'try-catch-finally para manejo de errores en tiempo de ejecución.' },
+      { title: 'Lambdas', desc: 'Funciones anónimas concisas: (x) -> x * 2. Requieren interfaces funcionales.' },
+      { title: 'Streams', desc: 'API funcional para procesar colecciones con filter(), map(), reduce(), collect().' },
+      { title: 'Generics', desc: 'Tipos parametrizados <T> para escribir código reutilizable y type-safe.' },
+      { title: 'Anotaciones', desc: 'Metadatos con @. Ej: @Override, @Deprecated, @FunctionalInterface, @SpringBootApplication.' },
+      { title: 'Optional', desc: 'Contenedor que puede o no tener valor. Evita NullPointerException.' },
+      { title: 'Enums', desc: 'Tipo especial con conjunto fijo de constantes. Pueden tener métodos y campos.' },
+    ];
+
+    function renderReferencia(list) {
+      const grid = document.getElementById('referenciaGrid');
+      if (!grid) return;
+      grid.innerHTML = list.map(r => `
+    <div class="ref-card" data-concept="${esc(r.title)}" data-hint="${esc(r.desc)}">
+      <h5>${esc(r.title)}</h5>
+      <p>${esc(r.desc)}</p>
+      <span class="ref-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>`).join('');
+      grid.querySelectorAll('.ref-card').forEach(card => {
+        card.onclick = () => openDocSlider(card.dataset.concept, card.dataset.hint, card);
+      });
+    }
+    function filtrarReferencia() {
+      const q = (document.getElementById('refSearch')?.value || '').toLowerCase();
+      renderReferencia(q ? REFERENCIAS.filter(r => r.title.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q)) : REFERENCIAS);
+    }
+    function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') }
+    renderReferencia(REFERENCIAS);
+
+    /* ══════════ 4. DOC SLIDER (Claude API) ══════════ */
+    let docSlides = [], docIdx = 0, docKey = null, docCtx = null;
+
+    async function openDocSlider(concept, hint, cardEl) {
+      document.querySelectorAll('.ref-card').forEach(c => c.classList.remove('active-concept'));
+      cardEl?.classList.add('active-concept');
+      const panel = document.getElementById('docSliderPanel');
+      panel.style.display = 'block';
+      document.getElementById('docSliderTitleText').textContent = concept;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (docKey === concept && docSlides.length > 0) return;
+      docKey = concept; docIdx = 0; docSlides = []; docCtx = { concept, hint };
+      showSkeleton();
+      docSlides = await fetchSlides(concept, hint, null);
+      docIdx = 0;
+      renderSlides();
+    }
+
+    function closeDocSlider() {
+      document.getElementById('docSliderPanel').style.display = 'none';
+      document.querySelectorAll('.ref-card').forEach(c => c.classList.remove('active-concept'));
+      docKey = null;
+    }
+
+    async function fetchSlides(concept, hint, extra) {
+      const statusEl = document.getElementById('docStatus');
+      statusEl.textContent = '⚡ Generando con IA...';
+      const prompt = `Eres un instructor experto en Java y POO.
+Genera exactamente 4 slides de documentación sobre el concepto Java: "${concept}".
+${hint ? `Descripción: ${hint}` : ''}
+${extra ? `Instrucción adicional: ${extra}` : ''}
+
+Responde ÚNICAMENTE con JSON válido (sin markdown, sin texto extra antes/después).
+
+{
+  "slides": [
+    {
+      "type": "concept",
+      "title": "¿Qué son las ${concept} en Java?",
+      "body": "Explicación pedagógica en 3-4 oraciones. Usa saltos de línea \\n para párrafos. Solo texto plano, sin HTML.",
+      "code": "// Ejemplo básico\\npublic class Ejemplo {\\n    public static void main(String[] args) {\\n        System.out.println(\\"Hola\\");\\n    }\\n}",
+      "codeComment": "Descripción breve del código"
+    },
+    {
+      "type": "example",
+      "title": "Ejemplo práctico real de ${concept}",
+      "body": "Explicación del ejemplo en 2-3 oraciones.",
+      "code": "// Código Java real funcional y comentado",
+      "codeComment": "Qué hace y por qué es útil"
+    },
+    {
+      "type": "pitfall",
+      "title": "Error común con ${concept}",
+      "body": "Describe el error frecuente y sus consecuencias.",
+      "code": "// INCORRECTO:\\n// código con el error\\n\\n// CORRECTO:\\n// código bien escrito",
+      "codeComment": "Diferencia clave MAL vs BIEN"
+    },
+    {
+      "type": "practice",
+      "title": "Ejercicio práctico de ${concept}",
+      "body": "Enunciado claro del ejercicio con lo que debe implementar el estudiante.",
+      "code": "public class Ejercicio {\\n    public static void main(String[] args) {\\n        // TODO: tu solución aquí\\n    }\\n}",
+      "codeComment": "Plantilla base para resolver"
+    }
+  ]
+}
+
+Reglas: body es texto plano con \\n para párrafos. Code es Java real y comentado. Responde SOLO el JSON.`;
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 2400,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const raw = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+        if (!raw) throw new Error('Respuesta vacía');
+        let clean = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/i, '').trim();
+        let parsed;
+        try { parsed = JSON.parse(clean); }
+        catch {
+          const m = clean.match(/\{[\s\S]*\}/);
+          if (m) parsed = JSON.parse(m[0]);
+          else throw new Error('JSON inválido');
+        }
+        if (!Array.isArray(parsed.slides)) throw new Error('slides no es array');
+        statusEl.textContent = `✅ ${parsed.slides.length} slides`;
+        setTimeout(() => { statusEl.textContent = '' }, 2500);
+        return parsed.slides;
+      } catch (err) {
+        console.error('Doc Slider:', err);
+        statusEl.textContent = '⚠️ Cargando contenido local';
+        setTimeout(() => { statusEl.textContent = '' }, 2500);
+        return fallbackSlides(concept, hint);
+      }
+    }
+
+    /* ── built-in fallback por concepto ─────── */
+    const BUILTIN_SLIDES = {
+      'Variables': [
+        {
+          type: 'concept', title: 'Variables en Java',
+          body: 'Una variable es un contenedor en memoria con nombre, tipo y valor.\nJava tiene 8 tipos primitivos: int, long, double, float, boolean, char, byte, short.\nLas variables de referencia almacenan la dirección de un objeto en el heap.',
+          code: '// Declaración e inicialización\nint edad = 25;\ndouble precio = 9.99;\nboolean activo = true;\nString nombre = "Java"; // referencia a objeto\n\nSystem.out.println("Edad: " + edad);\nSystem.out.println("Precio: $" + precio);',
+          codeComment: 'Primitivos guardan el valor directo; String es una referencia'
+        },
+        {
+          type: 'example', title: 'Variables locales, de instancia y estáticas',
+          body: 'Variables locales: existen solo dentro de un método y deben inicializarse.\nVariables de instancia: cada objeto tiene la suya propia.\nVariables estáticas: se comparten entre todas las instancias de la clase.',
+          code: 'public class Contador {\n    static int total = 0;  // estática: compartida\n    int id;               // instancia: por objeto\n\n    public Contador() {\n        total++;\n        this.id = total;\n    }\n\n    public static void main(String[] args) {\n        Contador a = new Contador();\n        Contador b = new Contador();\n        System.out.println("Total instancias: " + Contador.total); // 2\n        System.out.println("ID de a: " + a.id); // 1\n        System.out.println("ID de b: " + b.id); // 2\n    }\n}',
+          codeComment: 'static pertenece a la clase; sin static pertenece al objeto'
+        },
+        {
+          type: 'pitfall', title: 'Usar variable local sin inicializar',
+          body: 'Las variables locales en Java NO tienen valor por defecto.\nEl compilador lanza error si detectas que puedes usarla sin inicializar.\nLas de instancia SÍ tienen default: 0, false o null según el tipo.',
+          code: '// INCORRECTO — error de compilación:\npublic void metodo() {\n    int x;                        // sin inicializar\n    System.out.println(x);       // ERROR: variable x might not have been initialized\n}\n\n// CORRECTO:\npublic void metodo() {\n    int x = 0;                    // siempre inicializa\n    System.out.println(x);       // OK: imprime 0\n}',
+          codeComment: 'Regla de oro: inicializa siempre las variables locales'
+        },
+        {
+          type: 'practice', title: 'Calculadora de área y perímetro',
+          body: 'Declara variables para ancho y alto de un rectángulo.\nCalcula el área (ancho × alto) y el perímetro (2 × (ancho + alto)).\nImprime ambos resultados con etiquetas descriptivas.',
+          code: 'public class CalculadoraArea {\n    public static void main(String[] args) {\n        // TODO: declara double ancho = 5.0;\n        // TODO: declara double alto = 3.0;\n        // TODO: calcula double area = ancho * alto;\n        // TODO: calcula double perimetro = 2 * (ancho + alto);\n        // TODO: imprime "Área: X" y "Perímetro: X"\n    }\n}',
+          codeComment: 'Salida esperada: Área: 15.0 | Perímetro: 16.0'
+        },
+      ],
+      'Clases': [
+        {
+          type: 'concept', title: '¿Qué es una Clase en Java?',
+          body: 'Una clase es una plantilla o molde para crear objetos.\nDefine los atributos (datos) y métodos (comportamiento) que tendrán sus instancias.\nEn Java todo el código vive dentro de clases, que son la base de la POO.',
+          code: '// Definición de una clase\npublic class Coche {\n    // Atributos (estado)\n    private String marca;\n    private String modelo;\n    private int velocidad;\n\n    // Constructor\n    public Coche(String marca, String modelo) {\n        this.marca = marca;\n        this.modelo = modelo;\n        this.velocidad = 0;\n    }\n\n    // Métodos (comportamiento)\n    public void acelerar(int cantidad) {\n        velocidad += cantidad;\n    }\n\n    public String getEstado() {\n        return marca + " " + modelo + " a " + velocidad + " km/h";\n    }\n}',
+          codeComment: 'La clase Coche encapsula estado y comportamiento de un coche real'
+        },
+        {
+          type: 'example', title: 'Creando e usando objetos',
+          body: 'Para usar una clase se crea un objeto con la palabra clave new.\nCada objeto tiene su propio estado independiente.\nSe accede a métodos y atributos con el operador punto (.).',
+          code: 'public class Main {\n    public static void main(String[] args) {\n        // Crear objetos (instancias)\n        Coche miCoche = new Coche("Toyota", "Corolla");\n        Coche otroCoche = new Coche("Honda", "Civic");\n\n        // Usar métodos\n        miCoche.acelerar(60);\n        otroCoche.acelerar(80);\n\n        // Ver estado de cada uno\n        System.out.println(miCoche.getEstado());   // Toyota Corolla a 60 km/h\n        System.out.println(otroCoche.getEstado()); // Honda Civic a 80 km/h\n    }\n}',
+          codeComment: 'Cada instancia mantiene su propio estado independiente'
+        },
+        {
+          type: 'pitfall', title: 'Confundir clase con objeto',
+          body: 'La clase es el plano; el objeto es la construcción real.\nCrear una variable de tipo clase no crea el objeto: puede ser null.\nSiempre usa new para instanciar, o recibirás NullPointerException.',
+          code: '// INCORRECTO — referencia null:\nCoche c;                          // solo declaración, c es null\nc.acelerar(50);                   // NullPointerException!\n\n// CORRECTO — instanciar con new:\nCoche c = new Coche("Ford","Focus"); // objeto real en heap\nc.acelerar(50);                       // OK: funciona correctamente',
+          codeComment: 'Siempre inicializa con new antes de usar el objeto'
+        },
+        {
+          type: 'practice', title: 'Clase Estudiante',
+          body: 'Crea una clase Estudiante con atributos: nombre (String) y nota (double).\nAgrega un constructor, getters y un método estaAprobado() que retorne true si nota >= 3.0.\nEn el main crea 2 estudiantes y muestra si están aprobados.',
+          code: 'public class Estudiante {\n    // TODO: atributos privados nombre y nota\n\n    // TODO: constructor con nombre y nota\n\n    // TODO: getters getNombre() y getNota()\n\n    // TODO: método boolean estaAprobado()\n\n    public static void main(String[] args) {\n        // TODO: crear 2 estudiantes y verificar si aprobaron\n    }\n}',
+          codeComment: 'Salida esperada: "Ana: Aprobado" | "Luis: Reprobado"'
+        },
+      ],
+      'Herencia': [
+        {
+          type: 'concept', title: 'Herencia en Java',
+          body: 'La herencia permite que una clase (hija) reutilice atributos y métodos de otra clase (padre).\nSe implementa con la palabra clave extends.\nJava solo soporta herencia simple: una clase puede extender solo una clase padre.',
+          code: '// Clase padre (superclase)\npublic class Vehiculo {\n    protected String marca;\n    protected int velocidadMax;\n\n    public Vehiculo(String marca, int velMax) {\n        this.marca = marca;\n        this.velocidadMax = velMax;\n    }\n\n    public void describir() {\n        System.out.println("Vehículo: " + marca + ", max: " + velocidadMax + "km/h");\n    }\n}\n\n// Clase hija (subclase)\npublic class Moto extends Vehiculo {\n    private boolean tieneSidecar;\n\n    public Moto(String marca, int velMax, boolean sidecar) {\n        super(marca, velMax); // llama al constructor del padre\n        this.tieneSidecar = sidecar;\n    }\n}',
+          codeComment: 'super() llama al constructor del padre; extends establece la relación'
+        },
+        {
+          type: 'example', title: '@Override: sobrescribir comportamiento',
+          body: 'La clase hija puede sobrescribir métodos del padre con @Override.\nEsto permite que objetos del mismo tipo padre tengan comportamiento diferente.\nEste concepto se combina con polimorfismo para crear código flexible.',
+          code: 'public class Coche extends Vehiculo {\n    private int numeroPuertas;\n\n    public Coche(String marca, int velMax, int puertas) {\n        super(marca, velMax);\n        this.numeroPuertas = puertas;\n    }\n\n    @Override\n    public void describir() {\n        super.describir(); // llama al método del padre\n        System.out.println("Puertas: " + numeroPuertas);\n    }\n}\n\n// Uso:\nVehiculo v = new Coche("BMW", 250, 4);\nv.describir(); // imprime descripción de Coche (polimorfismo)',
+          codeComment: '@Override garantiza que estás sobrescribiendo correctamente'
+        },
+        {
+          type: 'pitfall', title: 'Constructor y super()',
+          body: 'Si la clase padre no tiene constructor sin argumentos, el hijo DEBE llamar super() explícitamente.\nsuper() debe ser la primera instrucción del constructor hijo.\nOlvidar esto genera error de compilación difícil de detectar.',
+          code: '// INCORRECTO — padre sin constructor vacío:\npublic class Animal {\n    protected String nombre;\n    public Animal(String nombre) { this.nombre = nombre; }\n}\npublic class Perro extends Animal {\n    // ERROR: no hay super() y Animal no tiene constructor vacío\n    public Perro() { } // error de compilación\n}\n\n// CORRECTO:\npublic class Perro extends Animal {\n    public Perro(String nombre) {\n        super(nombre); // primera instrucción\n    }\n}',
+          codeComment: 'super() siempre primera línea del constructor hijo'
+        },
+        {
+          type: 'practice', title: 'Jerarquía de figuras geométricas',
+          body: 'Crea una clase Figura con atributo color y método calcularArea() que retorne 0.\nCrea Circulo (extends Figura) con radio y que sobreescriba calcularArea() → π×r².\nCrea Rectangulo (extends Figura) con ancho y alto y calcularArea() → ancho×alto.',
+          code: 'public class Figura {\n    protected String color;\n    // TODO: constructor y calcularArea()\n}\n\npublic class Circulo extends Figura {\n    private double radio;\n    // TODO: constructor y @Override calcularArea()\n}\n\npublic class Rectangulo extends Figura {\n    // TODO: atributos, constructor y @Override calcularArea()\n\n    public static void main(String[] args) {\n        // TODO: crear instancias y mostrar áreas\n    }\n}',
+          codeComment: 'Usa Math.PI para el cálculo del área del círculo'
+        },
+      ],
+    };
+
+    function fallbackSlides(concept, hint) {
+      if (BUILTIN_SLIDES[concept]) return BUILTIN_SLIDES[concept];
+      return [
+        {
+          type: 'concept', title: `${concept} en Java`,
+          body: `${concept}: ${hint || 'Concepto fundamental de Java y POO.'}\n\nEstudia sus características principales, cómo se declara y cuándo es apropiado usarlo.\nPractica modificando el código del editor para experimentar con el concepto.`,
+          code: `// Ejemplo base — ${concept}\npublic class Ejemplo {\n    public static void main(String[] args) {\n        // Experimenta con ${concept} aquí\n        System.out.println("Aprendiendo ${concept}");\n    }\n}`, codeComment: `Modifica y ejecuta para practicar ${concept}`
+        },
+        {
+          type: 'example', title: 'Ejemplo práctico',
+          body: `Un ejemplo real de ${concept} en acción.\nObserva la estructura, modifica valores y observa los cambios.\nEsta es la mejor forma de interiorizar el concepto.`,
+          code: `public class EjemploPractico {\n    // Implementa aquí un ejemplo de ${concept}\n\n    public static void main(String[] args) {\n        // Prueba tu implementación\n    }\n}`, codeComment: 'Carga en el editor y ejecuta'
+        },
+        {
+          type: 'pitfall', title: 'Error frecuente',
+          body: `Al trabajar con ${concept} los errores más comunes son de visibilidad, tipo y ciclo de vida.\nRevisa siempre modificadores de acceso y si estás instanciando correctamente.`,
+          code: `// Checklist para ${concept}:\n// 1. Modificadores de acceso correctos (public/private/protected)\n// 2. Inicialización antes de usar\n// 3. Tipo correcto para la operación\n// 4. Herencia e implementación si aplica`, codeComment: 'Usa esta lista como guía al depurar'
+        },
+        {
+          type: 'practice', title: 'Ejercicio de práctica',
+          body: `Implementa un mini-proyecto usando ${concept}.\nComienza desde la plantilla y añade funcionalidad paso a paso.\nHaz clic en "Cargar en editor" para ejecutar tu solución.`,
+          code: `public class Practica {\n    // TODO: implementa ${concept} aquí\n\n    public static void main(String[] args) {\n        // TODO: prueba tu implementación\n        System.out.println("¡Listo!");\n    }\n}`, codeComment: 'Plantilla lista para tu práctica'
+        },
+      ];
+    }
+
+    function showSkeleton() {
+      const t = document.getElementById('docTrack');
+      t.style.transform = 'translateX(0)';
+      t.innerHTML = `<div style="min-width:100%;padding:16px 18px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="sk-line" style="height:17px;width:30%;border-radius:99px;"></div>
+      <div class="sk-line" style="height:22px;width:65%;border-radius:6px;"></div>
+      <div class="sk-line" style="height:13px;width:92%;border-radius:5px;"></div>
+      <div class="sk-line" style="height:13px;width:78%;border-radius:5px;"></div>
+      <div class="sk-line" style="height:13px;width:86%;border-radius:5px;"></div>
+      <div class="sk-line" style="height:110px;width:100%;border-radius:10px;margin-top:3px;"></div>
+      <div class="sk-line" style="height:11px;width:50%;border-radius:5px;"></div>
+    </div>
+  </div>`;
+      document.getElementById('docDots').innerHTML = '';
+      document.getElementById('docCounter').textContent = '···';
+    }
+
+    function renderSlides() {
+      const t = document.getElementById('docTrack');
+      t.innerHTML = '';
+      t.style.transform = 'translateX(0)';
+      const typeConf = {
+        concept: { label: '📖 Concepto', cls: 'concept' },
+        example: { label: '✅ Ejemplo', cls: 'example' },
+        pitfall: { label: '⚠️ Error común', cls: 'pitfall' },
+        practice: { label: '🎯 Práctica', cls: 'practice' },
+      };
+      docSlides.forEach((slide, i) => {
+        const cfg = typeConf[slide.type] || typeConf.concept;
+        const el = document.createElement('div');
+        el.className = 'doc-slide';
+        const bodyHtml = (slide.body || '').split('\n\n').filter(p => p.trim())
+          .map(p => `<p style="margin:0 0 6px;">${esc(p.replace(/\n/g, ' '))}</p>`).join('');
+        const codeBlock = slide.code ? `
+      <div class="slide-code">
+        <div class="slide-code-header">
+          <span class="slide-code-lang">Java</span>
+          <button class="slide-copy-btn" onclick="copyCode(${i})">Copiar</button>
+        </div>
+        <pre>${javaHL(slide.code)}</pre>
+      </div>
+      ${slide.codeComment ? `<p style="font-size:.72rem;color:var(--ink-faint);margin-top:4px;">ℹ️ ${esc(slide.codeComment)}</p>` : ''}` : '';
+        el.innerHTML = `
+      <span class="slide-badge ${cfg.cls}">${cfg.label}</span>
+      <h4 class="slide-title">${esc(slide.title || '')}</h4>
+      <div class="slide-body">${bodyHtml}</div>
+      ${codeBlock}`;
+        t.appendChild(el);
+      });
+      // dots
+      const dotsEl = document.getElementById('docDots');
+      dotsEl.innerHTML = docSlides.map((_, i) =>
+        `<div class="slide-dot${i === 0 ? ' active' : ''}" onclick="goSlide(${i})" title="Slide ${i + 1}"></div>`
+      ).join('');
+      docIdx = 0;
+      updateSlider();
+    }
+
+    function docNav(dir) {
+      docIdx = Math.max(0, Math.min(docSlides.length - 1, docIdx + dir));
+      updateSlider();
+    }
+    function goSlide(i) { docIdx = i; updateSlider(); }
+    function updateSlider() {
+      document.getElementById('docTrack').style.transform = `translateX(-${docIdx * 100}%)`;
+      document.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === docIdx));
+      document.getElementById('docCounter').textContent = docSlides.length ? `${docIdx + 1} / ${docSlides.length}` : '···';
+    }
+
+    async function askMoreExamples() {
+      if (!docCtx) return;
+      showSkeleton();
+      docSlides = await fetchSlides(docCtx.concept, docCtx.hint, 'Genera 4 slides DIFERENTES con ejemplos más avanzados, patrones reales y casos de uso de nivel intermedio');
+      docIdx = 0; renderSlides();
+    }
+
+    function loadSlideInEditor() {
+      const code = docSlides[docIdx]?.code;
+      if (!code) return;
+      setEditorValue(code);
+      document.getElementById('sec-playground')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function copyCode(i) {
+      navigator.clipboard.writeText(docSlides[i]?.code || '').catch(() => { });
+    }
+
+    /* Java syntax highlighter */
+    function javaHL(code) {
+      let s = esc(code);
+      // protect comments
+      s = s.replace(/(\/\/[^\n]*)/g, '\x01CM\x02$1\x01\/CM\x02');
+      s = s.replace(/(\/\*[\s\S]*?\*\/)/g, '\x01CM\x02$1\x01\/CM\x02');
+      // strings
+      s = s.replace(/("(?:[^"\\]|\\.)*")/g, '\x01ST\x02$1\x01\/ST\x02');
+      // keywords
+      s = s.replace(/\b(public|private|protected|class|interface|abstract|extends|implements|static|final|void|new|return|if|else|for|while|do|switch|case|break|continue|import|package|throws|throw|try|catch|finally|this|super|null|true|false|instanceof|enum|record|var)\b/g, '\x01KW\x02$1\x01\/KW\x02');
+      // types
+      s = s.replace(/\b(String|int|double|float|long|boolean|char|byte|short|List|Map|Set|ArrayList|HashMap|LinkedList|Optional|Object|Integer|Double|Boolean|Long|Character|Number|Math)\b/g, '\x01TP\x02$1\x01\/TP\x02');
+      // numbers
+      s = s.replace(/\b(\d+\.?\d*[fFdDlL]?)\b/g, '\x01NM\x02$1\x01\/NM\x02');
+      // replace placeholders
+      return s
+        .replace(/\x01CM\x02([\s\S]*?)\x01\/CM\x02/g, '<span class="cm">$1</span>')
+        .replace(/\x01ST\x02([\s\S]*?)\x01\/ST\x02/g, '<span class="str">$1</span>')
+        .replace(/\x01KW\x02([\s\S]*?)\x01\/KW\x02/g, '<span class="kw">$1</span>')
+        .replace(/\x01TP\x02([\s\S]*?)\x01\/TP\x02/g, '<span class="tp">$1</span>')
+        .replace(/\x01NM\x02([\s\S]*?)\x01\/NM\x02/g, '<span class="num">$1</span>');
+    }
+
+    // Keyboard nav for slider
+    document.addEventListener('keydown', e => {
+      if (document.getElementById('docSliderPanel')?.style.display !== 'block') return;
+      if (e.key === 'ArrowRight') docNav(+1);
+      if (e.key === 'ArrowLeft') docNav(-1);
+    });
+
+    /* ══════════ 5. MONACO EDITOR ══════════ */
+    let monacoEditor;
+    const editorFiles = {}, editorAliases = {};
+    let activeFile = null;
+    document.getElementById('editorBody').style.height = '400px';
+
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+      monacoEditor = monaco.editor.create(document.getElementById('monacoEditor'), {
+        value: 'public class Main {\n    public static void main(String[] args) {\n        // Tu código Java aquí\n        System.out.println("¡Hola, Java!");\n    }\n}',
+        language: 'java', theme: 'vs-dark', automaticLayout: false,
+        fontSize: 14, lineHeight: 22,
+        fontFamily: "'JetBrains Mono','Fira Code',monospace",
+        minimap: { enabled: false }, scrollBeyondLastLine: false, roundedSelection: true,
+        padding: { top: 12, bottom: 12 },
+        scrollbar: { vertical: 'auto', horizontal: 'auto', verticalScrollbarSize: 5, horizontalScrollbarSize: 5 },
+        renderLineHighlight: 'line', cursorBlinking: 'smooth',
+        bracketPairColorization: { enabled: true }, fixedOverflowWidgets: true
+      });
+
+      monacoEditor.onKeyDown(e => {
+        if (e.ctrlKey && e.keyCode === monaco.KeyCode.Enter) { e.preventDefault(); e.stopPropagation(); ejecutarJava(); }
+      });
+
+      function fl() {
+        if (!monacoEditor) return;
+        const c = document.getElementById('monacoEditor');
+        monacoEditor.layout({ width: c.offsetWidth, height: c.offsetHeight });
+      }
+      [0, 50, 150, 300, 600, 1200].forEach(ms => setTimeout(fl, ms));
+      if (window.ResizeObserver) {
+        const ro = new ResizeObserver(() => fl());
+        ro.observe(document.getElementById('monacoEditor'));
+        ro.observe(document.getElementById('editorBody'));
+      }
+      window.addEventListener('resize', fl);
+
+      // context menu on right-click
+      monacoEditor.onContextMenu(e => {
+        e.event.preventDefault();
+        const menu = document.getElementById('editorContextMenu');
+        menu.style.left = e.event.posx + 'px';
+        menu.style.top = e.event.posy + 'px';
+        menu.classList.add('active');
+      });
+
+      addEditorTab('Main.java', 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("¡Hola, Java!");\n    }\n}');
+    });
+
+    document.addEventListener('click', () => {
+      document.getElementById('editorContextMenu').classList.remove('active');
+    });
+
+    function getEditorValue() { return monacoEditor ? monacoEditor.getValue() : document.getElementById('javaEditor').value; }
+    function setEditorValue(v) {
+      if (monacoEditor) { monacoEditor.setValue(v); monacoEditor.focus(); }
+      else { document.getElementById('javaEditor').value = v; }
+    }
+
+    /* Editor tabs */
+    function addEditorTab(name, content) {
+      editorFiles[name] = content || '';
+      if (!activeFile) activeFile = name;
+      renderTabs();
+      if (activeFile === name) setEditorValue(content || '');
+    }
+    function renderTabs() {
+      const c = document.getElementById('tabContainer');
+      c.innerHTML = '';
+      Object.keys(editorFiles).forEach(name => {
+        const tab = document.createElement('div');
+        tab.className = 'editor-tab' + (name === activeFile ? ' active' : '');
+        tab.innerHTML = `<span onclick="switchTab('${name}')">${name}</span><span class="tab-close" onclick="closeTab('${name}')">×</span>`;
+        c.appendChild(tab);
+      });
+    }
+    function switchTab(name) {
+      if (activeFile && monacoEditor) editorFiles[activeFile] = monacoEditor.getValue();
+      activeFile = name;
+      setEditorValue(editorFiles[name] || '');
+      renderTabs();
+    }
+    function closeTab(name) {
+      if (Object.keys(editorFiles).length <= 1) return;
+      delete editorFiles[name];
+      if (activeFile === name) { activeFile = Object.keys(editorFiles)[0]; setEditorValue(editorFiles[activeFile] || ''); }
+      renderTabs();
+    }
+    function createNewFile() {
+      openInputModal('Nombre del archivo', 'NuevoArchivo.java', name => {
+        if (!name) return;
+        if (!name.endsWith('.java')) name += '.java';
+        addEditorTab(name, `public class ${name.replace('.java', '')} {\n    \n}`);
+        switchTab(name);
+      });
+    }
+
+    /* ══════════ 6. RUN JAVA ══════════ */
+    async function ejecutarJava() {
+      const out = document.getElementById('runOutput');
+      const runBtn = document.getElementById('runBtn');
+      const dot = document.getElementById('outputDot');
+      const t0 = Date.now();
+      out.innerHTML = '<span class="out-dim">⏳ Ejecutando...</span>';
+      document.getElementById('runValidate').textContent = '';
+      document.getElementById('execTime').textContent = '';
+      runBtn.classList.add('running');
+      runBtn.innerHTML = '…';
+      dot.style.background = 'var(--warn)';
+      try {
+        const res = await fetch('/run-java', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
+          body: getEditorValue()
+        });
+        const text = await res.text();
+        const ms = ((Date.now() - t0) / 1000).toFixed(2);
+        document.getElementById('execTime').textContent = ms + 's';
+        out.innerHTML = text.split('\n').map(line => {
+          if (!line.trim()) return '<span> </span>';
+          if (line.match(/error|exception|fail/i)) return `<span class="out-err">${esc(line)}</span>`;
+          if (line.match(/^\/\//)) return `<span class="out-dim">${esc(line)}</span>`;
+          if (line.match(/warning/i)) return `<span class="out-warn">${esc(line)}</span>`;
+          return `<span class="out-ok">${esc(line)}</span>`;
+        }).join('\n');
+        dot.style.background = 'var(--success)';
+      } catch (err) {
+        out.innerHTML = `<span class="out-err">❌ Error de red: ${err.message}</span>`;
+        dot.style.background = 'var(--danger)';
+      } finally {
+        runBtn.classList.remove('running');
+        runBtn.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Ejecutar`;
+      }
+    }
+
+    /* ══════════ 7. EDITOR EXPAND ══════════ */
+    let isExpanded = false, isOutExp = false;
+    function toggleEditorFullscreen() { isExpanded ? collapseEditor() : expandEditor(); }
+    function expandEditor() {
+      isExpanded = true;
+      document.getElementById('editorShell').classList.add('expanded');
+      document.getElementById('expandedBackdrop').classList.add('active');
+      const btn = document.getElementById('expandBtn');
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg> Contraer`;
+      [50, 150, 350].forEach(ms => setTimeout(relayout, ms));
+      document.addEventListener('keydown', onEsc);
+    }
+    function collapseEditor() {
+      isExpanded = false;
+      document.getElementById('editorShell').classList.remove('expanded');
+      document.getElementById('expandedBackdrop').classList.remove('active');
+      const btn = document.getElementById('expandBtn');
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg> Ampliar`;
+      [50, 150, 350].forEach(ms => setTimeout(relayout, ms));
+      document.removeEventListener('keydown', onEsc);
+    }
+    function onEsc(e) { if (e.key === 'Escape') collapseEditor(); }
+    document.addEventListener('keydown', e => { if (e.key === 'F11') { e.preventDefault(); toggleEditorFullscreen(); } });
+    function relayout() {
+      if (!monacoEditor) return;
+      const b = document.getElementById('editorBody');
+      monacoEditor.layout({ width: document.getElementById('monacoEditor').offsetWidth, height: b.offsetHeight });
+    }
+
+    function toggleOutputExpand() {
+      isOutExp = !isOutExp;
+      const b = document.getElementById('runOutput');
+      const btn = document.getElementById('outputExpandBtn');
+      const c = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>`;
+      const x = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
+      b.style.maxHeight = isOutExp ? '55vh' : '';
+      btn.innerHTML = isOutExp ? c + ' Contraer' : x + ' Expandir salida';
+      setTimeout(relayout, 320);
+    }
+
+    /* Drag resize */
+    (() => {
+      const h = document.getElementById('resizeHandle');
+      const b = document.getElementById('editorBody');
+      let drag = false, sy = 0, sh = 0;
+      h.addEventListener('mousedown', e => { if (isExpanded) return; drag = true; sy = e.clientY; sh = b.offsetHeight; document.body.style.userSelect = 'none'; document.body.style.cursor = 'row-resize'; });
+      window.addEventListener('mousemove', e => { if (!drag) return; const nh = Math.max(200, Math.min(window.innerHeight * .85, sh + (e.clientY - sy))); b.style.height = nh + 'px'; if (monacoEditor) monacoEditor.layout({ width: document.getElementById('monacoEditor').offsetWidth, height: nh }); });
+      window.addEventListener('mouseup', () => { if (!drag) return; drag = false; document.body.style.userSelect = ''; document.body.style.cursor = ''; });
+    })();
+
+    /* ══════════ 8. BOILERPLATES ══════════ */
+    function insertGettersSetters() {
+      const code = getEditorValue();
+      const fields = code.match(/private\s+(\w+)\s+(\w+)\s*;/g) || [];
+      let inserts = '';
+      fields.forEach(f => {
+        const m = f.match(/private\s+(\w+)\s+(\w+)/);
+        if (!m) return;
+        const [, type, name] = m;
+        const cap = name[0].toUpperCase() + name.slice(1);
+        inserts += `\n    public ${type} get${cap}() { return ${name}; }\n    public void set${cap}(${type} ${name}) { this.${name} = ${name}; }`;
+      });
+      if (inserts) {
+        const idx = code.lastIndexOf('}');
+        setEditorValue(code.slice(0, idx) + inserts + '\n' + code.slice(idx));
+      }
+    }
+    function insertConstructor() {
+      const code = getEditorValue();
+      const classMatch = code.match(/class\s+(\w+)/);
+      const fields = code.match(/private\s+(\w+)\s+(\w+)\s*;/g) || [];
+      if (!classMatch) return;
+      const cName = classMatch[1];
+      const params = fields.map(f => { const m = f.match(/private\s+(\w+)\s+(\w+)/); return m ? `${m[1]} ${m[2]}` : '' }).filter(Boolean).join(', ');
+      const assigns = fields.map(f => { const m = f.match(/private\s+(\w+)\s+(\w+)/); return m ? `        this.${m[2]} = ${m[2]};` : '' }).filter(Boolean).join('\n');
+      const ctor = `\n    public ${cName}(${params}) {\n${assigns}\n    }`;
+      const idx = code.indexOf('{', code.indexOf('class')) + 1;
+      setEditorValue(code.slice(0, idx) + ctor + code.slice(idx));
+    }
+    function insertBoilerplate(type) {
+      const tpls = {
+        'controller': 'import org.springframework.stereotype.Controller;\nimport org.springframework.web.bind.annotation.*;\n\n@Controller\n@RequestMapping("/api")\npublic class MiController {\n\n    @GetMapping("/")\n    public String index() {\n        return "index";\n    }\n}',
+        'rest-controller': 'import org.springframework.web.bind.annotation.*;\nimport java.util.List;\n\n@RestController\n@RequestMapping("/api/recursos")\npublic class RecursoController {\n\n    @GetMapping\n    public List<String> listar() {\n        return List.of("elemento1", "elemento2");\n    }\n\n    @PostMapping\n    public String crear(@RequestBody String body) {\n        return "Creado: " + body;\n    }\n}',
+        'entity': 'import jakarta.persistence.*;\n\n@Entity\n@Table(name = "mi_entidad")\npublic class MiEntidad {\n\n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n\n    @Column(nullable = false)\n    private String nombre;\n\n    // Constructores, getters y setters\n}',
+      };
+      if (tpls[type]) setEditorValue(tpls[type]);
+    }
+
+    /* ══════════ 9. REPO MANAGER ══════════ */
+    const STANDARD_RETOS = [
+      { id: 'nivel1', titulo: 'Hola POO', descripcion: 'Crea una clase Persona con nombre y edad. Instancia un objeto e imprime "Hola, [nombre], tienes [edad] años."', template: 'public class Main {\n    public static void main(String[] args) {\n        // TODO: crea clase Persona e instancia\n    }\n}', output_esperado: ['Hola,'] },
+      { id: 'nivel2', titulo: 'Getters & Setters', descripcion: 'Crea clase Producto con precio privado. Agrega getter y setter. Cambia el precio y muestra el nuevo valor.', template: 'public class Main {\n    public static void main(String[] args) {\n        // TODO: Producto con getter/setter de precio\n    }\n}', output_esperado: ['precio:', 'Precio:'] },
+      { id: 'nivel3', titulo: 'Herencia básica', descripcion: 'Crea clase Animal con método hablar(). Crea Perro y Gato que la extiendan y sobreescriban hablar().', template: 'public class Main {\n    public static void main(String[] args) {\n        // TODO: Animal, Perro y Gato\n    }\n}', output_esperado: ['Guau', 'Miau'] },
+      { id: 'nivel4', titulo: 'Interfaz Calculable', descripcion: 'Define interfaz Calculable con calcular(). Implementa Suma y Producto. Prueba ambas con dos números.', template: 'public class Main {\n    public static void main(String[] args) {\n        // TODO: interface + implementaciones\n    }\n}', output_esperado: ['Suma', 'Producto'] },
+      { id: 'nivel5', titulo: 'ArrayList de objetos', descripcion: 'Crea lista de 3 Personas. Filtra con Stream las mayores de 18 e imprime sus nombres.', template: 'import java.util.*;\nimport java.util.stream.*;\npublic class Main {\n    public static void main(String[] args) {\n        // TODO: lista + stream filter\n    }\n}', output_esperado: ['Mayor:', 'mayor:'] },
+    ];
+
+    let colecciones = { standard: { nombre: 'Standard', retos: STANDARD_RETOS } };
+    let repoActual = 'standard';
+    let repoTemporal = null;
+
+    function renderRetos() {
+      const container = document.getElementById('retos-container');
+      const repo = colecciones[repoActual];
+      if (!repo) { container.innerHTML = ''; return; }
+      const retos = repo.retos;
+      let done = 0;
+      container.innerHTML = '';
+      retos.forEach((r, i) => {
+        const key = `poo_${repoActual}_${r.id || i}`;
+        const isDone = localStorage.getItem(key) === '1';
+        if (isDone) done++;
+        const prevKey = i > 0 ? `poo_${repoActual}_${retos[i - 1].id || (i - 1)}` : null;
+        const locked = prevKey && localStorage.getItem(prevKey) !== '1';
+        const chips = (r.output_esperado || []).map(t => `<span class="chip">${esc(t)}</span>`).join('');
+        const card = document.createElement('div');
+        card.className = `reto-card${isDone ? ' done' : ''}${locked ? ' locked' : ''}`;
+        card.innerHTML = `
+      <div class="reto-header">
+        <div class="reto-num">${i + 1}</div>
+        <div class="reto-title">${esc(r.titulo || 'Reto ' + (i + 1))}</div>
+      </div>
+      <div class="reto-desc">${esc(r.descripcion || '')}</div>
+      ${chips ? `<div class="reto-chips">✦ ${chips}</div>` : ''}
+      <div class="reto-actions">
+        <div class="status-dot ${isDone ? 'done' : 'pending'}"></div>
+        <button class="btn ghost sm" onclick="validarReto('${repoActual}',${i})">✔ Validar</button>
+        <button class="btn sm" onclick="cargarReto('${repoActual}',${i})">Cargar</button>
+      </div>`;
+        container.appendChild(card);
+      });
+      const pct = retos.length ? Math.round((done / retos.length) * 100) : 0;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = `${done} / ${retos.length}`;
+    }
+
+    function cargarReto(repoId, idx) {
+      const r = colecciones[repoId]?.retos[idx];
+      if (!r) return;
+      setEditorValue(r.template || '');
+      document.getElementById('runOutput').innerHTML = '<span class="out-dim">// Reto cargado. Presiona Ctrl+Enter para ejecutar.</span>';
+      document.getElementById('runValidate').textContent = '';
+      document.getElementById('playground-title').textContent = r.titulo;
+      document.getElementById('sec-playground').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function validarReto(repoId, idx) {
+      const r = colecciones[repoId]?.retos[idx];
+      if (!r) return;
+      const out = document.getElementById('runOutput').textContent || '';
+      const ok = r.output_esperado?.length ? r.output_esperado.every(t => out.includes(t)) : out.trim().length > 0;
+      const key = `poo_${repoId}_${r.id || idx}`;
+      const v = document.getElementById('runValidate');
+      if (ok) {
+        localStorage.setItem(key, '1');
+        const today = new Date().toISOString().slice(0, 10);
+        const dk = `poo_done_day_${today}`;
+        localStorage.setItem(dk, (parseInt(localStorage.getItem(dk) || '0') + 1).toString());
+        v.textContent = '✅ ¡Correcto!'; v.style.color = 'var(--success)';
+        openAlertModal('¡Reto completado! 🎉', '¡Excelente! Dominas este concepto. Avanza al siguiente reto.');
+        updateDailyProgress();
+      } else {
+        v.textContent = '❌ No coincide'; v.style.color = 'var(--danger)';
+      }
+      renderRetos();
+    }
+
+    function switchRepo(id) {
+      repoActual = id;
+      document.querySelectorAll('.repo-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id)?.classList.add('active');
+      renderRetos();
+    }
+
+    function addRepoTab(id, nombre) {
+      if (document.getElementById('tab-' + id)) return;
+      const slider = document.getElementById('repo-slider');
+      const btn = document.createElement('button');
+      btn.className = 'repo-tab'; btn.id = 'tab-' + id; btn.textContent = nombre;
+      btn.onclick = () => switchRepo(id);
+      slider.appendChild(btn);
+    }
+
+    async function cargarDesdeRepo() {
+      const url = document.getElementById('repoUrl').value.trim();
+      const status = document.getElementById('backendStatus');
+      if (!url) { openAlertModal('Atención', 'Introduce una URL de repositorio de GitHub.'); return; }
+      status.textContent = '⏳ Cargando repositorio...';
+      try {
+        const res = await fetch('/repo/load', { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=UTF-8' }, body: url });
+        if (!res.ok) { status.textContent = '❌ Error: ' + await res.text(); return; }
+        const data = await res.json();
+        const nombre = url.split('/').pop().replace('.git', '');
+        const id = 'repo_' + Date.now();
+        colecciones[id] = { nombre, retos: data.ejercicios.map((e, i) => ({ id: e.id || ('ej' + i), titulo: e.titulo, descripcion: e.descripcion, template: e.template, output_esperado: e.output_esperado || e.expected || null })) };
+        repoTemporal = { id, nombre };
+        document.getElementById('btnSaveRepo').style.display = 'inline-flex';
+        addRepoTab(id, nombre);
+        switchRepo(id);
+        status.textContent = `✅ ${data.ejercicios.length} retos cargados de "${nombre}"`;
+      } catch (err) { status.textContent = '❌ Error de red: ' + err.message; }
+    }
+
+    function guardarRepositorioActual() {
+      if (!repoTemporal) return;
+      const saved = JSON.parse(localStorage.getItem('poo_saved_repos') || '{}');
+      saved[repoTemporal.id] = { id: repoTemporal.id, nombre: repoTemporal.nombre, retos: colecciones[repoTemporal.id].retos };
+      localStorage.setItem('poo_saved_repos', JSON.stringify(saved));
+      document.getElementById('btnSaveRepo').style.display = 'none';
+      renderSavedRepos();
+      document.getElementById('backendStatus').textContent = '💾 Repositorio guardado.';
+    }
+
+    function renderSavedRepos() {
+      const saved = JSON.parse(localStorage.getItem('poo_saved_repos') || '{}');
+      const ids = Object.keys(saved);
+      const cont = document.getElementById('saved-repos-container');
+      const list = document.getElementById('saved-repos-list');
+      if (!ids.length) { cont.style.display = 'none'; return; }
+      cont.style.display = 'block';
+      list.innerHTML = ids.map(id => `
+    <div class="saved-chip">
+      <span onclick="loadSavedRepo('${id}')">${esc(saved[id].nombre)}</span>
+      <span class="saved-chip-del" onclick="deleteSavedRepo('${id}')">×</span>
+    </div>`).join('');
+    }
+    function loadSavedRepo(id) {
+      const saved = JSON.parse(localStorage.getItem('poo_saved_repos') || '{}');
+      if (!saved[id]) return;
+      colecciones[id] = { nombre: saved[id].nombre, retos: saved[id].retos };
+      addRepoTab(id, saved[id].nombre);
+      switchRepo(id);
+    }
+    function deleteSavedRepo(id) {
+      const saved = JSON.parse(localStorage.getItem('poo_saved_repos') || '{}');
+      delete saved[id]; delete colecciones[id];
+      localStorage.setItem('poo_saved_repos', JSON.stringify(saved));
+      document.getElementById('tab-' + id)?.remove();
+      if (repoActual === id) switchRepo('standard');
+      renderSavedRepos();
+    }
+
+    /* ══════════ 10. DAILY PROGRESS ══════════ */
+    function updateDailyProgress() {
+      const today = new Date().toISOString().slice(0, 10);
+      const done = parseInt(localStorage.getItem(`poo_done_day_${today}`) || '0');
+      const goal = parseInt(localStorage.getItem('poo_daily_goal') || '2');
+      const pct = Math.min(100, Math.round((done / goal) * 100));
+      document.getElementById('dailyDone').textContent = done;
+      document.getElementById('dailyGoal').textContent = goal;
+      document.getElementById('dailyProgressBar').style.width = pct + '%';
+      const msgs = ['¡Sigue así! 💪', '¡Excelente trabajo! 🚀', '¡Eres imparable! ⚡', '¡Gran progreso! 🎯', '¡Casi en la meta! 🏁'];
+      if (done > 0) document.getElementById('dailyMotivation').textContent = msgs[(done - 1) % msgs.length];
+      // streak
+      let streak = 0; const d = new Date();
+      for (let i = 0; i < 60; i++) {
+        if (!localStorage.getItem(`poo_done_day_${d.toISOString().slice(0, 10)}`)) break;
+        streak++; d.setDate(d.getDate() - 1);
+      }
+      document.getElementById('streakCount').textContent = streak;
+    }
+    updateDailyProgress();
+
+    /* ══════════ 11. MODALS ══════════ */
+    function openInputModal(title, placeholder, cb) {
+      const m = document.getElementById('inputModal');
+      document.getElementById('inputModalTitle').textContent = title;
+      document.getElementById('customInput').placeholder = placeholder;
+      document.getElementById('customInput').value = '';
+      document.getElementById('inputModalConfirm').onclick = () => {
+        cb(document.getElementById('customInput').value.trim());
+        m.classList.remove('active');
+      };
+      m.classList.add('active');
+      setTimeout(() => document.getElementById('customInput').focus(), 80);
+    }
+    function closeInputModal() { document.getElementById('inputModal').classList.remove('active'); }
+    function openAlertModal(title, msg, onOk, showCancel) {
+      document.getElementById('alertModalTitle').textContent = title;
+      document.getElementById('alertModalMessage').textContent = msg;
+      document.getElementById('alertModalCancel').style.display = showCancel ? 'inline-flex' : 'none';
+      document.getElementById('alertModalConfirm').onclick = () => { closeAlertModal(); onOk?.(); };
+      document.getElementById('alertModal').classList.add('active');
+    }
+    function closeAlertModal() { document.getElementById('alertModal').classList.remove('active'); }
+
+    /* ══════════ 12. THEME ══════════ */
+    document.querySelectorAll('.theme-card').forEach(c => {
+      c.addEventListener('click', () => {
+        document.querySelectorAll('.theme-card').forEach(x => x.classList.remove('active'));
+        c.classList.add('active');
+        document.getElementById('themeModal').classList.remove('active');
+      });
+    });
+
+    /* ══════════ 13. GLOBAL SEARCH ══════════ */
+    function globalFilter(q) {
+      if (!q) { renderReferencia(REFERENCIAS); return; }
+      q = q.toLowerCase();
+      renderReferencia(REFERENCIAS.filter(r => r.title.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q)));
+    }
+
+    /* ══════════ 14. INIT ══════════ */
+    renderSavedRepos();
+    renderRetos();
+  </script>
 </body>
 
 </html>
